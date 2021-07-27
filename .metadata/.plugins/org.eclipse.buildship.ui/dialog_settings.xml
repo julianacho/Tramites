@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<list key="workingset_selection_history">
+		<item value="TRAMITES_JAVA"/>
+		<item value="worksapce"/>
+	</list>
+	<section name="org.eclipse.buildship.ui.wizard.project.import">
+		<item value="false" key="apply_working_sets"/>
+		<item value="G:\Secretaría Distrital de Gobierno\GitLab Tramites y Servicios\TRAMITES_JAVA" key="project_location"/>
+		<list key="working_sets">
+		</list>
+	</section>
+</section>

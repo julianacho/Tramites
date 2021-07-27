@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html lang="es"  xmlns = "http://www.w3.org/1999/xhtml"  xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+
+
+
+    <ui:composition template="/sidebartemplate.xhtml">
+        <ui:define name="content">
+            <div class="col-md-10">
+                <h:form>
+                    <section>
+                        <div class="well">
+                            <div class="row">
+                                <div class="col-md-12" style="text-align:center">
+                                    <h3><strong>Solicitudes realizadas</strong></h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="well well-sm">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="panel panel-default">
+                                                <h:dataTable id="datatablePadre" value = "#{pHConsultController.listPHRequestDTOs}"
+                                                             var = "r" class="table table-bordered text-uppercase">
+                                                    <h:column>    				
+                                                        <f:facet name = "header">No. radicado</f:facet>    				
+                                                            #{r.radNumber}
+                                                    </h:column>
+                                                    <h:column>
+                                                        <f:facet name = "header">Trámite</f:facet>
+                                                            #{r.procedure}
+                                                    </h:column>
+                                                    <h:column>
+                                                        <f:facet name = "header">Nombre PH</f:facet>
+                                                            #{r.name}
+                                                    </h:column>
+                                                    <h:column>
+                                                        <f:facet name = "header">Fecha solicitud</f:facet>
+                                                            #{r.dateRequest}
+                                                    </h:column>
+                                                    <h:column>
+                                                        <f:facet name = "header">Fecha atención</f:facet>
+                                                            #{r.dateAnswer}
+                                                    </h:column>
+                                                    <h:column>
+                                                        <f:facet name = "header">Estado</f:facet>
+                                                            #{r.state}
+                                                    </h:column>
+                                                    <h:column>
+                                                        <f:facet name = "header">Observación</f:facet>
+                                                            #{r.observation}
+                                                    </h:column>
+                                                    <h:column>
+                                                        <f:facet name = "header">Acción</f:facet>
+                                                        <h:panelGroup layout="block" rendered="true">			
+                                                            <a id="link1">
+                                                                <h:commandButton id="download" value="Descargar" action="#{certificateConsultController.DownloadRequest()}">
+                                                                    <f:param name="radNumber" value="#{r.radNumber}"/>
+                                                                </h:commandButton>
+                                                            </a>
+                                                        </h:panelGroup>
+                                                        <h:panelGroup layout="block" rendered="true">
+                                                            <a id="link2">
+                                                                <h:commandButton id="correct" value="Corregir" action="hola"
+                                                                                 onclick="block()">
+                                                                    <f:param name="radNumber" value="#{r.radNumber}"/>
+                                                                </h:commandButton>
+                                                            </a>
+                                                        </h:panelGroup>
+                                                    </h:column>
+                                                </h:dataTable>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </h:form>
+            </div>
+            <script>
+                $(document).ready(function ()
+                {
+                    //Desbloquea la pantalla.
+                    $.unblockUI();
+                });
+            </script>
+        </ui:define>
+    </ui:composition>
+</html>

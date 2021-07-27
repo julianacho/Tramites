@@ -1,0 +1,175 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<faces-config version="2.1"
+              xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd">
+
+    
+    <navigation-rule> 
+        
+        <from-view-id>/login.xhtml</from-view-id> 
+
+        <navigation-case>
+            <from-action>#{loginController.Register()}</from-action>
+           <from-outcome>ok</from-outcome> 
+           <to-view-id>/register.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{loginController.Authenticate()}</from-action>
+           <from-outcome>success</from-outcome> 
+           <to-view-id>/sidebartemplate.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{loginController.ForgotPassword()}</from-action>
+           <from-outcome>success</from-outcome> 
+           <to-view-id>/forgotpassword.xhtml</to-view-id>
+        </navigation-case>
+        
+    </navigation-rule>
+    <navigation-rule> 
+        
+        <from-view-id>/forgotpassword.xhtml</from-view-id> 
+
+        <navigation-case>
+            <from-action>#{forgotPasswordController.Back()}</from-action>
+           <from-outcome>back</from-outcome> 
+           <to-view-id>/login.xhtml</to-view-id>
+        </navigation-case>
+        
+    </navigation-rule>
+    <navigation-rule> 
+        
+        <from-view-id>/register.xhtml</from-view-id> 
+
+        <navigation-case>
+            <from-action>#{registerController.Back()}</from-action>
+           <from-outcome>success</from-outcome> 
+           <to-view-id>/login.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{registerController.Register()}</from-action>
+           <from-outcome>success</from-outcome> 
+           <to-view-id>/login.xhtml</to-view-id>
+        </navigation-case>
+        
+    </navigation-rule>
+    <navigation-rule> 
+        
+        <from-view-id>/rememberpassword.xhtml</from-view-id>
+
+        <navigation-case>
+            <from-action>#{rememberPasswordController.ChangePassword()}</from-action>
+           <from-outcome>success</from-outcome> 
+           <to-view-id>/login.xhtml</to-view-id>
+        </navigation-case>
+        
+    </navigation-rule>
+    <navigation-rule> 
+        
+        <from-view-id>/updateinfo.xhtml</from-view-id> 
+
+        <navigation-case>
+            <from-action>#{updateInfoController.UpdateInfo()}</from-action>
+           <from-outcome>success</from-outcome> 
+           <to-view-id>/login.xhtml</to-view-id>
+        </navigation-case>
+        
+    </navigation-rule>
+    <navigation-rule> 
+        
+        <from-view-id>/certificateconsult.xhtml</from-view-id> 
+
+        <navigation-case>
+            <from-action>#{certificateConsultController.CorrectRequest()}</from-action>
+           <from-outcome>success</from-outcome> 
+           <to-view-id>/correctcertificaterequest.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{certificateConsultController.CorrectYoungerRequest()}</from-action>
+           <from-outcome>success</from-outcome> 
+           <to-view-id>/correctcertificaterequest.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{certificateConsultController.DownloadRequest()}</from-action>
+           <from-outcome>success</from-outcome> 
+           <to-view-id>/certificateconsult.xhtml</to-view-id>
+        </navigation-case>
+        
+    </navigation-rule>
+    <navigation-rule> 
+        
+        <from-view-id>/certificaterequest.xhtml</from-view-id> 
+
+        <navigation-case>
+            <from-action>#{certificateRequestController.Back()}</from-action>
+           <from-outcome>success</from-outcome> 
+           <to-view-id>/certificateconsult.xhtml</to-view-id>
+        </navigation-case>
+        
+    </navigation-rule>
+    <navigation-rule> 
+        
+        <from-view-id>*</from-view-id> 
+
+        <navigation-case>
+           <from-action>#{loginController.show()}</from-action>
+           <from-outcome>login</from-outcome> 
+           <to-view-id>/login.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+           <from-outcome>crearsolicitud</from-outcome> 
+           <to-view-id>/certificaterequest.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+           <from-outcome>consultarsolicitud</from-outcome> 
+           <to-view-id>/certificateconsult.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+           <from-outcome>password</from-outcome> 
+           <to-view-id>/changepassword.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+           <from-outcome>updateinfo</from-outcome> 
+           <to-view-id>/updateinfo.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+           <from-outcome>phregister</from-outcome> 
+           <to-view-id>/phregister.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+           <from-outcome>phconsult</from-outcome> 
+           <to-view-id>/phconsult.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+           <from-outcome>updateagent</from-outcome> 
+           <to-view-id>/updatelegalagent.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+           <from-outcome>phsubsanacionlegalagent</from-outcome> 
+           <to-view-id>/phsubsanacionlegalagent.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+           <from-outcome>updaterepresentante</from-outcome> 
+           <to-view-id>/phupdatelegalagent.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+           <from-outcome>phupdatepropiedad</from-outcome> 
+           <to-view-id>/phupdatepropiedad.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+           <from-outcome>extinctionph</from-outcome> 
+           <to-view-id>/phextinction.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+           <from-outcome>subsanacionextinctionph</from-outcome> 
+           <to-view-id>/phextinctionsubsanacion.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+           <from-outcome>phconsultinit</from-outcome> 
+           <to-view-id>/phconsultinit.xhtml</to-view-id>
+        </navigation-case>
+        
+    </navigation-rule>
+    
+
+</faces-config>

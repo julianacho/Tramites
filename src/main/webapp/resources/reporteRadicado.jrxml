@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="58b5f79b-b913-4715-bf9b-8b3ca788dade">
+	<property name="ireport.zoom" value="0.9982500000000003"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="254"/>
+	<parameter name="radicado" class="java.lang.String"/>
+	<parameter name="fecha" class="java.lang.String"/>
+	<parameter name="tramite" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="135" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="25" width="389" height="30" backcolor="#D80E2F" uuid="afcc3b10-c370-474c-b377-d1539169ed90"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="1" y="25" width="363" height="30" forecolor="#FFFFFF" uuid="df4320b0-e57d-48eb-be85-ab6720524c4c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="24" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TRÁMITES Y SERVICIOS]]></text>
+			</staticText>
+			<rectangle radius="10">
+				<reportElement mode="Opaque" x="364" y="11" width="191" height="68" uuid="e24c307e-11f5-44cc-8d8b-25d11822d26f"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="379" y="14" width="100" height="15" uuid="08f22315-222c-4d7b-ad20-73e503e68a50"/>
+				<textElement>
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<text><![CDATA[Radicado No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="379" y="44" width="33" height="15" uuid="ed388b63-52aa-4285-a8bd-1fe2db405ff6"/>
+				<textElement>
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="379" y="29" width="100" height="20" uuid="3f08ea02-1f8d-4b19-b728-5ab1344913e2"/>
+				<textElement>
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{radicado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="379" y="59" width="100" height="20" uuid="f8cebcf5-96c5-44ec-af58-c282421b3835"/>
+				<textElement>
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fecha}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="67" splitType="Stretch">
+			<staticText>
+				<reportElement x="25" y="10" width="100" height="20" uuid="ab5fe2fe-4e64-4943-82c7-d0fbe7032ec2"/>
+				<textElement>
+					<font fontName="DejaVu Sans" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Señores]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="25" y="30" width="127" height="31" uuid="34b3f05a-436e-4b9f-8150-0fc36958db5c"/>
+				<textElement>
+					<font fontName="DejaVu Sans" size="12"/>
+				</textElement>
+				<text><![CDATA[Secretaria Distrital de Gobierno Bogotá]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="94" splitType="Stretch">
+			<staticText>
+				<reportElement x="197" y="28" width="182" height="20" uuid="fa1c9f88-116e-4c35-9cea-0ca4c94418b4"/>
+				<textElement>
+					<font fontName="DejaVu Sans" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ref: SOLICITUD DE TRAMITE DE ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="25" y="61" width="524" height="20" uuid="614c304d-a82d-4541-adf1-d19937fb73fa"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{tramite}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="209" splitType="Stretch">
+			<staticText>
+				<reportElement x="25" y="118" width="258" height="20" uuid="8b442e8e-1db8-4aef-a8a6-ba44fcd8c1ef"/>
+				<textElement>
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<text><![CDATA[Si autorizo la notificación a los correos electronicos: SI.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="25" y="162" width="100" height="20" uuid="7d9d09e1-6264-4c7a-bebd-80599acb5a4a"/>
+				<textElement>
+					<font fontName="DejaVu Sans" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Muchas gracias,]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="25" y="38" width="530" height="58" uuid="955ef459-50f7-4c29-a0f3-7219a4cabaed"/>
+				<textElement textAlignment="Justified">
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA["En mi calidad de ciudadano del Distrito Capital me permito informar que he surtido todos los tramites establecidos por la Secretalria Distrital de Gobierno a traves del canal dispuesto para tal fin, pagina web, para fomalizar la solicitud de " + $P{tramite} + " a mi nombre."]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<rectangle>
+				<reportElement x="1" y="15" width="571" height="30" backcolor="#D80E2F" uuid="69dffa52-00a4-4328-932c-5444a09fe167"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="389" y="15" width="183" height="30" forecolor="#000000" uuid="10df5eda-cdcc-4fac-9fd8-b06fc0c831d2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TRÁMITES Y SERVICIOS]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

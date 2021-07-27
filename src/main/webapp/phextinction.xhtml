@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html lang="es"  xmlns = "http://www.w3.org/1999/xhtml"  xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+
+
+
+    <ui:composition template="/sidebartemplate.xhtml">
+        <ui:define name="content">
+            <div class="col-md-10">
+                <h:form id="extinctionPHForm" enctype="multipart/form-data">
+                    <section>
+                        <h:panelGroup layout="block" id="registeralert">
+                            <h:panelGroup layout="block" rendered="#{pHExtincionPropiedadController.alertShow}">			
+                                <div class="#{pHExtincionPropiedadController.alertStyle ? 'alert alert-success alert-dismissible' : 'alert alert-warning alert-dismissible'}"
+                                     id="alert" align="center">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&#215;</a>
+                                    <h:outputLabel id="finalMessage" value="#{pHExtincionPropiedadController.alertMessage}"/>
+                                </div>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                        <div class="well">
+                            <div class="row">
+                                <div class="col-md-12" style="text-align:center">
+                                    <h3><strong>Extinción de Propiedad Horizontal</strong></h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="well well-sm">
+                            
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <label><strong>Documentos soporte de Extinción de Propiedad</strong></label><br />
+                                    <img src="images/Help.png" style="width: 25px"/>
+                                    <label style="font-size: 10px;"><strong>Recuerde Subir los archivos con Formato  <label style="color:red"></label></strong></label>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row ">    
+                                        <div class="form-group">
+                                            <div class="col-md-6">
+                                                <label for="inputEscrituraPublica">Escritura Pública o Sentencia Judicial</label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <p:fileUpload mode="simple" id="inputEscrituraPublica" value="#{pHExtincionPropiedadController.uploadPublicDocument}" 
+                                                                    disabled="false" styleClass="requerido" requiredMessage="Debe seleccionar un archivo" />
+                                                <h:message for="inputEscrituraPublica" style="color:#ff0000"/>
+                                                <span id='messageinputEscrituraPublica' style="font-size:9px;">un documento de 4 Megas máximo de tipo PDF,PNG,JPG</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <div class="row ">
+                                        <div class="form-group">
+                                            <div class="col-md-6">
+                                                <label for="inputCertificadoTradicionLibertad">Certificado de tradición  y libertad</label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <p:fileUpload mode="simple" id="inputCertificadoTradicionLibertad" value="#{pHExtincionPropiedadController.uploadCertificateOfTraditionAndFreedom}" 
+                                                                    disabled="false" styleClass="requerido" requiredMessage="Debe seleccionar un archivo" />
+                                                <h:message for="inputCertificadoTradicionLibertad" style="color:#ff0000"/>
+                                                <span id='messageinputCertificadoTradicionLibertad' style="font-size:9px;">un documento de 4 Megas máximo de tipo PDF,PNG,JPG</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <div class="row ">
+                                        <div class="form-group">
+                                            <div class="col-md-6">
+                                                <label for="inputCopiaDocumentoIdentificacion">Carta de Solicitud de Extinción</label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <p:fileUpload mode="simple" id="inputCopiaDocumentoIdentificacion" value="#{pHExtincionPropiedadController.uploadIdDocumentCopy}" 
+                                                                    disabled="false" styleClass="requerido" requiredMessage="Debe seleccionar un archivo" />
+                                                <h:message for="inputCopiaDocumentoIdentificacion" style="color:#ff0000"/>
+                                                <span id='messageinputCopiaDocumentoIdentificacion' style="font-size:9px;">un documento de 4 Megas máximo de tipo PDF,PNG,JPG</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row ">
+                                        <div class="form-group">
+                                            <div class="col-md-6">
+                                                <label for="inputCertificadoRevisorFical">Documento Revisor Fiscal</label><span style="color:red;"> (opcional)</span><br/>
+                                            	<img src="images/Help.png" style="width: 25px"/>
+                                            	<label style="font-size: 10px;">
+			                                    	<strong>Adjuntar Cedula, carta de aceptación, matrícula profesional vigente e inscripción a la Junta Central de Contadores</strong>
+												</label>                                              
+                                            </div>
+                                            <div class="col-md-4">
+                                                <p:fileUpload mode="simple" id="inputCertificadoRevisorFiscal" value="#{pHExtincionPropiedadController.uploadDocumentOfFiscaReviewer}" 
+                                                                    disabled="false" requiredMessage="Debe seleccionar un archivo" />
+                                                <h:message for="inputCertificadoRevisorFiscal" style="color:#ff0000"/>
+                                                <span id='messageinputCertificadoRevisorFiscal' style="font-size:9px;">un documento de 6 Megas máximo de tipo pdf,png,jpg</span>
+                                            </div>  
+                                        </div>   
+                                    </div>                               
+                                    <br />
+                                    
+                                    <hr />
+                                    <div class="col-md-12">
+                                        <label style="text-align: justify"><strong><h:selectBooleanCheckbox id="chkbSeleccionar" value="#{pHExtincionPropiedadController.oathCheckBox}"/>
+                                         Acepto, bajo la gravedad de juramento, que soy la persona facultada para realizar este
+                                        trámite. De la misma manera, acepto que todos los datos suministrados están correctamente
+                                        diligenciados y la información aportada es cierta y veraz. Entiendo que cualquier error en
+                                        el diligenciamiento del presente formulario podrá dar lugar a rechazo o cancelación del trámite,
+                                        bajo la completa responsabilidad de la persona solicitante de este.</strong> </label>
+                                        <br/>
+                                        <span id='checkmessage'></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="well">
+                            <div class="row ">
+                                <div class="col-md-6 col-md-offset-3 " style="text-align: center ">
+                                    <h:commandButton id="btnSolicitar" value="Solicitar Extinción" styleClass="btn btn-default btn-block" 
+                                                     action="#{pHExtincionPropiedadController.request()}" onclick="return validaDireccion()"/>
+                                </div>
+                                
+                                <div class="col-md-3">
+                                    <h:commandLink action="phconsultinit" value="Regresar" immediate="true"
+                                                   onclick="block()" class="btn btn-default btn-block"/>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </h:form>
+            </div>
+            <h:outputScript>
+            		$('.numerico').on('keypress', function (e)
+	                {
+	                    return (e.charCode &gt;&#61; 48 &amp;&amp; e.charCode &lt;&#61; 57) || (e.key &#61;&#61; "Backspace");
+	                });
+            
+                function validaDireccion()
+                {
+                    var req = document.getElementsByClassName('requerido');
+                    var dev = 0;
+                    var dev1 = -1;
+                    var dev2 = 0;
+                    
+                    for (var i &#61; 0; i &lt; req.length; i++) 
+                    {
+                        dev++;
+                        if (req[i].value &#61;&#61; "") 
+                        {
+                            req[i].style.backgroundColor = "#ffcece";
+                           
+                        } else {
+                            req[i].style.backgroundColor = "";
+                            
+                            dev = dev - 1;
+                        }
+                    }
+                    
+                    
+                                       
+                    if ($("#extinctionPHForm\\:chkbSeleccionar").is(':checked') === false)
+                    {
+                        $('#checkmessage').html('La solicitud no puede enviarse porque aún no ha aceptado la declaración bajo gravedad de juramento').css('color', 'red');
+                    } else {
+                        $('#checkmessage').html('');
+                    }
+                    
+                    
+                    if (dev &gt; 0) 
+                    {
+                        $('#checkvalidationmessage').html('Faltan Campos por Completar').css('color', 'red');
+                        return false;
+                    } else {
+                        return checkoath();
+                    }
+                };  
+            </h:outputScript>
+            <script>
+                //Esta función verifica el tipo y el tamaño de los archivos que se cargan.
+                
+                $("input[type=file]").on("change", function(inputFile, id) {
+        			var max = 2048 * 2048;//1024 * 6500; // 6.5MB
+        			var maxOtherFile = 2048 * 2048;//1024 * 20000 //20MB
+                    var file = inputFile.delegateTarget.files[0];
+                    var name = inputFile.delegateTarget.name.split(":")
+                    var messageName = "";
+                    var fileName = "";
+                    if (name.length > 2){
+                    	messageName = "#message" + name[2];	
+                    	fileName = name[2];
+                    }else{
+                    	messageName = "#message" + name[1];
+                    	fileName =  name[1];
+                    }
+                    
+                    if (fileName == "inputEscrituraPublica" || fileName == "inputActaAsambleaConsejo"){
+                    	
+	                    if (file.size > maxOtherFile)
+	                    {
+	                        $(messageName).html('El archivo supera el peso permitido de 20MB').css('color', 'red');
+	                        $(document.getElementById(inputFile.delegateTarget.name)).prop("value", null);
+	 
+	                    }else
+	                    {
+	                        var ext = file.name.split(".");
+	                        if ((ext[1].toLowerCase() !== "pdf") &amp;&amp; (ext[1].toLowerCase() !== "png") &amp;&amp; (ext[1].toLowerCase() !== "jpg") &amp;&amp; (ext[1].toLowerCase() !== "tif") )
+	                        {
+	                            $(messageName).html('El formato del archivo no es válido').css('color', 'red');
+	                            $(document.getElementById(inputFile.delegateTarget.name)).prop("value", null);
+	                        } else {
+	                            $(messageName).html('');
+	                        }
+	                    }
+                    }
+                    
+                    if (fileName == "inputActaConsejo" || fileName == "inputActoAdministrativo"|| fileName == "inputCopiaDocumentoIdentificacion"|| fileName == "inputDocumentoAceptacion" || fileName == "inputCertificadoTradicionLibertad" || fileName == "inputCertificadoCatastral" || fileName == "inputCertificadoCamaraComercio" || fileName == "inputCertificadoRevisorFiscal"){
+	                    if (file.size > max)
+	                    {
+	                        $(messageName).html('El archivo supera el peso permitido de 6MB').css('color', 'red');
+	                        $(document.getElementById(inputFile.delegateTarget.name)).prop("value", null);
+	 
+	                    }else
+	                    {
+	                        var ext = file.name.split(".");
+	                        if ((ext[1].toLowerCase() !== "pdf") &amp;&amp; (ext[1].toLowerCase() !== "png") &amp;&amp; (ext[1].toLowerCase() !== "jpg") &amp;&amp; (ext[1].toLowerCase() !== "tif") )
+	                        {
+	                            $(messageName).html('El formato del archivo no es válido').css('color', 'red');
+	                            $(document.getElementById(inputFile.delegateTarget.name)).prop("value", null);
+	                        } else {
+	                            $(messageName).html('');
+	                        }
+	                    }
+                    }
+				});                 
+                
+                function checkFile(inputFile, id) 
+                {
+                    var max = 2048 * 2048; // 4MB
+                    var file = inputFile.files[0];
+                    var name = id.split(":");
+                    var messageName = "#message" + name[1];
+                    if (name[1] == "inputActaAsambleaConsejo" || name[1] == "inputCopiaDocumentoIdentificacion") 
+                    {
+                        var ext = file.name.split(".");
+                        if ((ext[1] !== "pdf") &amp;&amp; (ext[1] !== "png") &amp;&amp; (ext[1] !== "jpg") &amp;&amp; (ext[1] !== "tif"))
+                        {
+                            $(messageName).html('El formato del archivo no es válido').css('color', 'red');
+                            inputFile.value = null;
+                        } else {
+                            if (file.size > max)
+                            {
+                                $(messageName).html('El archivo supera el peso permitido de 4MB').css('color', 'red');
+                                inputFile.value = null;
+                            } else
+                            {  
+                                $(messageName).html('');                  
+                            }
+                        }                        
+                    }
+                    if (name[1] == "inputDocumentoAceptacion" || name[1] == "inputCertificadoTradicionLibertad") 
+                    {
+                        var ext = file.name.split(".");
+                        if ((ext[1] !== "pdf") &amp;&amp; (ext[1] !== "png") &amp;&amp; (ext[1] !== "jpg") &amp;&amp; (ext[1] !== "tif"))
+                        {
+                            $(messageName).html('El formato del archivo no es válido').css('color', 'red');
+                            inputFile.value = null;
+                        } else {
+                            if (file.size > max)
+                            {
+                                $(messageName).html('El archivo supera el peso permitido de 4MB').css('color', 'red');
+                                inputFile.value = null;
+                            } else
+                            {  
+                                $(messageName).html('');                  
+                            }
+                        }                        
+                    }
+                    
+                    if (name[1] == "inputEscrituraPublica") 
+                    {
+                        var ext = file.name.split(".");
+                        if ((ext[1] !== "pdf") &amp;&amp; (ext[1] !== "png") &amp;&amp; (ext[1] !== "jpg") &amp;&amp; (ext[1] !== "tif"))
+                        {
+                            $(messageName).html('El formato del archivo no es válido').css('color', 'red');
+                            inputFile.value = null;
+                        } else {
+                            if (file.size > max)
+                            {
+                                $(messageName).html('El archivo supera el peso permitido de 4MB').css('color', 'red');
+                                inputFile.value = null;
+                            } else
+                            {  
+                                $(messageName).html('');                  
+                            }
+                        }                        
+                    }
+                    
+                };
+                //Esta función verifica si el checkbox de declaración bajo gravedad de juramento está seleccionado. 
+                //Si esta seleccionado bloquea la pantalla y hace su procedimiento normal; si no, coloca un mensaje de error en el campo.
+                function checkoath()
+                {
+                    if ($("#extinctionPHForm\\:chkbSeleccionar").is(':checked') === true)
+                    {
+                        $('#checkmessage').html('');
+                        $.blockUI({message: '<h3><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>  Cargando...</h3>', css: {
+                        border: 'none',
+                                padding: '15px',
+                                backgroundColor: '#000',
+                                '-webkit-border-radius': '10px',
+                                '-moz-border-radius': '10px',
+                                opacity: .5,
+                                color: '#fff'
+                        }});
+                        return true;
+                    } else
+                    {
+                        $('#checkmessage').html('La solicitud no puede enviarse porque aún no ha aceptado la declaración bajo gravedad de juramento').css('color', 'red');
+                        return false;
+                    }
+                };
+            </script>
+        </ui:define>
+    </ui:composition>
+</html>

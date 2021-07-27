@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html lang="es"  xmlns = "http://www.w3.org/1999/xhtml"  xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+
+
+    <ui:composition template="/sidebartemplate.xhtml">
+        <ui:define name="content">
+            <div class="col-md-10">
+                <h:form id="busquedaPropiedad">
+                    <section>
+                        <h:panelGroup layout="block" id="registeralert">
+                            <h:panelGroup layout="block" rendered="#{pHConsultInitController.alertShow}">			
+                                <div class="#{pHConsultInitController.alertStyle ? 'alert alert-success alert-dismissible' : 'alert alert-warning alert-dismissible'}"
+                                     id="alert" align="center">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&#215;</a>
+                                    <h:outputLabel id="finalMessage" value="#{pHConsultInitController.alertMessage}"/>
+                                </div>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                        <div class="well">
+                            <div class="row">
+                                <div class="col-md-12" style="text-align:center">
+                                    <h3><strong>Consulta de propiedad horizontal</strong></h3>
+                                </div>
+                            </div>
+                        </div>                
+                        <div class="well well-sm">
+                            <div class="panel panel-default" style="margin-bottom: -8px">
+                                <div class="panel-heading ">
+                                    <label><strong>Consulta de Propiedad Horizontal</strong></label>
+
+
+                                    <span  id="Help" onMouseOver="mano(this)" onclick="fpopover(); return false;"   style="width: 4%; text-transform:bold; cursor:hand" data-placement="left" class="pull-right" data-toggle="popover"   data-html="true" data-content="#{pHConsultInitController.urlVideoRegistro}" >Ayuda</span>
+                                    <img src="images/Ayuda.png" style="width: 25px; margin-left: 20px;" class="pull-right"/>
+
+                                    <h:selectOneRadio style="display:inline-block;float:right;margin-left: 5px; margin-right: 5px;" id="typeSearchPropiedad" onchange="typeSearch(this.value)" value="#{pHConsultInitController.tBusqueda}">
+                                        <f:selectItem itemValue = "1" itemLabel = "Matricula"/> 
+                                        <f:selectItem itemValue = "2" itemLabel = "Nombre y Localidad" /> 
+                                    </h:selectOneRadio>
+                                    <h:inputHidden id="typeSearchPropiedadAux" value="#{pHConsultInitController.tBusqueda}"/>
+                                    <div style="float:right;">
+                                        <label>Buscar Por: </label>
+                                    </div>
+
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div id="contLocalidad" style="display: none;">
+                                            <div class="col-md-2">
+                                                <label>Localidad</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <h:selectOneMenu  id="drpdLocalidad" value="#{pHConsultInitController.localidad}" onchange="localidad();"
+                                                                  class="form-control"  requiredMessage="Seleccione una opcion" disabled="#{pHConsultInitController.disableLocation}">
+                                                    <f:selectItem itemValue="" itemLabel="Seleccionar" />
+                                                    <f:selectItems value="#{pHConsultInitController.valuesLocation}"  var="location" itemLabel="#{location.nameLocation}" itemValue="#{location.valueLocation}"/>
+                                                </h:selectOneMenu>
+                                                <h:inputHidden id="drpdLocalidadAux" value="#{pHConsultInitController.localidad}" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label id="labelBusqueda"> #{pHConsultInitController.labelBusqueda}</label>
+                                        </div>
+                                        <div class="col-md-2">
+                                        	<h:selectOneMenu id="txtCalleEvento2" class="form-control dir"  tabindex="5" style="padding: 7px 5px;">
+                                                <f:selectItems value="#{pHConsultInitController.valuesMatriculaSelect1}" />
+                                            </h:selectOneMenu>
+                                        </div>
+                                        <div class="col-md-2">
+                                        	<h:selectOneMenu id="txtCalleEvento3" class="form-control dir"  tabindex="5" style="padding: 7px 5px;">
+												<f:selectItems value="#{pHConsultInitController.valuesMatriculaSelect2}" />
+                                            </h:selectOneMenu>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <h:inputText id="txtNitPropiedadNumero" class="form-control numerico" maxlength="20" 
+                                                          autocomplete="off" style="display: #{pHConsultInitController.verNit}" 
+                                                         onkeyup="onKeyUp(this)"> 
+                                                         
+                                            </h:inputText>               
+                                            			  
+                                        </div>                                        
+                                        <div class="col-md-3">
+
+                                            <h:inputText id="txtNombrePropiedadConsulta" class="form-control letrasTildes" maxlength="35"
+                                                         value="#{pHConsultInitController.nombre}" autocomplete="off" style="display: #{pHConsultInitController.verNombre}"
+                                                         onkeypress="return check(event)"/>
+                                                         <h:inputHidden id="txtNitPropiedadConsulta" value="#{pHConsultInitController.nit}"/>
+
+                                            <span id="messageCheckBusqueda" style="color:red;"></span>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <h:commandButton id="btnSolicitar" value="Buscar" styleClass="btn btn-default btn-block" 
+                                                             onclick="return validaVacio()" action="#{pHConsultInitController.FindPH()}">
+                                                <f:ajax execute="busquedaPropiedad" 
+                                                        render="busquedaPropiedad"
+                                                        onevent="updateView"/>
+                                            </h:commandButton>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12" style="margin-top: 15px;">
+                                            <img src="images/Help.png" style="width: 20px"/>
+                                            <span style="color:red;font-size: 11px;" id="ayudaBusqueda">#{pHConsultInitController.helpMessage}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+
+                            <h:panelGroup rendered="#{pHConsultInitController.noResult}">
+                                <div class="panel panel-default" style="margin-bottom: -8px">
+                                    <div class="panel-heading">
+                                        <label><strong>Información de Propiedad Horizontal</strong></label>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <img src="images/Help.png" style="width: 20px"/>
+                                                <h:outputLabel id="errorConsulta" value="#{pHConsultInitController.consultErrorMessage}"
+                                                               style="font-size: 11px; font-weight: normal; color: red; margin-left: 5px;"/>
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <div class="row"  style="display: #{pHConsultInitController.showButtonNew}">
+                                            <div class="col-md-3">
+                                                <h:commandButton action="#{pHConsultInitController.registerPH()}" class="btn btn-default btn-block" value="Registrar Propiedad" immediate="true"
+                                                                 onclick="block()"/>
+                                            </div>
+                                        </div>
+                                        <br/>
+                                    </div>
+                                </div>
+                            </h:panelGroup>
+                            <h:panelGroup rendered="#{pHConsultInitController.result}">
+                                <div class="panel panel-default" style="margin-bottom: -8px">
+                                    <div class="panel-heading">
+                                        <label><strong>Información de Propiedad Horizontal</strong></label>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-8 col-md-offset-2">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <label>Nombre: </label>
+                                                        <h:outputLabel id="nombre" value=" #{pHConsultInitController.namePH}"
+                                                                       style="font-weight: normal; margin-left: 3px;"/>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <label>Dirección: </label>
+                                                        <h:outputLabel id="direccion" value=" #{pHConsultInitController.addressPH}"
+                                                                       style="font-weight: normal; margin-left: 3px;"/>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <label>Representante Legal: </label>
+                                                        <h:outputLabel id="representante" value=" #{pHConsultInitController.legalAgentPH}"
+                                                                       style="font-weight: normal; margin-left: 3px;"/>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <label>Periodo: </label>
+                                                        <h:outputLabel id="periodo" style="font-weight: normal; margin-left: 3px;"
+                                                                       value=" De: #{pHConsultInitController.dateInitPH} - A: #{pHConsultInitController.dateFinalPH}"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <h:dataTable id="datatablePadre" value = "#{pHConsultInitController.listRequestDTOs}"
+                                                     var = "r" class="table table-bordered text-uppercase">
+                                            <h:column>    				
+                                                <f:facet name = "header">Proceso</f:facet>    				
+                                                    #{r.name}
+                                            </h:column>
+                                            <h:column>
+                                                <f:facet name="header">Radicado</f:facet>
+                                                    #{r.radNumberSolicitud}
+                                            </h:column>
+                                            <h:column>
+                                                <f:facet name = "header">Descargar Certificado</f:facet>
+                                                <h:panelGroup layout="block" rendered="#{r.showAprobadoD}">
+                                                    <h:commandLink action="#{pHConsultInitController.downloadDocument()}" value="Descargar Certificado">
+                                                        <f:param name="radicado" value="#{r.radNumber}" />
+                                                    </h:commandLink>
+                                                </h:panelGroup>
+                                            </h:column>
+                                            <h:column>
+                                                <f:facet name = "header">Estado</f:facet>
+                                                <h:panelGroup layout="block" rendered="#{r.showSubsanacionExtincion}">			
+                                                    <a id="link1">
+                                                        <h:commandButton id="subExtincion" value="#{r.state}" action="#{pHConsultInitController.subsanacionExtincionPH()}">
+                                                            <f:param name="Documentos" value="#{r.paramSubsanacion}" />
+                                                            <f:param name="caso" value="#{r.caso}" />
+                                                        </h:commandButton>
+                                                    </a>
+                                                </h:panelGroup>
+                                                <h:panelGroup layout="block" rendered="#{r.showSubsanacionActualizacionRepresentante}">			
+                                                    <a id="link1">
+                                                        <h:commandButton id="subActualizacionRepresentante" value="#{r.state}" action="#{pHConsultInitController.subsanacionLegalAgent()}"
+                                                                         onclick="block()">
+                                                            <f:param name="Documentos" value="#{r.paramSubsanacion}" />
+                                                            <f:param name="caso" value="#{r.caso}"  />
+                                                        </h:commandButton>
+                                                    </a>
+                                                </h:panelGroup>
+                                                <h:panelGroup layout="block" rendered="#{r.showSubsanacionPropiedad}">
+                                                    <a id="link2">
+                                                        <h:commandButton id="subPropiedad" value="#{r.state}" action="#{pHConsultInitController.subsanacionInscripcionPH()}"
+                                                                         onclick="block()">
+                                                            <f:param name="Documentos" value="#{r.paramSubsanacion}" />
+                                                        </h:commandButton>
+                                                    </a>
+                                                </h:panelGroup>
+                                                <h:panelGroup layout="block" rendered="#{r.showTramite}">
+                                                    #{r.state}
+                                                </h:panelGroup>
+                                                <h:panelGroup layout="block" rendered="#{r.showAprobado}">
+                                                    #{r.state}
+                                                </h:panelGroup>
+                                            </h:column>
+                                        </h:dataTable>
+                                        <div class="row">
+                                            <div class="col-md-3"  style="display: #{pHConsultInitController.showButtonNewClosed}">
+                                                <h:commandButton action="#{pHConsultInitController.registerPH()}" class="btn btn-default btn-block" value="Registrar Propiedad" immediate="true"
+                                                                 onclick="block()"/>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <h:commandLink action="#{pHConsultInitController.updateLegalAgent}" class="btn btn-default btn-block" value="Solicitud Modificar Representante" immediate="true"
+                                                               onclick="block()"  rendered="#{pHConsultInitController.updateRepresentantePropiedadHorizontal}"/>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <h:commandLink action="#{pHConsultInitController.extincionPH()}" class="btn btn-default btn-block" value="Solicitud Extinción" immediate="true"
+                                                               onclick="block()"  rendered="#{pHConsultInitController.extincionPropiedadHorizontal}"/>
+                                            </div>
+
+                                        </div>
+
+                                        <h:panelGroup rendered="#{pHConsultInitController.msjTramite}">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <h:outputLabel id="messageConsulta" value="#{pHConsultInitController.messageTramitePropiedad}"
+                                                                   style="font-weight: bold; color: red"/>
+                                                </div>
+                                            </div>
+                                        </h:panelGroup>
+                                    </div>
+                                </div>
+                            </h:panelGroup>
+                        </div> 
+                    </section>
+                </h:form>
+            </div>
+            <h:outputScript>
+            
+            		$('.numerico').on('keypress', function (e)
+	                {
+	                    return (e.charCode &gt;&#61; 48 &amp;&amp; e.charCode &lt;&#61; 57) || (e.key &#61;&#61; "Backspace");
+	                });
+                function validaVacio()
+                {
+                $("#busquedaPropiedad\\:txtNitPropiedadConsulta").val($("#busquedaPropiedad\\:txtCalleEvento2").val() + $("#busquedaPropiedad\\:txtCalleEvento3").val() + $("#busquedaPropiedad\\:txtNitPropiedadNumero").val());
+
+                if($("#busquedaPropiedad\\:typeSearchPropiedadAux").val() == 1){
+
+                if($("#busquedaPropiedad\\:txtNitPropiedadNumero").val() &#61;&#61; '')
+                {
+                $("#messageCheckBusqueda").html('Este Campo no puede estar Vacio');
+                return false;
+                } else {
+                $("#messageCheckBusqueda").html('');
+                return true;
+                }
+                }
+
+                if($("#busquedaPropiedad\\:typeSearchPropiedadAux").val() == 2){
+
+                if($("#busquedaPropiedad\\:txtNombrePropiedadConsulta").val() &#61;&#61; '')
+                {
+                $("#messageCheckBusqueda").html('Este Campo no puede estar Vacio');
+                return false;
+                } else {
+                $("#messageCheckBusqueda").html('');
+                return true;
+                }
+                }
+                };
+
+
+                $('.numerico').on('keypress', function (e)
+                {
+                return (e.charCode &gt;&#61; 48 &amp;&amp; e.charCode &lt;&#61; 57) || (e.key &#61;&#61; "Backspace")|| (e.key &#61;&#61; "Enter");
+                });
+
+                function updateView()
+                {
+                $("#busquedaPropiedad\\:typeSearchPropiedad\\:0").css({'margin-left':'5px','margin-right':'5px'});
+                $("#busquedaPropiedad\\:typeSearchPropiedad\\:1").css({'margin-left':'5px','margin-right':'5px'});
+                $('.numerico').on('keypress', function (e)
+                {
+                return ((e.charCode &gt;&#61; 48 &amp;&amp; e.charCode &lt;&#61; 57) || (e.key &#61;&#61; "Backspace") || (e.key &#61;&#61; "Enter"));
+                });
+                if($("#busquedaPropiedad\\:typeSearchPropiedadAux").val() == 1)
+                {
+                $("#contLocalidad").css("display","none");
+                }
+
+                if($("#busquedaPropiedad\\:typeSearchPropiedadAux").val() == 2)
+                {
+                $("#contLocalidad").css("display","");
+                }
+                };
+            </h:outputScript>
+            <script>
+                function block()
+                {
+                    $.blockUI({message: '<h3><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>  Cargando...</h3>', css: {
+                            border: 'none',
+                            padding: '15px',
+                            backgroundColor: '#000',
+                            '-webkit-border-radius': '10px',
+                            '-moz-border-radius': '10px',
+                            opacity: .5,
+                            color: '#fff'
+                        }});
+                }
+                ;
+
+                $(document).ready(function ()
+                {
+                    $('[data-toggle="popover"]').popover({
+                        title: '<span class="text-info"><strong> Ayuda</strong></span>' +
+                                '<button type="button" id="close" class="close" onclick="$(&quot;#Help&quot;).popover(&quot;hide&quot;);">X</button>'
+                    });
+                    $("#busquedaPropiedad\\:typeSearchPropiedad\\:0").css({'margin-left': '5px', 'margin-right': '5px'});
+                    $("#busquedaPropiedad\\:typeSearchPropiedad\\:1").css({'margin-left': '5px', 'margin-right': '5px'});
+                    $.unblockUI();
+                });
+
+                function localidad()
+                {
+                    $("#busquedaPropiedad\\:drpdLocalidadAux").val($("#busquedaPropiedad\\:drpdLocalidad").val());
+                }
+
+                function typeSearch(select)
+                {
+                    $("#busquedaPropiedad\\:typeSearchPropiedadAux").val(select);
+                    if (select == 1)
+                    {
+                        $("#contLocalidad").css("display", "none");
+                        $("#busquedaPropiedad\\:drpdLocalidad").attr("disabled", "true");
+                        $("#busquedaPropiedad\\:drpdLocalidad").val("");
+                        $("#labelBusqueda").html("Matricula inmobiliaria");
+                        $("#busquedaPropiedad\\:txtNitPropiedadConsulta").val("");
+                        $("#busquedaPropiedad\\:txtNitPropiedadConsulta").css("display", "");
+                        $("#busquedaPropiedad\\:txtNombrePropiedadConsulta").css("display", "none");
+                        $("#busquedaPropiedad\\:txtNombrePropiedadConsulta").val("-1");
+                        $("#messageCheckBusqueda").html('');
+                        $("#ayudaBusqueda").html("Ingrese la matricula inmobiliaria de la Propiedad Horizontal sin el dígito de verificación, no use puntos, guiones ni espacios");
+                    }
+
+                    if (select == 2)
+                    {
+                        $("#contLocalidad").css("display", "");
+                        $("#busquedaPropiedad\\:drpdLocalidad").removeAttr("disabled");
+                        $("#busquedaPropiedad\\:drpdLocalidad").val("");
+                        $("#labelBusqueda").html("Ingrese Nombre de la Propiedad");
+                        $("#busquedaPropiedad\\:txtNombrePropiedadConsulta").val("");
+                        $("#busquedaPropiedad\\:txtNombrePropiedadConsulta").css("display", "");
+                        $("#busquedaPropiedad\\:txtNitPropiedadConsulta").css("display", "none");
+                        $("#busquedaPropiedad\\:txtNitPropiedadConsulta").val("-1");
+                        $("#messageCheckBusqueda").html('');
+                        $("#ayudaBusqueda").html("Ingrese la Localidad donde se encuentra ubicada la propiedad horizontal y el nombre exacto con el que está registrada recuerde que el sistema difiere entre mayúsculas y minúsculas");
+                    }
+                }
+                ;
+
+                function fpopover()
+                {
+                    var p = $('[data-toggle="popover"]').popover();
+                    console.log(p);
+                    p.on("show.bs.popover", function (e) {
+                        p.data("bs.popover").tip().css({"max-width": "100%"});
+                    });
+                }
+                
+                  function mano(a) {
+                    if (navigator.appName === "Netscape") {
+                        a.style.cursor = 'pointer';
+                    } else {
+                        a.style.cursor = 'hand';
+                    }
+                }
+                
+                ///Matricula mayuscula
+                function mayus(e) {
+                            e.value = e.value.toUpperCase();
+                        $("#busquedaPropiedad\\:txtNitPropiedadConsulta").val(e.value);
+                }
+                
+                function onlyNumber(e) {
+                	
+                    //e.value = $("#busquedaPropiedad\\:txtCalleEvento2").val() + "-" + $("#busquedaPropiedad\\:txtCalleEvento3").val() + e.value.toUpperCase();
+                	//$("#busquedaPropiedad\\:txtNitPropiedadConsulta").val(e.value);
+                }
+                
+                function onKeyUp(e) {
+                	e.value = e.value.replace(/[^0-9]/g,'');
+                	$("#busquedaPropiedad\\:txtNitPropiedadConsulta").val($("#busquedaPropiedad\\:txtCalleEvento2").val() + $("#busquedaPropiedad\\:txtCalleEvento3").val() + $("#busquedaPropiedad\\:txtNitPropiedadNumero").val());
+                }
+
+
+
+                $('.numerico').on('keypress', function (e){
+                    return (e.charCode &gt;&#61; 48 &amp;&amp; e.charCode &lt;&#61; 57) || (e.key &#61;&#61; "Backspace");});
+    
+
+                $('.letrasTildes').on('keypress', function (e){
+                    return ((e.charCode &gt;&#61; 65 &amp;&amp; e.charCode &lt;&#61; 90)                                
+                            || (e.charCode &gt;&#61; 97 &amp;&amp; e.charCode &lt;&#61; 122)                                
+                            || (e.charCode &#61;&#61; 32)                                 
+                            || (e.key &#61;&#61; "Backspace")                                
+                            || (e.charCode &#61;&#61; 193)                                 
+                            || (e.charCode &#61;&#61; 201)                                 
+                            || (e.charCode &#61;&#61; 205)                                 
+                            || (e.charCode &#61;&#61; 211)                                 
+                            || (e.charCode &#61;&#61; 218)                                
+                            || (e.charCode &#61;&#61; 225)                                 
+                            || (e.charCode &#61;&#61; 233)                                 
+                            || (e.charCode &#61;&#61; 237)                                 
+                            || (e.charCode &#61;&#61; 243)                                 
+                            || (e.charCode &#61;&#61; 250)                                
+                            || (e.charCode &#61;&#61; 209)                                
+                            || (e.charCode &#61;&#61; 241));                        
+                    //return;                    
+                });
+                
+
+            </script>    
+        </ui:define>
+    </ui:composition>
+</html>

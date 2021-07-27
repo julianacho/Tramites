@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html lang="es"  xmlns = "http://www.w3.org/1999/xhtml"  xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+
+
+    
+    
+
+
+    <ui:composition template="/sidebartemplate.xhtml">
+        <ui:define name="content">
+            <h:form id="home">
+                <div class="col-md-10">
+                    <section>
+                        <div class="well">
+                            <div class="row">
+                                <div class="col-md-12" style="text-align:center">
+                                    <h3><strong>Inicio</strong></h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="well well-sm">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <div class="row ">
+                                        <div class="col-md-4 col-md-offset-1 navbar navbar-default sidebar hidden-sm hidden-xs " style="padding: 2%; text-align: center">
+                                            <label><strong>Certificados Residencia</strong></label>                                            
+                                                <img src="#{loginController.urlImgCR}" alt="" style="width: 100%"/>
+                                        </div>
+                                        <div class="col-md-4 col-md-offset-1 navbar navbar-default sidebar hidden-sm hidden-xs " style="padding: 2%; text-align: center">
+                                            <label><strong>Propiedad Horizontal</strong></label>
+                                            <img src="#{loginController.urlImgPH}" alt="" style="width: 100%"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

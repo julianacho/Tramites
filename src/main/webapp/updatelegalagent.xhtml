@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html lang="es"  xmlns = "http://www.w3.org/1999/xhtml"  xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+
+
+
+    <ui:composition template="/sidebartemplate.xhtml">
+        <ui:define name="content">
+            <div class="col-md-10">
+                <h:form id="updateLegalAgentForm" enctype="multipart/form-data">
+                    <section>
+                        <!--Mensaje de alerta-->
+                        <h:panelGroup layout="block" id="registeralert">
+                            <h:panelGroup layout="block" rendered="#{updateLegalAgentController.alertShow}">			
+                                <div class="#{updateLegalAgentController.alertStyle ? 'alert alert-success alert-dismissible' : 'alert alert-warning alert-dismissible'}"
+                                     id="alert" align="center">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&#215;</a>
+                                    <h:outputLabel id="finalMessage" value="#{updateLegalAgentController.alertMessage}"/>
+                                </div>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                        <div class="well">
+                            <div class="row">
+                                <div class="col-md-12" style="text-align:center">
+                                    <h3><strong>Solicitud actualización representante legal</strong></h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="well well-sm">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <label><strong>Datos de la propiedad horizontal</strong></label>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label>Localidad</label>
+                                                    <h:selectOneMenu id="drpdLocalidad" value="#{updateLegalAgentController.location}" class="form-control"
+                                                                    required="true" requiredMessage="Este campo es requerido.">
+                                                       <f:selectItem itemValue="#{null}" itemLabel="Seleccione" />
+                                                       <f:selectItems value="#{updateLegalAgentController.valuesLocation}"/>
+                                                   </h:selectOneMenu>
+                                                   <h:message for="drpdLocalidad" style="color:#ff0000"/>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label>Barrio</label>
+                                                    <h:selectOneMenu id="drpdBarrio" value="#{updateLegalAgentController.neightborhood}" class="form-control"
+                                                                    required="true" requiredMessage="Este campo es requerido.">
+                                                       <f:selectItem itemValue="#{null}" itemLabel="Seleccione" />
+                                                       <f:selectItems value="#{updateLegalAgentController.valuesNeightborhood}"/>
+                                                   </h:selectOneMenu>
+                                                   <h:message for="drpdBarrio" style="color:#ff0000"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <label><strong>Documentos soporte</strong></label>
+                                </div>
+                                <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="inputActaAsambleaConsejo">Acta de asamblea o consejo</label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <p:fileUpload mode="simple" id="inputActaAsambleaConsejo" value="#{updateLegalAgentController.uploadConferenceRecord}" 
+                                                               required="true" disabled="false" requiredMessage="Debe seleccionar un archivo" />
+                                                <h:message for="inputActaAsambleaConsejo" style="color:#ff0000"/>
+                                                <span id='messageinputActaAsambleaConsejo'></span>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="inputDocumentoAceptacion">Documento de aceptación</label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <p:fileUpload mode="simple" id="inputDocumentoAceptacion" value="#{updateLegalAgentController.uploadAcceptDocument}" 
+                                                               required="true" disabled="false" requiredMessage="Debe seleccionar un archivo" />
+                                                <h:message for="inputDocumentoAceptacion" style="color:#ff0000"/>
+                                                <span id='messageinputDocumentoAceptacion'></span>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="inputCartaSolicitudActualizacion">Carta solicitud de actualización</label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <p:fileUpload mode="simple" id="inputCartaSolicitudActualizacion" value="#{updateLegalAgentController.uploadUpdateDocument}" 
+                                                               required="true" disabled="false" requiredMessage="Debe seleccionar un archivo" />
+                                                <h:message for="inputCartaSolicitudActualizacion" style="color:#ff0000"/>
+                                                <span id='messageinputCartaSolicitudActualizacion'></span>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="inputCopiaDocumentoIdentificacion">Copia de documento de identificación</label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <p:fileUpload mode="simple" id="inputCopiaDocumentoIdentificacion" value="#{updateLegalAgentController.uploadIdDocumentCopy}" 
+                                                               required="true" disabled="false" requiredMessage="Debe seleccionar un archivo" />
+                                                <h:message for="inputCopiaDocumentoIdentificacion" style="color:#ff0000"/>
+                                                <span id='messageinputCopiaDocumentoIdentificacion'></span>
+                                            </div>
+                                        </div>
+                                    <hr />
+                                    <div class="col-md-12">
+                                        <h:selectBooleanCheckbox id="chkbSeleccionar" value="#{updateLegalAgentController.oathCheckBox}"/>
+                                        <label>Acepto bajo gravedad de juramento que soy la persona con la facultad para realizar este trámite</label>                                        
+                                        <br/>
+                                        <span id='checkmessage'></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="well">
+                            <div class="row ">
+                                <div class="col-md-6 col-md-offset-3 " style="text-align: center ">
+                                    <h:commandButton id="btnSolicitar" value="Solicitar actualización RL" styleClass="btn btn-default btn-block" 
+                                                     action="#{updateLegalAgentController.Request()}" onclick="return checkoath()"/>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </h:form>
+            </div>
+            <script>
+            		$('.numerico').on('keypress', function (e)
+	                {
+	                    return (e.charCode &gt;&#61; 48 &amp;&amp; e.charCode &lt;&#61; 57) || (e.key &#61;&#61; "Backspace");
+	                });
+            
+                //Esta función verifica el tipo y el tamaño de los archivos que se cargan.
+                function checkFile(inputFile, id) 
+                {
+                    var max = 2048 * 2048; // 5MB
+                    var file = inputFile.files[0];
+                    var name = id.split(":");
+                    var messageName = "#message" + name[1];
+                    if (file.size > max)
+                    {
+                        $(messageName).html('El archivo supera el peso permitido de 4MB').css('color', 'red');
+                        inputFile.value = null;
+                    } 
+                    else
+                    {
+                        var ext = file.name.split(".");
+                        if ((ext[1] !== "pdf") &amp;&amp; (ext[1] !== "png") &amp;&amp; (ext[1] !== "jpg") &amp;&amp; (ext[1] !== "tif"))
+                        {
+                            $(messageName).html('El formato del archivo no es válido').css('color', 'red');
+                            inputFile.value = null;
+                        } else {
+                            $(messageName).html('');
+                        }
+                    }
+                };
+                //Esta función verifica si el checkbox de declaración bajo gravedad de juramento está seleccionado. 
+                //Si esta seleccionado bloquea la pantalla y hace su procedimiento normal; si no, coloca un mensaje de error en el campo.
+                function checkoath()
+                {
+                    if ($("#updateLegalAgentForm\\:chkbSeleccionar").is(':checked') === true)
+                    {
+                        $('#checkmessage').html('');
+                        $.blockUI({message: '<h3><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>  Cargando...</h3>', css: {
+                        border: 'none',
+                                padding: '15px',
+                                backgroundColor: '#000',
+                                '-webkit-border-radius': '10px',
+                                '-moz-border-radius': '10px',
+                                opacity: .5,
+                                color: '#fff'
+                        }});
+                        return true;
+                    } else
+                    {
+                        $('#checkmessage').html('La solicitud no puede enviarse porque aún no ha aceptado la declaración bajo gravedad de juramento').css('color', 'red');
+                        return false;
+                    }
+                };
+            </script>
+        </ui:define>
+    </ui:composition>
+</html>

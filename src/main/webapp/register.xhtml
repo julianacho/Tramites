@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="es"  xmlns = "http://www.w3.org/1999/xhtml"  xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="content">
+            <section>
+                <h:panelGroup layout="block" id="registeralert">
+                    <h:panelGroup layout="block" rendered="#{registerController.alertMessage}">			
+                        <div class="#{registerController.registerSuccess ? 'alert alert-success alert-dismissible' : 'alert alert-warning alert-dismissible'}"
+                             id="alert" align="center">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&#215;</a>
+                            <h:outputLabel id="finalMessage" value="#{registerController.result}"/>
+                        </div>
+                    </h:panelGroup>
+                </h:panelGroup>
+                <h:form id="registerForm" >
+                    <div class="well">
+                        <div class="row">
+                            <div class="col-md-12" style="text-align:center">
+                                <h3><strong>Registrar</strong></h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="well well-sm">
+                        <div class="panel panel-default " style="margin-bottom: -8px">
+                            <div class="panel-heading ">
+                                <img src="images/Help.png" style="width: 25px"/>
+                                <label><strong>Los campos marcados con <label style="color:red">*</label> son obligatorios.</strong></label>
+                                
+                                <span  id="Help" onMouseOver="mano(this)" onclick="fpopover(); return false;"   style="width: 4%; text-transform:bold; cursor:hand" data-placement="left" class="pull-right" data-toggle="popover"   data-html="true" data-content="#{registerController.urlVideoRegistro}" >Ayuda</span>
+                                <img src="images/Ayuda.png" style="width: 25px" class="pull-right"/>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <label><strong>Información Personal</strong></label>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row ">
+                                    <div class="col-md-12 ">
+                                        <div class="row ">
+                                            <div class="col-md-3 ">
+                                                <label>Nacionalidad</label><label style="color:red">*</label>
+                                                <h:selectOneMenu id="drpdNacionalidad" value="#{registerController.nationality}" 
+                                                                 class="form-control requerido"  requiredMessage="Este campo es requerido.">
+                                                    <f:selectItem itemValue="#{null}" itemLabel="Seleccione" />
+                                                    <f:selectItems value="#{registerController.valuesNationality}"/>
+                                                </h:selectOneMenu>
+                                                <h:message for="drpdNacionalidad" style="color:#ff0000" />
+                                            </div>
+											<div class="col-md-3 " data-toggle="tooltip" data-placement="top" title="Recuerde que si el trámite a solicitar es Certificado de Residencia los únicos tipos de identificación permitidos son: Cedula de Ciudadanía, Contraseña, Cedula de Extranjería y PEP. Los menores de edad se registran asociados a un adulto responsables de ellos.">
+                                                <label >Tipo de identificación</label><label style="color:red">*</label>
+                                                <h:selectOneMenu id="drpdTipoIdentificacion" value="#{registerController.idType}" 
+                                                                 class="form-control requerido"  requiredMessage="Este campo es requerido."
+																onchange="changeTypeDocValue()">
+                                                    <f:selectItem itemValue="#{null}" itemLabel="Seleccione" />
+                                                    <f:selectItems value="#{registerController.valuesIdType}"/>
+                                                </h:selectOneMenu>
+                                                <h:message for="drpdTipoIdentificacion" style="color:#ff0000"/>
+                                            </div>
+											<div class="col-md-3 " data-toggle="tooltip" data-placement="top" title="Digite su número de identificación completo y verifique la información consignada ya que la misma no podrá ser editada por el usuario una vez se cree el registró.">
+                                                <label  > No. de identificación</label><label style="color:red">*</label>
+                                                <h:inputText id="txtNumeroIdentificacion"  class="form-control requerido"  
+                                                             maxlength="20" value="#{registerController.idNumber}"  onkeypress="return check(event)" onkeyup="fusername(this.value)">
+                                                </h:inputText>
+                                                <h:message for="txtNumeroIdentificacion" style="color:#ff0000"/>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="row ">
+                                            <div class="col-md-3 ">
+                                                <label>Primer nombre</label><label style="color:red">*</label>
+                                                <h:inputText id="txtPrimerNombre"  class="form-control text-mayuscula requerido letrasTildes"
+                                                             maxlength="15" value="#{registerController.firstName}" requiredMessage="Este campo es requerido."
+                                                             onkeyup="this.value = this.value.toUpperCase();" onkeypress="return check(event)"/>
+                                                <h:message for="txtPrimerNombre" style="color:#ff0000"/>
+                                            </div>
+                                            <div class="col-md-3 ">
+                                                <label>Segundo nombre</label>
+                                                <h:inputText id="txtSegundoNombre" class="form-control text-mayuscula letrasTildes"
+                                                             maxlength="15" value="#{registerController.secondName}" 
+                                                             onkeyup="this.value = this.value.toUpperCase();" onkeypress="return check(event)"/>
+                                                <h:message for="txtSegundoNombre" style="color:#ff0000"/>
+                                            </div>
+                                            <div class="col-md-3 ">
+                                                <label>Primer apellido</label><label style="color:red">*</label>
+                                                <h:inputText id="txtPrimerApellido"  class="form-control text-mayuscula requerido letrasTildes" 
+                                                             maxlength="15" value="#{registerController.lastName}" requiredMessage="Este campo es requerido."
+                                                             onkeyup="this.value = this.value.toUpperCase();" onkeypress="return check(event)"/>
+                                                <h:message for="txtPrimerApellido" style="color:#ff0000"/>
+                                            </div>
+                                            <div class="col-md-3 ">
+                                                <div class="form-group">
+                                                    <label>Segundo apellido</label>
+                                                    <h:inputText id="txtSegundoApellido" class="form-control text-mayuscula letrasTildes"
+                                                                 maxlength="15" value="#{registerController.secondLastName}"
+                                                                 onkeyup="this.value = this.value.toUpperCase();" onkeypress="return check(event)"/> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="row ">
+                                            <div class="col-md-3" data-toggle="tooltip" data-placement="top" title="Verifique la información consignada en este campo, la misma no podrá ser editada por el usuario una vez se cree el registro.">
+                                                <label>Fecha de nacimiento</label><label style="color:red">*</label>
+                                                <h:inputText id="txtFechaNacimiento" styleClass="form-control datepicker requerido" 
+                                                             readonly="true" style="width: 100%; display: inline-block" 
+                                                             value="#{registerController.birthDate}"/>
+                                            </div>
+                                            <div class="col-md-3 ">
+                                                <label>Sexo</label><label style="color:red">*</label>
+                                                <h:selectOneMenu id="drpdSexo" value="#{registerController.sexo}" 
+                                                                 class="form-control requerido"  requiredMessage="Este campo es requerido.">
+                                                    <f:selectItem itemValue="#{null}" itemLabel="Seleccione" />
+                                                    <f:selectItems value="#{registerController.valuesSex}"/>
+                                                </h:selectOneMenu>
+                                            </div>
+                                            <div class="col-md-3 ">
+                                                <label>Género</label><label style="color:red">*</label>
+                                                <h:selectOneMenu id="drpdGenero" value="#{registerController.gender}" 
+                                                                 class="form-control requerido"  requiredMessage="Este campo es requerido.">
+                                                    <f:selectItem itemValue="#{null}" itemLabel="Seleccione" />
+                                                    <f:selectItems value="#{registerController.valuesGender}"/>
+                                                </h:selectOneMenu>
+                                            </div>
+                                            <div class="col-md-3 ">
+                                                <label>Orientación Sexual</label><label style="color:red">*</label>
+                                                <h:selectOneMenu id="drpdSexualOrient" value="#{registerController.sexualOrient}" 
+                                                                 class="form-control requerido"  requiredMessage="Este campo es requerido.">
+                                                    <f:selectItem itemValue="#{null}" itemLabel="Seleccione" />
+                                                    <f:selectItems value="#{registerController.valuesSexualOrient}"/>
+                                                </h:selectOneMenu>
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <div class="row">
+                                            <div class="col-md-3 ">
+                                                <label>Etnia</label><label style="color:red">*</label>
+                                                <h:selectOneMenu id="drpdEtnia" value="#{registerController.etnia}" 
+                                                                 class="form-control requerido" onchange="etnia(this.value)">
+                                                    <f:selectItem itemValue="#{null}" itemLabel="Seleccione" />
+                                                    <f:selectItems value="#{registerController.valuesEtnia}"/>
+                                                </h:selectOneMenu>
+                                            </div>
+                                            <div class="col-md-3 ">
+                                                <div class="form-group">
+                                                    <label>Otra Etnia</label>
+                                                    <h:inputText id="txtCualEtnia" class="form-control text-mayuscula"
+                                                                 maxlength="15" 
+                                                                 onkeyup="this.value = this.value.toUpperCase();valueEtnia();" 
+                                                                 readonly="true" onkeypress="return check(event)"/> 
+                                                    <h:inputHidden value="#{registerController.cualEtnia}" id="txtCualEtniaAux" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <label><strong>Información de Contacto</strong></label>
+                                <h:selectOneRadio style="display:inline-block;float:right;" id="typeDireccion" onchange="typeDireccion(this.value)" value="#{registerController.typeDireccion}">
+                                    <f:selectItem itemValue = "1" itemLabel = "Urbana"/> 
+                                    <f:selectItem itemValue = "2" itemLabel = "Rural" /> 
+                                </h:selectOneRadio>
+                                <div style="float:right;">
+                                    <label>Tipo de Dirección: </label>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row ">
+                                    <div class="col-md-12 ">
+                                        <div class="row ">
+                                            <div class="col-md-3 ">
+                                                <label>No. Teléfono</label>
+                                                <h:inputText id="txtTelefono"  class="form-control text-mayuscula requerido numerico" 
+                                                             maxlength="10" value="#{registerController.phone}" requiredMessage="Este campo es requerido.">
+                                                </h:inputText>
+                                                <h:message for="txtTelefono" style="color:#ff0000" />
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>Dirección rural    </label><label style="color:red;display: none;" id="requeridoDireccionRural">*</label>
+                                                <h:inputText id="txtDireccionRural" class="form-control text-mayuscula" 
+                                                             maxlength="30" disabled="true" onkeyup="direccionRural()"/>
+                                                <h:inputHidden value="#{registerController.ruralAddress}" id="txtDireccionRuralh" />
+                                            </div>
+                                            <div class="col-md-3 ">
+                                                <label>Ciudad de residencia</label><label style="color:red">*</label>
+                                                <h:selectOneMenu id="drpdCiudadResidencia" 
+                                                                 class="form-control requerido" onchange="locationList(this.value)">
+                                                    <f:selectItem itemValue="#{null}" itemLabel="Seleccione" />
+                                                    <f:selectItems value="#{registerController.valuesResidenceCity}" var="residence" itemLabel="#{residence.nameLocation}" itemValue="#{residence.idLocation}|#{residence.valueLocation}" />
+                                                </h:selectOneMenu>
+                                                <h:inputHidden id="valCiudadResidencia" value="#{registerController.residenceCity}" />
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="row ">
+
+                                            <div class="col-md-3 " data-toggle="tooltip" data-placement="top" title="La localidad seleccionada debe coincidir con la dirección registrada, de esta dependerá la suscripción del certificado de residencia.">
+                                                <label>Localidad</label><label style="color:red">*</label>
+                                                <h:selectOneMenu id="drpdLocalidad" value="#{registerController.location}" class="form-control requerido" onchange="barriosList(this.value)">
+                                                    <f:selectItem itemValue="#{null}" itemLabel="Seleccione" />
+                                                    <f:selectItems value="#{registerController.valuesLocation}" var="location" itemLabel="#{location.nameLocation}" itemValue="#{location.idLocation}|#{location.valueLocation}|#{location.padreId}"/>
+                                                </h:selectOneMenu>
+
+                                                <h:inputHidden id="valLocalidad" value="#{registerController.location}" />
+                                            </div>
+                                            <div class="col-md-3 " data-toggle="tooltip" data-placement="top" title="Recuerde Validar que el barrio que registra corresponde al mismo registrado en sus recibos de servicios públicos.">
+                                                <label>Barrio</label><label style="color:red">*</label>
+                                                <select class="form-control requerido" id="drpdBarrio" onchange="barrioVal(this.value)">
+
+                                                </select>
+
+                                                <h:selectOneMenu id="drpdBarrioAux" style="visibility:hidden;">
+                                                    <f:selectItems value="#{registerController.valuesNeightborhood}" var="neight"  itemLabel="#{neight.nameLocation}" itemValue="#{neight.valueLocation}|#{neight.padreId}"/>
+                                                </h:selectOneMenu>
+
+
+                                                <h:inputHidden id="valBarrio" value="#{registerController.neightborhood}" />
+                                            </div>
+                                            <div class="col-md-3 ">
+                                                <label>No. Celular</label>
+                                                <h:inputText id="txtCelular"  class="form-control requerido numerico" maxlength="10" 
+                                                             value="#{registerController.cellphone}" requiredMessage="Este campo es requerido." >
+                                                </h:inputText>
+                                                <h:message for="txtCelular" style="color:#ff0000" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <label>Dirección   </label><label style="color:red" id="requeridoDireccion">*</label>
+                                                <h:inputText id="txtDireccion" class="form-control text-mayuscula requerido" maxlength="20" disabled="true"/>
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <div class="well" id="dir">
+                                            <div class="row" style="margin-top: 0.8%;">
+                                                <div class="col-xs-12">
+                                                    <div class="row">
+                                                        <label class="col-xs-12">Dirección</label>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="col-lg-2 col-md-12" style="padding: 0;">
+
+                                                                <h:selectOneMenu id="txtCalleEvento" value="#{registerController.mainStreet}" class="form-control requerido dir" 
+                                                                                 tabindex="3" onchange="direccion();" 
+                                                                                 requiredMessage="Requerido" style="width: 60%; display: inline-block;">
+                                                                    <f:selectItem itemValue="#{null}" itemLabel="Seleccione" />
+                                                                    <f:selectItems value="#{registerController.valuesMainStreet}"/>
+                                                                </h:selectOneMenu>
+
+
+                                                                <h:inputText class="form-control requerido dir numerico" id="txtCalleEvento1" tabindex="4" maxlength="3"
+                                                                             value="#{registerController.numberMainStreet}" onkeyup="direccion();"
+                                                                             requiredMessage="Requerido"  style="display: inline-block; width: 25%;padding: 4px 6px;"/>
+
+                                                                <h:message for="txtCalleEvento" style="color:#ff0000; font-size:13px;"/>
+                                                                <h:message for="txtCalleEvento1" style="color:#ff0000; font-size:13px; margin-left: 20px;"/>
+
+                                                            </div>
+                                                            <div class="col-lg-2 col-md-12" style="padding: 0;">
+                                                                <div style="display: inline-block; width: 60%">
+                                                                    <h:selectOneMenu id="txtCalleEvento2" value="#{registerController.firstAddressLetter}" class="form-control dir" 
+                                                                                     tabindex="5" onchange="direccion()">
+                                                                        <f:selectItem itemValue="" itemLabel="Seleccione" />
+                                                                        <f:selectItem itemValue="A" itemLabel="A" />
+                                                                        <f:selectItem itemValue="B" itemLabel="B" />
+                                                                        <f:selectItem itemValue="C" itemLabel="C" />
+                                                                        <f:selectItem itemValue="D" itemLabel="D" />
+                                                                        <f:selectItem itemValue="E" itemLabel="E" />
+                                                                        <f:selectItem itemValue="F" itemLabel="F" />
+                                                                        <f:selectItem itemValue="G" itemLabel="G" />
+                                                                        <f:selectItem itemValue="H" itemLabel="H" />
+                                                                        <f:selectItem itemValue="I" itemLabel="I" />
+                                                                        <f:selectItem itemValue="J" itemLabel="J" />
+                                                                        <f:selectItem itemValue="K" itemLabel="K" />
+                                                                        <f:selectItem itemValue="L" itemLabel="L" />
+                                                                        <f:selectItem itemValue="M" itemLabel="M" />
+                                                                        <f:selectItem itemValue="N" itemLabel="N" />
+                                                                        <f:selectItem itemValue="O" itemLabel="O" />
+                                                                        <f:selectItem itemValue="P" itemLabel="P" />
+                                                                        <f:selectItem itemValue="Q" itemLabel="Q" />
+                                                                        <f:selectItem itemValue="R" itemLabel="R" />
+                                                                        <f:selectItem itemValue="S" itemLabel="S" />
+                                                                        <f:selectItem itemValue="T" itemLabel="T" />
+                                                                        <f:selectItem itemValue="U" itemLabel="U" />
+                                                                        <f:selectItem itemValue="V" itemLabel="V" />
+                                                                        <f:selectItem itemValue="W" itemLabel="W" />
+                                                                        <f:selectItem itemValue="X" itemLabel="X" />
+                                                                        <f:selectItem itemValue="Y" itemLabel="Y" />
+                                                                        <f:selectItem itemValue="Z" itemLabel="Z" />
+                                                                    </h:selectOneMenu>
+                                                                </div>
+                                                                <div style="display: inline-block; width: 35%">
+                                                                    <h:selectBooleanCheckbox id="txtCalleEvento3" tabindex="6" value="#{registerController.bisAddress}"
+                                                                                             onchange="direccion()" class="dir"/>
+                                                                    <label for="bis" class="txtLabel" >BIS</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-3 col-md-12" style="padding: 0;">
+                                                                <h:selectOneMenu id="txtCalleEvento4" value="#{registerController.secondAddressLetter}" class="form-control dir" 
+                                                                                 tabindex="7" onchange="direccion()" style="width: 35%;display: inline-block;">
+                                                                    <f:selectItem itemValue="" itemLabel="Seleccione" />
+                                                                    <f:selectItem itemValue="A" itemLabel="A" />
+                                                                    <f:selectItem itemValue="B" itemLabel="B" />
+                                                                    <f:selectItem itemValue="C" itemLabel="C" />
+                                                                    <f:selectItem itemValue="D" itemLabel="D" />
+                                                                    <f:selectItem itemValue="E" itemLabel="E" />
+                                                                    <f:selectItem itemValue="F" itemLabel="F" />
+                                                                    <f:selectItem itemValue="G" itemLabel="G" />
+                                                                    <f:selectItem itemValue="H" itemLabel="H" />
+                                                                    <f:selectItem itemValue="I" itemLabel="I" />
+                                                                    <f:selectItem itemValue="J" itemLabel="J" />
+                                                                    <f:selectItem itemValue="K" itemLabel="K" />
+                                                                    <f:selectItem itemValue="L" itemLabel="L" />
+                                                                    <f:selectItem itemValue="M" itemLabel="M" />
+                                                                    <f:selectItem itemValue="N" itemLabel="N" />
+                                                                    <f:selectItem itemValue="O" itemLabel="O" />
+                                                                    <f:selectItem itemValue="P" itemLabel="P" />
+                                                                    <f:selectItem itemValue="Q" itemLabel="Q" />
+                                                                    <f:selectItem itemValue="R" itemLabel="R" />
+                                                                    <f:selectItem itemValue="S" itemLabel="S" />
+                                                                    <f:selectItem itemValue="T" itemLabel="T" />
+                                                                    <f:selectItem itemValue="U" itemLabel="U" />
+                                                                    <f:selectItem itemValue="V" itemLabel="V" />
+                                                                    <f:selectItem itemValue="W" itemLabel="W" />
+                                                                    <f:selectItem itemValue="X" itemLabel="X" />
+                                                                    <f:selectItem itemValue="Y" itemLabel="Y" />
+                                                                    <f:selectItem itemValue="Z" itemLabel="Z" />
+                                                                </h:selectOneMenu>
+
+                                                                <div style="display: inline-block; width: 35%">
+                                                                    <h:selectOneMenu id="txtCalleEvento5" value="#{registerController.firstStreetGeneratingPath}" class="form-control dir" 
+                                                                                     tabindex="8" onchange="direccion()">
+                                                                        <f:selectItem itemValue="#{null}" itemLabel="Seleccione" />
+                                                                        <f:selectItems value="#{registerController.valuesStreetGeneratingPath}"/>
+                                                                    </h:selectOneMenu>
+                                                                </div>
+                                                                <div style="display: inline-block; width: 5%; text-align: center">
+                                                                    <label for="numeral" class="txtLabel">#</label>
+                                                                </div>
+
+
+                                                                <h:inputText class="form-control requerido dir numerico" id="txtCalleEvento6" tabindex="9" maxlength="3"
+                                                                             value="#{registerController.firstNumberAddress}" onkeyup="direccion()"
+                                                                             requiredMessage="Requerido" style="display: inline-block;width: 15%;padding: 4px 6px;"/>
+                                                                <h:message for="txtCalleEvento6" style="color:#ff0000; font-size:13px;"/>
+                                                            </div>
+                                                            <div  class="col-lg-5 col-md-12" style="padding: 0;">
+                                                                <div style="display: inline-block; width: 25%">
+                                                                    <h:selectOneMenu id="txtCalleEvento7" value="#{registerController.thirdAddressLetter}" class="form-control dir" 
+                                                                                     tabindex="10" onchange="direccion()">
+                                                                        <f:selectItem itemValue="" itemLabel="Seleccione" />
+                                                                        <f:selectItem itemValue="A" itemLabel="A" />
+                                                                        <f:selectItem itemValue="B" itemLabel="B" />
+                                                                        <f:selectItem itemValue="C" itemLabel="C" />
+                                                                        <f:selectItem itemValue="D" itemLabel="D" />
+                                                                        <f:selectItem itemValue="E" itemLabel="E" />
+                                                                        <f:selectItem itemValue="F" itemLabel="F" />
+                                                                        <f:selectItem itemValue="G" itemLabel="G" />
+                                                                        <f:selectItem itemValue="H" itemLabel="H" />
+                                                                        <f:selectItem itemValue="I" itemLabel="I" />
+                                                                        <f:selectItem itemValue="J" itemLabel="J" />
+                                                                        <f:selectItem itemValue="K" itemLabel="K" />
+                                                                        <f:selectItem itemValue="L" itemLabel="L" />
+                                                                        <f:selectItem itemValue="M" itemLabel="M" />
+                                                                        <f:selectItem itemValue="N" itemLabel="N" />
+                                                                        <f:selectItem itemValue="O" itemLabel="O" />
+                                                                        <f:selectItem itemValue="P" itemLabel="P" />
+                                                                        <f:selectItem itemValue="Q" itemLabel="Q" />
+                                                                        <f:selectItem itemValue="R" itemLabel="R" />
+                                                                        <f:selectItem itemValue="S" itemLabel="S" />
+                                                                        <f:selectItem itemValue="T" itemLabel="T" />
+                                                                        <f:selectItem itemValue="U" itemLabel="U" />
+                                                                        <f:selectItem itemValue="V" itemLabel="V" />
+                                                                        <f:selectItem itemValue="W" itemLabel="W" />
+                                                                        <f:selectItem itemValue="X" itemLabel="X" />
+                                                                        <f:selectItem itemValue="Y" itemLabel="Y" />
+                                                                        <f:selectItem itemValue="Z" itemLabel="Z" />
+                                                                    </h:selectOneMenu>
+                                                                </div>
+                                                                <div style="display: inline-block; width: 10%">
+                                                                    <h:selectBooleanCheckbox id="txtCalleEvento8" tabindex="11" 
+                                                                                             value="#{registerController.secondBisAddress}"
+                                                                                             onchange="direccion()" class="dir"/>
+                                                                    <label for="bis" class="txtLabel">BIS</label>
+                                                                </div>
+                                                                <h:selectOneMenu id="txtCalleEvento9" value="#{registerController.fourthAddressLetter}" class="form-control dir" 
+                                                                                 tabindex="12" onchange="direccion()" style="width:25%;display: inline-block;">
+                                                                    <f:selectItem itemValue="" itemLabel="Seleccione" />
+                                                                    <f:selectItem itemValue="A" itemLabel="A" />
+                                                                    <f:selectItem itemValue="B" itemLabel="B" />
+                                                                    <f:selectItem itemValue="C" itemLabel="C" />
+                                                                    <f:selectItem itemValue="D" itemLabel="D" />
+                                                                    <f:selectItem itemValue="E" itemLabel="E" />
+                                                                    <f:selectItem itemValue="F" itemLabel="F" />
+                                                                    <f:selectItem itemValue="G" itemLabel="G" />
+                                                                    <f:selectItem itemValue="H" itemLabel="H" />
+                                                                    <f:selectItem itemValue="I" itemLabel="I" />
+                                                                    <f:selectItem itemValue="J" itemLabel="J" />
+                                                                    <f:selectItem itemValue="K" itemLabel="K" />
+                                                                    <f:selectItem itemValue="L" itemLabel="L" />
+                                                                    <f:selectItem itemValue="M" itemLabel="M" />
+                                                                    <f:selectItem itemValue="N" itemLabel="N" />
+                                                                    <f:selectItem itemValue="O" itemLabel="O" />
+                                                                    <f:selectItem itemValue="P" itemLabel="P" />
+                                                                    <f:selectItem itemValue="Q" itemLabel="Q" />
+                                                                    <f:selectItem itemValue="R" itemLabel="R" />
+                                                                    <f:selectItem itemValue="S" itemLabel="S" />
+                                                                    <f:selectItem itemValue="T" itemLabel="T" />
+                                                                    <f:selectItem itemValue="U" itemLabel="U" />
+                                                                    <f:selectItem itemValue="V" itemLabel="V" />
+                                                                    <f:selectItem itemValue="W" itemLabel="W" />
+                                                                    <f:selectItem itemValue="X" itemLabel="X" />
+                                                                    <f:selectItem itemValue="Y" itemLabel="Y" />
+                                                                    <f:selectItem itemValue="Z" itemLabel="Z" />
+                                                                </h:selectOneMenu>
+                                                                <h:inputText class="form-control requerido dir numerico" id="txtCalleEvento10" tabindex="13" maxlength="3"
+                                                                             value="#{registerController.secondNumberAddress}" onkeyup="direccion()"
+                                                                             requiredMessage="Requerido" style="width: 10%;display: inline-block;padding: 4px 6px;"/>
+
+                                                                <h:selectOneMenu id="txtCalleEvento11" value="#{registerController.secondStreetGeneratingPath}" class="form-control dir" 
+                                                                                 tabindex="14" onchange="direccion()" style="width: 25%;display: inline-block;">
+                                                                    <f:selectItem itemValue="#{null}" itemLabel="Seleccione" />
+                                                                    <f:selectItems value="#{registerController.valuesStreetGeneratingPath}"/>
+                                                                </h:selectOneMenu>
+                                                                <h:message for="txtCalleEvento10" style="color:#ff0000; font-size:13px;"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row" style="margin-top: 0.8%">
+                                                <div class="col-xs-12">
+                                                    <div class="row">
+                                                        <label class="col-xs-12">Complemento</label>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <h:selectOneMenu id="txtCalleEvento12" value="#{registerController.firstAddressComplement}" class="form-control dir" 
+                                                                             tabindex="15" onchange="direccion()">
+                                                                <f:selectItem itemValue="" itemLabel="Seleccione" />
+                                                                <f:selectItem itemValue="AD" itemLabel="Administración" />
+                                                                <f:selectItem itemValue="AG" itemLabel="Agrupación" />
+                                                                <f:selectItem itemValue="AL" itemLabel="Altillo" />
+                                                                <f:selectItem itemValue="AP" itemLabel="Apartamento" />
+                                                                <f:selectItem itemValue="AS" itemLabel="Apartamento Sótano" />
+                                                                <f:selectItem itemValue="BG" itemLabel="Bodega" />
+                                                                <f:selectItem itemValue="BQ" itemLabel="Bloque" />
+                                                                <f:selectItem itemValue="CA" itemLabel="Casa" />
+                                                                <f:selectItem itemValue="CJ" itemLabel="Conjunto" />
+                                                                <f:selectItem itemValue="CN" itemLabel="Consultorio" />
+                                                                <f:selectItem itemValue="DP" itemLabel="Depósito" />
+                                                                <f:selectItem itemValue="DS" itemLabel="Depósito Sótano" />
+                                                                <f:selectItem itemValue="ED" itemLabel="Edificio" />
+                                                                <f:selectItem itemValue="EN" itemLabel="Entrada" />
+                                                                <f:selectItem itemValue="ES" itemLabel="Estudio" />
+                                                                <f:selectItem itemValue="ET" itemLabel="Etapa" />
+                                                                <f:selectItem itemValue="EX" itemLabel="Exterior" />
+                                                                <f:selectItem itemValue="GD" itemLabel="Garaje deposito" />
+                                                                <f:selectItem itemValue="GJ" itemLabel="Garaje" />
+                                                                <f:selectItem itemValue="GS" itemLabel="Garaje Sótano" />
+                                                                <f:selectItem itemValue="HB" itemLabel="Habitación" />
+                                                                <f:selectItem itemValue="IN" itemLabel="Interior" />
+                                                                <f:selectItem itemValue="LB" itemLabel="Laboratorio" />
+                                                                <f:selectItem itemValue="LC" itemLabel="Local" />
+                                                                <f:selectItem itemValue="LM" itemLabel="Local Mezzanine" />
+                                                                <f:selectItem itemValue="LS" itemLabel="Local Sótano" />
+                                                                <f:selectItem itemValue="MD" itemLabel="Modulo" />
+                                                                <f:selectItem itemValue="MN" itemLabel="Mezzanine" />
+                                                                <f:selectItem itemValue="MZ" itemLabel="Manzana" />
+                                                                <f:selectItem itemValue="NV" itemLabel="Nivel" />
+                                                                <f:selectItem itemValue="OF" itemLabel="Oficina" />
+                                                                <f:selectItem itemValue="OS" itemLabel="Oficina Sótano" />
+                                                                <f:selectItem itemValue="PH" itemLabel="Penthouse" />
+                                                                <f:selectItem itemValue="PI" itemLabel="Piso" />
+                                                                <f:selectItem itemValue="PT" itemLabel="Portería" />
+                                                                <f:selectItem itemValue="SA" itemLabel="Salón" />
+                                                                <f:selectItem itemValue="SM" itemLabel="Super Manzana" />
+                                                                <f:selectItem itemValue="SU" itemLabel="Suite" />
+                                                                <f:selectItem itemValue="TO" itemLabel="Torre" />
+                                                                <f:selectItem itemValue="TZ" itemLabel="Terraza" />
+                                                                <f:selectItem itemValue="UD" itemLabel="Unidad" />
+                                                            </h:selectOneMenu>
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                            <h:inputText class="form-control dir" id="txtCalleEvento13" tabindex="16" 
+                                                                         size="2" value="#{registerController.firstNumberComplement}"
+                                                                         onkeyup="direccion()" />
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <h:selectOneMenu id="txtCalleEvento14" value="#{registerController.secondAddressComplement}" class="form-control dir" 
+                                                                             tabindex="17" onchange="direccion()">
+                                                                <f:selectItem itemValue="" itemLabel="Seleccione" />
+                                                                <f:selectItem itemValue="AD" itemLabel="Administración" />
+                                                                <f:selectItem itemValue="AG" itemLabel="Agrupación" />
+                                                                <f:selectItem itemValue="AL" itemLabel="Altillo" />
+                                                                <f:selectItem itemValue="AP" itemLabel="Apartamento" />
+                                                                <f:selectItem itemValue="AS" itemLabel="Apartamento Sótano" />
+                                                                <f:selectItem itemValue="BG" itemLabel="Bodega" />
+                                                                <f:selectItem itemValue="BQ" itemLabel="Bloque" />
+                                                                <f:selectItem itemValue="CA" itemLabel="Casa" />
+                                                                <f:selectItem itemValue="CJ" itemLabel="Conjunto" />
+                                                                <f:selectItem itemValue="CN" itemLabel="Consultorio" />
+                                                                <f:selectItem itemValue="DP" itemLabel="Depósito" />
+                                                                <f:selectItem itemValue="DS" itemLabel="Depósito Sótano" />
+                                                                <f:selectItem itemValue="ED" itemLabel="Edificio" />
+                                                                <f:selectItem itemValue="EN" itemLabel="Entrada" />
+                                                                <f:selectItem itemValue="ES" itemLabel="Estudio" />
+                                                                <f:selectItem itemValue="ET" itemLabel="Etapa" />
+                                                                <f:selectItem itemValue="EX" itemLabel="Exterior" />
+                                                                <f:selectItem itemValue="GD" itemLabel="Garaje deposito" />
+                                                                <f:selectItem itemValue="GJ" itemLabel="Garaje" />
+                                                                <f:selectItem itemValue="GS" itemLabel="Garaje Sótano" />
+                                                                <f:selectItem itemValue="HB" itemLabel="Habitación" />
+                                                                <f:selectItem itemValue="IN" itemLabel="Interior" />
+                                                                <f:selectItem itemValue="LB" itemLabel="Laboratorio" />
+                                                                <f:selectItem itemValue="LC" itemLabel="Local" />
+                                                                <f:selectItem itemValue="LM" itemLabel="Local Mezzanine" />
+                                                                <f:selectItem itemValue="LS" itemLabel="Local Sótano" />
+                                                                <f:selectItem itemValue="MD" itemLabel="Modulo" />
+                                                                <f:selectItem itemValue="MN" itemLabel="Mezzanine" />
+                                                                <f:selectItem itemValue="MZ" itemLabel="Manzana" />
+                                                                <f:selectItem itemValue="NV" itemLabel="Nivel" />
+                                                                <f:selectItem itemValue="OF" itemLabel="Oficina" />
+                                                                <f:selectItem itemValue="OS" itemLabel="Oficina Sótano" />
+                                                                <f:selectItem itemValue="PH" itemLabel="Penthouse" />
+                                                                <f:selectItem itemValue="PI" itemLabel="Piso" />
+                                                                <f:selectItem itemValue="PT" itemLabel="Portería" />
+                                                                <f:selectItem itemValue="SA" itemLabel="Salón" />
+                                                                <f:selectItem itemValue="SM" itemLabel="Super Manzana" />
+                                                                <f:selectItem itemValue="SU" itemLabel="Suite" />
+                                                                <f:selectItem itemValue="TO" itemLabel="Torre" />
+                                                                <f:selectItem itemValue="TZ" itemLabel="Terraza" />
+                                                                <f:selectItem itemValue="UD" itemLabel="Unidad" />
+                                                            </h:selectOneMenu>
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                            <h:inputText class="form-control dir" id="txtCalleEvento15" tabindex="18" size="2"
+                                                                         value="#{registerController.secondNumberComplement}" onkeyup="direccion()" />
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <h:selectOneMenu id="txtCalleEvento16" value="#{registerController.thirdAddressComplement}" class="form-control dir" 
+                                                                             tabindex="19" onchange="direccion()">
+                                                                <f:selectItem itemValue="" itemLabel="Seleccione" />
+                                                                <f:selectItem itemValue="AD" itemLabel="Administración" />
+                                                                <f:selectItem itemValue="AG" itemLabel="Agrupación" />
+                                                                <f:selectItem itemValue="AL" itemLabel="Altillo" />
+                                                                <f:selectItem itemValue="AP" itemLabel="Apartamento" />
+                                                                <f:selectItem itemValue="AS" itemLabel="Apartamento Sótano" />
+                                                                <f:selectItem itemValue="BG" itemLabel="Bodega" />
+                                                                <f:selectItem itemValue="BQ" itemLabel="Bloque" />
+                                                                <f:selectItem itemValue="CA" itemLabel="Casa" />
+                                                                <f:selectItem itemValue="CJ" itemLabel="Conjunto" />
+                                                                <f:selectItem itemValue="CN" itemLabel="Consultorio" />
+                                                                <f:selectItem itemValue="DP" itemLabel="Depósito" />
+                                                                <f:selectItem itemValue="DS" itemLabel="Depósito Sótano" />
+                                                                <f:selectItem itemValue="ED" itemLabel="Edificio" />
+                                                                <f:selectItem itemValue="EN" itemLabel="Entrada" />
+                                                                <f:selectItem itemValue="ES" itemLabel="Estudio" />
+                                                                <f:selectItem itemValue="ET" itemLabel="Etapa" />
+                                                                <f:selectItem itemValue="EX" itemLabel="Exterior" />
+                                                                <f:selectItem itemValue="GD" itemLabel="Garaje deposito" />
+                                                                <f:selectItem itemValue="GJ" itemLabel="Garaje" />
+                                                                <f:selectItem itemValue="GS" itemLabel="Garaje Sótano" />
+                                                                <f:selectItem itemValue="HB" itemLabel="Habitación" />
+                                                                <f:selectItem itemValue="IN" itemLabel="Interior" />
+                                                                <f:selectItem itemValue="LB" itemLabel="Laboratorio" />
+                                                                <f:selectItem itemValue="LC" itemLabel="Local" />
+                                                                <f:selectItem itemValue="LM" itemLabel="Local Mezzanine" />
+                                                                <f:selectItem itemValue="LS" itemLabel="Local Sótano" />
+                                                                <f:selectItem itemValue="MD" itemLabel="Modulo" />
+                                                                <f:selectItem itemValue="MN" itemLabel="Mezzanine" />
+                                                                <f:selectItem itemValue="MZ" itemLabel="Manzana" />
+                                                                <f:selectItem itemValue="NV" itemLabel="Nivel" />
+                                                                <f:selectItem itemValue="OF" itemLabel="Oficina" />
+                                                                <f:selectItem itemValue="OS" itemLabel="Oficina Sótano" />
+                                                                <f:selectItem itemValue="PH" itemLabel="Penthouse" />
+                                                                <f:selectItem itemValue="PI" itemLabel="Piso" />
+                                                                <f:selectItem itemValue="PT" itemLabel="Portería" />
+                                                                <f:selectItem itemValue="SA" itemLabel="Salón" />
+                                                                <f:selectItem itemValue="SM" itemLabel="Super Manzana" />
+                                                                <f:selectItem itemValue="SU" itemLabel="Suite" />
+                                                                <f:selectItem itemValue="TO" itemLabel="Torre" />
+                                                                <f:selectItem itemValue="TZ" itemLabel="Terraza" />
+                                                                <f:selectItem itemValue="UD" itemLabel="Unidad" />
+                                                            </h:selectOneMenu>
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                            <h:inputText class="form-control dir" id="txtCalleEvento17" tabindex="20" size="2"
+                                                                         value="#{registerController.thirdNumberComplement}" onkeyup="direccion()" />
+                                                        </div>
+                                                        <div class="col-md-2 col-md-offset-1" style="text-align:right">
+                                                            <h:commandButton id="cleanbutton" value="Limpiar" styleClass="btn btn-default btn-block"
+                                                                             onclick="clean()" immediate="true">
+                                                                <f:ajax execute="@form" render="@none" />
+                                                            </h:commandButton>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <label><strong>Información Complementaria</strong></label>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row ">
+                                    <div class="col-md-12 ">
+                                        <div class="row ">
+                                            <div class="col-md-3 ">
+                                                <label>Ocupación</label><label style="color:red">*</label>
+                                                <h:selectOneMenu id="drpdOcupacion" value="#{registerController.occupation}" class="form-control requerido"
+                                                                 requiredMessage="Este campo es requerido.">
+                                                    <f:selectItem itemValue="#{null}" itemLabel="Seleccione" />
+                                                    <f:selectItems value="#{registerController.valuesOccupation}"/>
+                                                </h:selectOneMenu>
+                                                <h:message for="drpdOcupacion" style="color:#ff0000" />
+                                            </div>
+                                            <div class="col-md-3 ">
+                                                <label>Condición especial</label>
+                                                <h:selectOneMenu id="drpdCondicionEspecial" value="#{registerController.specialCondition}" 
+                                                                 class="form-control">
+                                                    <f:selectItem itemValue="#{null}" itemLabel="Seleccione" />
+                                                    <f:selectItems value="#{registerController.valuesSpecialCondition}"/>
+                                                </h:selectOneMenu>  
+                                            </div>
+                                            <div class="col-md-3 ">
+                                                <label>Estrato</label><label style="color:red">*</label>
+                                                <h:selectOneMenu id="drpdEstrato" value="#{registerController.stratum}" 
+                                                                 class="form-control requerido"  requiredMessage="Este campo es requerido.">
+                                                    <f:selectItem itemValue="#{null}" itemLabel="Seleccione" />
+                                                    <f:selectItems value="#{registerController.valuesStratum}"/>
+                                                </h:selectOneMenu>
+                                                <h:message for="drpdEstrato" style="color:#ff0000" />
+                                            </div>
+                                            <div class="col-md-3 ">
+                                                <label>Correo electrónico</label><label style="color:red">*</label>
+                                                <h:inputText id="email"  class="form-control requerido" autocomplete="off"
+                                                             value="#{registerController.email}" requiredMessage="Este campo es requerido." maxlength="100">
+                                                </h:inputText>
+                                                <h:message for="email" style="color:#ff0000" />
+                                                <span id='emailmessage'></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <label><strong>Información de Usuario</strong></label>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row ">
+                                    <div class="col-md-12 ">
+                                        <div class="row ">
+                                            <div class="col-md-6 ">
+                                                <label>Usuario</label><label style="color:red">*</label>
+                                                <div class="input-group ">
+                                                    <span class="input-group-addon ">
+                                                        <i class="glyphicon glyphicon-user "></i>
+                                                    </span>
+                                                    <h:inputText id="txtNuevoUsuario"  class="form-control requerido" maxlength="15"
+                                                                 requiredMessage="Este campo es requerido."  onkeypress="return check(event)" readonly="true"/>
+                                                </div>
+                                                <h:message for="txtNuevoUsuario" style="color:#ff0000" />
+                                            </div>
+                                            <div class="col-md-3 ">
+                                                <label>Contraseña</label><label style="color:red">*</label>
+                                                <div class="input-group ">
+                                                    <span class="input-group-addon ">
+                                                        <i class="glyphicon glyphicon-lock "></i>
+                                                    </span>
+                                                    <h:inputSecret id="txtNuevaClave"  class="form-control requerido" maxlength="15"
+                                                                   value="#{registerController.pass}" requiredMessage="Este campo es requerido."/>
+                                                </div>
+                                                <h:message for="txtNuevaClave" style="color:#ff0000" />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label>Confirmar Contraseña</label><label style="color:red">*</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="glyphicon glyphicon-lock"></i>
+                                                    </span>
+                                                    <h:inputSecret id="txtNuevaClaveValidar"  class="form-control requerido"
+                                                                   maxlength="15" value="#{registerController.passConfirmation}"
+                                                                   requiredMessage="Este campo es requerido."/>
+                                                </div>
+                                                <h:message for="txtNuevaClaveValidar" style="color:#ff0000"/>
+                                                <span id='message'></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row ">
+                            <div class="col-md-12 ">
+                                <div class="row ">
+                                    <div class="col-md-5">
+                                        <h:selectBooleanCheckbox id="chkTerminosCondiciones"/>
+                                        <label>Acepto términos y condiciones</label>
+                                        <br/>
+                                        <a class="bootstrap-link" onclick="openModal()">Ver Términos</a>
+                                        <br/>
+                                        <span id='checkmessage'></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="col-md-3">
+                            <h:inputHidden id="direccionh" value="#{registerController.address}" />
+                            <h:inputHidden id="direccionComplementoh" value="#{registerController.addressCompl}" />
+                            <h:inputHidden id="fechanacimientoh" value="#{registerController.birthDate}"
+                                           requiredMessage="Este campo es requerido."/>
+                        </div>
+                        <div class="col-md-6" style="text-align:center">
+
+                            <span id='checkvalidationmessage'></span>
+                            <br/>
+                            <h:commandButton value="Registrar" styleClass="btn btn-default btn-block" 
+                                             action="#{registerController.Register()}" onclick="return validaDireccion();"/>
+                        </div>
+                        <div class="col-md-2 col-md-offset-1" style="text-align:right;margin-top:21px;">
+                            <h:commandButton value="Regresar" styleClass="btn btn-default btn-block" 
+                                             action="#{registerController.Back()}" immediate="true" onclick="block()"/>
+                        </div>
+                    </div>
+                </h:form>
+                <br />
+            </section>
+            <div class="modal fade" id="modalTerminos" role="dialog">
+                <form id="formTerminosCondiciones">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">x</span>
+                                </button>
+                                <h4 class="modal-title">Términos y condiciones</h4>
+                            </div>
+                            <div class="modal-body area_trabajo">
+                                <div class="content">
+                                    <h6>La Secretaría Distrital de Gobierno de Bogotá D.C. en concordancia con las disposiciones de ley 1712 de 2014,
+                                        a través de este aplicativo busca garantizar el acceso a la información y la celeridad en los trámites y en la
+                                        prestación de los servicios que tiene a su cargo. Así mismo, de acuerdo a la ley 1581 de 2012 la Secretaría Distrital
+                                        de Gobierno es responsable del tratamiento de los datos personales; estos serán incluidos en nuestra base de
+                                        datos y utilizados para las siguientes finalidades:</h6>
+                                    <ul>
+                                        <li>
+                                            <h6>Lograr una eficiente comunicación relacionada con nuestros trámites y servicios y para facilitar el acceso
+                                                general a la información de estos.</h6>
+                                        </li>
+                                        <li>
+                                            <h6>Proveer nuestros trámites y servicios.</h6>
+                                        </li>
+                                        <li>
+                                            <h6>Informar sobre nuevos trámites o servicios que estén relacionados con el o los adelantado(s) o realizado(s).</h6>
+                                        </li>
+                                        <li>
+                                            <h6>Informar sobre cambios de nuestros trámites o servicios.</h6>
+                                        </li>
+                                        <li>
+                                            <h6>Evaluar la calidad de servicio.</h6>
+                                        </li>
+                                        <li>
+                                            <h6>Realizar estudios internos sobre hábitos de consumo.</h6>
+                                        </li>
+                                    </ul>
+                                    <h6>Usted podrá ejercer sus derechos a conocer, actualizar, rectificar sus datos personales, hacer consultas y
+                                        reclamos, y demás derechos indicados en el artículo 8o. de la ley 1581 de 2012 y las demás normas que lo complementen
+                                        o sustituya, en la Secretaría Distrital de Gobierno.</h6>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="btn-toolbar">
+                                    <button class="btn btn-sm btn-primary pull-right" data-dismiss="modal" type="button">Cerrar</button>
+                                </div>
+                            </div></div>
+                    </div>
+                </form>
+            </div>
+           
+            <h:outputScript>
+
+
+
+
+                function typeDireccion(select)
+                {
+                var req = document.getElementsByClassName('dir');
+                if(select === '1')
+                {
+                $("#registerForm\\:txtDireccionRural").attr('disabled','disabled');
+                $("#registerForm\\:txtDireccionRuralh").val('');
+                $("#registerForm\\:txtDireccionRural").val('');
+                $("#requeridoDireccionRural").css('display','none');
+                $("#requeridoDireccion").css('display','');
+                $("#registerForm\\:txtDireccionRural").removeClass('requerido');
+                $("#registerForm\\:txtDireccionRural").css('background-color',''); 
+                $("#registerForm\\:txtDireccion").css('background-color','');
+                $("#registerForm\\:txtDireccion").addClass('requerido');
+                $("#registerForm\\:txtCalleEvento").addClass('requerido');
+                $("#registerForm\\:txtCalleEvento1").addClass('requerido');
+                $("#registerForm\\:txtCalleEvento6").addClass('requerido');
+                $("#registerForm\\:txtCalleEvento10").addClass('requerido');
+                for (var i &#61; 0; i &lt; req.length; i++) 
+                {
+                req[i].style.backgroundColor = "";
+                req[i].disabled = "";
+                req[i].value = "";
+                }
+                }
+                if(select === '2')
+                {
+                $("#registerForm\\:txtDireccionRural").removeAttr('disabled');
+                $("#requeridoDireccionRural").css('display','');
+                $("#requeridoDireccion").css('display','none');
+                $("#registerForm\\:txtDireccionRural").addClass('requerido');
+                $("#registerForm\\:direccionh").val('');
+                $("#registerForm\\:direccionComplementoh").val('');
+                $("#registerForm\\:txtDireccion").val('');
+                $("#registerForm\\:txtDireccionRural").css('background-color',''); 
+                $("#registerForm\\:txtDireccion").css('background-color',''); 
+                $("#registerForm\\:txtDireccion").removeClass('requerido');
+                $("#registerForm\\:txtCalleEvento").removeClass('requerido');
+                $("#registerForm\\:txtCalleEvento1").removeClass('requerido');
+                $("#registerForm\\:txtCalleEvento6").removeClass('requerido');
+                $("#registerForm\\:txtCalleEvento10").removeClass('requerido');
+                for (var i &#61; 0; i &lt; req.length; i++) 
+                {
+                req[i].style.backgroundColor = "";
+                req[i].disabled = "disabled";
+                req[i].value = "";
+                }
+                }
+                };
+                $('.numerico').on('keypress', function (e)
+                {
+                return (e.charCode &gt;&#61; 48 &amp;&amp; e.charCode &lt;&#61; 57) || (e.key &#61;&#61; "Backspace");
+                });
+            </h:outputScript>
+            
+            <script>
+            
+            
+	            function validaDireccion()
+	            {
+		            var req = document.getElementsByClassName('requerido');
+		            var dev = 0;
+		
+		            for (var i &#61; 0; i &lt; req.length; i++) 
+		            {                      
+						dev++;
+						if (req[i].value &#61;&#61; "") 
+						{   
+							req[i].style.backgroundColor = "#ffcece";
+						} else {
+							req[i].style.backgroundColor = "";
+							dev = dev - 1;
+						}
+						var auxId = req[i].id.split(':')[1];
+						if (auxId &#61;&#61; 'txtTelefono' || auxId &#61;&#61; 'txtCelular')
+						{
+							var auxValue = $("#registerForm\\:"+auxId).val();
+						}
+						var auxId = req[i].id.split(':')[1];
+						if (auxId &#61;&#61; 'txtCelular')
+						{
+							var auxValue = $("#registerForm\\:txtTelefono").val();
+							if(auxValue &#33;&#61; "")
+							{
+								dev = dev -1;
+								$("#registerForm\\:txtCelular").css('background-color','');
+							} else 
+							{
+								if($("#registerForm\\:txtCelular").val() &#33;&#61; "")
+								{
+									$("#registerForm\\:txtTelefono").css('background-color','');
+									dev = dev -1;
+								}
+							}
+						}
+		
+		            }            
+	                if ($("#registerForm\\:chkTerminosCondiciones").is(':checked') === false)
+	                {
+	                $('#checkmessage').html('Debe aceptar los términos y condiciones').css('color', 'red');
+	                } else {
+	                $('#checkmessage').html('');
+	                }
+	                if (dev &gt; 0) 
+	                {
+	                $('#checkvalidationmessage').html('Faltan Campos por Completar').css('color', 'red');
+	                return false;
+	                } else {
+	                return checktherms();
+	                }
+                };
+            
+            	$('input#registerForm\\:txtNumeroIdentificacion').keydown(function(e) { if (e.keyCode == 32) { return false; } });
+                //Coge todos los valores de los elementos de la dirección para 
+                //unirlos y mostrar el resultado en el campo de dirección.
+                function direccion()
+                {
+                    var ce = $("#registerForm\\:txtCalleEvento").val();
+                    var ce1 = $("#registerForm\\:txtCalleEvento1").val();
+                    var ce2 = $("#registerForm\\:txtCalleEvento2").val();
+                    var ce3 = $("#registerForm\\:txtCalleEvento3").is(':checked') === true ? " Bis" : "";
+                    var ce4 = $("#registerForm\\:txtCalleEvento4").val();
+                    var ce5 = " " + $("#registerForm\\:txtCalleEvento5").val() + " # ";
+                    var ce6 = $("#registerForm\\:txtCalleEvento6").val();
+                    var ce7 = $("#registerForm\\:txtCalleEvento7").val();
+                    var ce8 = $("#registerForm\\:txtCalleEvento8").is(':checked') === true ? " Bis" : "";
+                    var ce9 = " " + $("#registerForm\\:txtCalleEvento9").val() + " - ";
+                    var ce10 = $("#registerForm\\:txtCalleEvento10").val();
+                    var ce11 = $("#registerForm\\:txtCalleEvento11").val();
+                    var co1 = " " + $("#registerForm\\:txtCalleEvento12").val();
+                    var co2 = " " + $("#registerForm\\:txtCalleEvento13").val();
+                    var co3 = " " + $("#registerForm\\:txtCalleEvento14").val();
+                    var co4 = " " + $("#registerForm\\:txtCalleEvento15").val();
+                    var co5 = " " + $("#registerForm\\:txtCalleEvento16").val();
+                    var co6 = " " + $("#registerForm\\:txtCalleEvento17").val();
+
+                    var direccion = ce + " " + ce1 + ce2 + ce3 + " " + ce4 + ce5 + ce6 + ce7 + ce8 + ce9 + ce10 + " " + ce11;
+
+                    var compl = co1 + co2 + co3 + co4 + co5 + co6;
+
+                    var dir = direccion + compl;
+
+                    $("#registerForm\\:txtDireccion").prop("value", dir);
+                    $("#registerForm\\:direccionh").prop("value", direccion);
+                    $("#registerForm\\:direccionComplementoh").prop("value", compl);
+                }
+                ;
+                function direccionRural()
+                {
+                    $("#registerForm\\:txtDireccionRuralh").prop("value", $("#registerForm\\:txtDireccionRural").val());
+                }
+                //Limpia todos los campos de dirección.
+                function clean()
+                {
+                    $("#registerForm\\:txtCalleEvento").prop("value", "");
+                    $("#registerForm\\:txtCalleEvento1").prop("value", "");
+                    $("#registerForm\\:txtCalleEvento2").prop("value", "");
+                    $("#registerForm\\:txtCalleEvento3").prop("value", "");
+                    $("#registerForm\\:txtCalleEvento4").prop("value", "");
+                    $("#registerForm\\:txtCalleEvento5").prop("value", "");
+                    $("#registerForm\\:txtCalleEvento6").prop("value", "");
+                    $("#registerForm\\:txtCalleEvento7").prop("value", "");
+                    $("#registerForm\\:txtCalleEvento8").prop("value", "");
+                    $("#registerForm\\:txtCalleEvento9").prop("value", "");
+                    $("#registerForm\\:txtCalleEvento10").prop("value", "");
+                    $("#registerForm\\:txtCalleEvento11").prop("value", "");
+                    $("#registerForm\\:txtCalleEvento12").prop("value", "");
+                    $("#registerForm\\:txtCalleEvento13").prop("value", "");
+                    $("#registerForm\\:txtCalleEvento14").prop("value", "");
+                    $("#registerForm\\:txtCalleEvento15").prop("value", "");
+                    $("#registerForm\\:txtCalleEvento16").prop("value", "");
+                    $("#registerForm\\:txtCalleEvento17").prop("value", "");
+                    $("#registerForm\\:txtDireccion").prop("value", "");
+                    $("#registerForm\\:direccionh").prop("value", "");
+                }
+                ;
+                //--------------------------
+                $(document).ready(function ()
+                {
+                    $('[data-toggle="popover"]').popover({
+                        title: '<span class="text-info"><strong> Ayuda</strong></span>' +
+                                '<button type="button" id="close" class="close" onclick="$(&quot;#Help&quot;).popover(&quot;hide&quot;);">X</button>'
+                    });
+                    //tooltip
+                    $('[data-toggle="tooltip"]').tooltip()
+                    //desbloquea la pantalla
+                    $("#registerForm\\:txtDireccion").prop("value", $("#registerForm\\:direccionh").val() + $("#registerForm\\:direccionComplementoh").val());
+                    $("#registerForm\\:txtDireccionRural").prop("value", $("#registerForm\\:txtDireccionRuralh").val());
+                    $('#registerForm\\:txtTelefono').attr('placeholder', 'Indicativo + Telefono');
+                    $("#registerForm\\:txtNuevoUsuario").val($("#registerForm\\txtNumeroIdentificacion").val());
+                    $.unblockUI();
+
+             
+                });
+                //Valida que la confimación de contraseña sea igual a la contraseña.
+                $('#registerForm\\:txtNuevaClave, #registerForm\\:txtNuevaClaveValidar').on('keyup', function ()
+                {
+                    if ($('#registerForm\\:txtNuevaClave').val() === $('#registerForm\\:txtNuevaClaveValidar').val())
+                    {
+                        $('#message').html('').css('color', 'green');
+                    } else
+                        $('#message').html('Las contraseñas no coinciden.').css('color', 'red');
+                });
+                //Esta función verifica si el checkbox de términos y condiciones está seleccionado. 
+                //Si esta seleccionado bloquea la pantalla y hace su procedimiento normal; si no, coloca un mensaje de error en el campo.
+                function checktherms()
+                {
+                    if ($("#registerForm\\:chkTerminosCondiciones").is(':checked') === true)
+                    {
+                        $('#checkmessage').html('');
+                        $('#checkvalidationmessage').html('');
+                        $.blockUI({message: '<h3><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>  Cargando...</h3>', css: {
+                                border: 'none',
+                                padding: '15px',
+                                backgroundColor: '#000',
+                                '-webkit-border-radius': '10px',
+                                '-moz-border-radius': '10px',
+                                opacity: .5,
+                                color: '#fff'
+                            }});
+                        return true;
+                    } else
+                    {
+                        $('#checkmessage').html('Debe aceptar los términos y condiciones').css('color', 'red');
+                        return false;
+                    }
+                }
+                ;
+
+                //Bloquea la pantalla
+                function block()
+                {
+                    $.blockUI({message: '<h3><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>  Cargando...</h3>', css: {
+                            border: 'none',
+                            padding: '15px',
+                            backgroundColor: '#000',
+                            '-webkit-border-radius': '10px',
+                            '-moz-border-radius': '10px',
+                            opacity: .5,
+                            color: '#fff'
+                        }});
+                }
+                ;
+                //Abre el modal de términos y condiciones.
+                function openModal()
+                {
+                    $('#modalTerminos').modal('show');
+                }
+                ;
+                //Funciones al cargar la vista
+                $(document).ready(function ()
+                {
+                    //componente de calendario para los campos de fecha.
+                    $(".datepicker").datepicker
+                            ({
+                                showOn: "button",
+                                buttonImage: "images/calendario.png",
+                                buttonText: "",
+                                buttonImageOnly: true,
+                                dateFormat: 'yy-mm-dd',
+                                changeMonth: true,
+                                changeYear: true,
+                                monthNamesShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+                                yearRange: "1900:2030",
+                                maxDate: (new Date().getFullYear() - 18) + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate(),
+                                onSelect: function ()
+                                {
+                                    var dateObject = $(this).datepicker({dateFormat: 'yy-mm-dd'}).val();
+                                    $("#registerForm\\:fechanacimientoh").prop("value", dateObject);
+                                }
+                            });
+                    $(".ui-datepicker-trigger").css({'display': 'inline-block', 'margin-left': '-35px', 'height': '32px', 'vertical-align': '-11px'});
+                    $("#registerForm\\:txtFechaNacimiento").prop("value", $("#registerForm\\:fechanacimientoh").val());
+                    $("#registerForm\\:typeDireccion\\:0").css({'margin-left': '5px', 'margin-right': '5px'});
+                    $("#registerForm\\:typeDireccion\\:1").css({'margin-left': '5px', 'margin-right': '5px'});
+                    $("#registerForm\\:drpdLocalidad").prop("disabled", "true");
+                    $("#drpdBarrio").prop("disabled", "true");
+                    $("#registerForm\\:drpdCiudadResidencia").val("");
+                    $("#registerForm\\:txtNuevoUsuario").val($("#registerForm\\:txtNumeroIdentificacion").val());
+                });
+
+                //Cada vez que se escribe una letra en el campo de email se verifica que tenga el formato de correo, en 
+                //caso que no tenga el formato adecuado, coloca un mensaje
+                $("#registerForm\\:email").keyup(function ()
+                {
+                    $("#registerForm\\:email").filter(function ()
+                    {
+                        var email = $(this).val();
+                        var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+                        if (!emailReg.test(email))
+                        {
+                            $('#emailmessage').html('Formato inválido').css('color', 'red');
+                        } else
+                        {
+                            $('#emailmessage').html('');
+                        }
+                    });
+                });
+
+                function locationList(ciudad)
+                {
+                    ciudad = ciudad.split("|");
+                    console.log(ciudad);
+
+                    $("#registerForm\\:valCiudadResidencia").val(ciudad[1]);
+
+                    $("#registerForm\\:drpdLocalidad").val("");
+                    $("#drpdBarrio").val("");
+                    $("#registerForm\\:drpdLocalidad option").each(function () {
+                        if ($(this).val().split("|")[2] === ciudad[0]) {
+                            $(this).css({"display": ""});
+                        } else {
+                            $(this).css({"display": "none"});
+                        }
+                    });
+                    $("#registerForm\\:drpdLocalidad").removeAttr("disabled");
+                    $("#drpdBarrio").prop("disabled", "true");
+                }
+
+                function barriosList(localidad)
+                {
+                    localidad = localidad.split("|");
+                    console.log(localidad);
+                    $("#drpdBarrio").removeAttr("disabled");
+                    $("#registerForm\\:valLocalidad").val(localidad[1]);
+                    $("#drpdBarrio").val("");
+                    $("#drpdBarrio").append(new Option("Seleccione", ""));
+                    $("#registerForm\\:drpdBarrioAux option").each(function () {
+                        if ($(this).val().split("|")[1] === localidad[0]) {
+                            $(this).removeAttr("style");
+                            $("#drpdBarrio").append(new Option($(this).text(), $(this).val()));
+                        } else {
+                            $("#drpdBarrio option[value='" + $(this).val() + "']").remove();
+                            $(this).css({"display": "none"});
+                        }
+                    });
+                }
+
+                function barrioVal(barrio)
+                {
+                    barrio = barrio.split("|");
+                    $("#registerForm\\:valBarrio").val(barrio[0]);
+                }
+                //Función que añade el mismo valor de txtidentificacion en el campo txtxusuario
+                function fusername(NumIdent)
+                {
+                	var selectedValue = document.getElementById("registerForm:drpdTipoIdentificacion").value;
+                    console.log('Valor Seleccionado');
+                    console.log(selectedValue);
+                    if(selectedValue != 'CE'){
+                        $("#registerForm\\:txtNumeroIdentificacion").val(NumIdent.replace(/[^0-9]/g, ''));
+                    }else{
+                        var documen = document.getElementById("registerForm:txtNumeroIdentificacion").value.toUpperCase();
+                        $("#registerForm\\:txtNumeroIdentificacion").val(documen);
+                    }
+                    $("#registerForm\\:txtNuevoUsuario").val(NumIdent);
+                }
+                
+                //Función que añade el mismo valor de txtidentificacion en el campo txtxusuario
+                function changeTypeDocValue()
+                {
+                    var selectedValue = document.getElementById("registerForm:drpdTipoIdentificacion").value;
+                    console.log('Cambio Valor Seleccionado');
+                    console.log(selectedValue);
+                    $("#registerForm\\:txtNumeroIdentificacion").val('');
+                    
+                }
+
+                function fpopover()
+                {
+                    var p = $('[data-toggle="popover"]').popover();
+                    console.log(p);
+                    p.on("show.bs.popover", function (e) {
+                        p.data("bs.popover").tip().css({"max-width": "100%"});
+                    });
+                }
+
+                function mano(a) {
+                    if (navigator.appName === "Netscape") {
+                        a.style.cursor = 'pointer';
+                    } else {
+                        a.style.cursor = 'hand';
+                    }
+                }
+
+                function etnia(etniaVal)
+                {
+                    if (etniaVal == 8)
+                    {
+                        $("#registerForm\\:txtCualEtnia").removeAttr('readonly');
+                        $("#registerForm\\:txtCualEtnia").addClass('requerido');
+                    } else {
+                        $("#registerForm\\:txtCualEtnia").val("");
+                        $("#registerForm\\:txtCualEtniaAux").val("");
+                        $("#registerForm\\:txtCualEtnia").attr('readonly', true);
+                        $("#registerForm\\:txtCualEtnia").removeClass('requerido');
+                        $("#registerForm\\:txtCualEtnia").css('background-color', '');
+                    }
+                }
+
+                function valueEtnia()
+                {
+                    $("#registerForm\\:txtCualEtniaAux").val($("#registerForm\\:txtCualEtnia").val());
+                }
+
+
+                $('.numerico').on('keypress', function (e){
+                    return (e.charCode &gt;&#61; 48 &amp;&amp; e.charCode &lt;&#61; 57) || (e.key &#61;&#61; "Backspace");});
+    
+
+                $('.letrasTildes').on('keypress', function (e){
+                    return ((e.charCode &gt;&#61; 65 &amp;&amp; e.charCode &lt;&#61; 90)                                
+                            || (e.charCode &gt;&#61; 97 &amp;&amp; e.charCode &lt;&#61; 122)                                
+                            || (e.charCode &#61;&#61; 32)                                 
+                            || (e.key &#61;&#61; "Backspace")                                
+                            || (e.charCode &#61;&#61; 193)                                 
+                            || (e.charCode &#61;&#61; 201)                                 
+                            || (e.charCode &#61;&#61; 205)                                 
+                            || (e.charCode &#61;&#61; 211)                                 
+                            || (e.charCode &#61;&#61; 218)                                
+                            || (e.charCode &#61;&#61; 225)                                 
+                            || (e.charCode &#61;&#61; 233)                                 
+                            || (e.charCode &#61;&#61; 237)                                 
+                            || (e.charCode &#61;&#61; 243)                                 
+                            || (e.charCode &#61;&#61; 250)                                
+                            || (e.charCode &#61;&#61; 209)                                
+                            || (e.charCode &#61;&#61; 241));                        
+                    //return;                    
+                });
+
+            </script>
+        </ui:define>
+    </ui:composition>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es"  xmlns = "http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      >
+
+
+
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="content">
+            <div class="container">
+                <h:form id="loginform">
+                    <h:panelGroup layout="block" id="registeralert">
+                        <h:panelGroup layout="block" rendered="#{loginController.loginMessage}">
+                            <div class="#{loginController.alertStyle ? 'alert alert-success alert-dismissible' : 'alert alert-warning alert-dismissible'}"
+                                 id="alert" align="center">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&#215;</a>
+                                <h:outputLabel id="finalMessage" value="#{loginController.result}"/>
+                            </div>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <div class="row">
+                        <div class="col-md-4 col-md-offset-4">
+                            <label>No. de identificación</label><label style="color:red">*</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="glyphicon glyphicon-user"></i>
+                                </span>
+                                <h:inputText id="txtUsuario" required="true" class="form-control"
+                                             maxlength="20" value="#{loginController.user}" requiredMessage="Este campo es requerido."
+												onkeyup="$(this).val($(this).val().toUpperCase());"
+                                             onkeypress="return check(event)" />
+                                             
+                            </div>
+                            <span id='userMessage'></span>
+                            <h:message for="txtUsuario" style="color:#ff0000" />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-4 col-md-offset-4">
+                            <label>Contraseña</label><label style="color:red">*</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="glyphicon glyphicon-lock"></i>
+                                </span>
+                                <h:inputSecret id="txtPassword" required="true" class="form-control" maxlength="15" 
+                                               value="#{loginController.pass}" requiredMessage="Este campo es requerido."/>
+                            </div>
+                            <h:message for="txtPassword" style="color:#ff0000" />
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-md-4 col-md-offset-4" style="text-align: center">
+                            <h:commandButton value="Ingresar" styleClass="btn btn-default btn-block"
+                                             type="submit" action="#{loginController.Authenticate()}" onclick="block()"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-md-offset-4">
+                            <hr/>
+                        </div>
+                    </div>
+                </h:form>
+                <h:form id="loginform2">
+                    <div class="row">
+                        <div class="col-md-6 col-md-offset-3" style="text-align: center">
+                            <div class="row">
+                                <div class="col-md-4" style="text-align: center">
+                                    <h:commandButton value="Registrarse" styleClass="btn btn-default" action="#{loginController.Register()}"
+                                                     immediate="true" onclick="block()"/>
+                                </div>
+                                <div class="col-md-4" style="text-align: center">
+                                    <h:outputLink value="#{loginController.urlAyuda}" target="_blank" class="btn btn-default">Ayuda</h:outputLink>
+                                </div>
+                                <div class="col-md-4" style="text-align: center">
+                                    <h:commandButton value="¿Olvidó su clave?" styleClass="btn btn-default"
+                                                     action="#{loginController.ForgotPassword()}" onclick="block()"
+                                                     type="submit">
+                                    </h:commandButton>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-md-6 col-md-offset-3">
+                            <h6>La Secretaría Distrital de Gobierno de Bogotá D.C. en concordancia con las disposiciones de ley 1712 de 2014,
+                                a través de este aplicativo busca garantizar el acceso a la información y la celeridad en los trámites y en la
+                                prestación de los servicios que tiene a su cargo. Así mismo, de acuerdo a la ley 1581 de 2012 la Secretaría Distrital
+                                de Gobierno es responsable del tratamiento de los datos personales; estos serán incluidos en nuestra base de
+                                datos y utilizados para las siguientes finalidades:</h6>
+                            <ul>
+                                <li>
+                                    <h6>Lograr una eficiente comunicación relacionada con nuestros trámites y servicios y para facilitar el acceso
+                                        general a la información de estos.</h6>
+                                </li>
+                                <li>
+                                    <h6>Proveer nuestros trámites y servicios.</h6>
+                                </li>
+                                <li>
+                                    <h6>Informar sobre nuevos trámites o servicios que estén relacionados con el o los adelantado(s) o realizado(s).</h6>
+                                </li>
+                                <li>
+                                    <h6>Informar sobre cambios de nuestros trámites o servicios.</h6>
+                                </li>
+                                <li>
+                                    <h6>Evaluar la calidad de servicio.</h6>
+                                </li>
+                                <li>
+                                    <h6>Realizar estudios internos sobre hábitos de consumo.</h6>
+                                </li>
+                            </ul>
+                            <h6>Usted podrá ejercer sus derechos a conocer, actualizar, rectificar sus datos personales, hacer consultas y
+                                reclamos, y demás derechos indicados en el artículo 8o. de la ley 1581 de 2012 y las demás normas que lo complementen
+                                o sustituya, en la Secretaría Distrital de Gobierno.</h6>
+                        </div>
+                    </div>
+                    <br/>
+                </h:form>
+            </div>
+            <script>
+            		$('.numerico').on('keypress', function (e)
+	                {
+	                    return (e.charCode &gt;&#61; 48 &amp;&amp; e.charCode &lt;&#61; 57) || (e.key &#61;&#61; "Backspace");
+	                });
+            
+            	$('input#loginform\\:txtUsuario').keydown(function(e) { if (e.keyCode == 32) { return false; } });
+                //Bloquea la pantalla.
+                function block()
+                {
+                    $.blockUI({message: '<h3><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>  Cargando...</h3>', css: {
+                            border: 'none',
+                            padding: '15px',
+                            backgroundColor: '#000',
+                            '-webkit-border-radius': '10px',
+                            '-moz-border-radius': '10px',
+                            opacity: .5,
+                            color: '#fff'
+                        }});
+                }
+                ;
+                //------------------------
+                $(document).ready(function ()
+                {
+                    $(userMessage).html('');
+                    //Desbloquea la pantalla.
+                    $.unblockUI();
+                });
+
+                $('.numerico').on('keypress', function (e){
+                    return (e.charCode &gt;&#61; 48 &amp;&amp; e.charCode &lt;&#61; 57) || (e.key &#61;&#61; "Backspace");});
+
+            </script>
+        </ui:define>
+    </ui:composition>
+</html>

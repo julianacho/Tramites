@@ -1,0 +1,302 @@
+<html lang="es"  
+      xmlns = "http://www.w3.org/1999/xhtml"  
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+
+
+    <ui:composition>
+        <h:head>
+            <meta charset="utf-8" />
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <title>SDG - Sistema de trámites y servicios</title>
+            <link rel="shortcut icon" href="images/favicon.png" />
+            
+            
+
+            <!-- CSS de Bootstrap -->
+<!--             <link href="css/bootstrap.min.css" rel="stylesheet" /> -->
+            <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+            <link href="css/sdg.css" rel="stylesheet"/>
+<!--             <script src="js/jquery.min.js"></script> -->
+<!--             <script src="js/bootstrap.min.js"></script> -->
+<!--             <script src="js/jquery.webui-popover.js"></script> -->
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+            <script src="js/jquery.blockUI.js"></script>
+            
+<!--             <script type="text/javascript" src="js/jquery-ui.js" /> -->
+<!--             <link rel="stylesheet" href="css/jquery-ui.css" /> -->
+            <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" />
+            <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+            
+            <script src="js/sdg.js"></script>
+            
+                        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" ></script>
+            
+<!--             <link href="css/bootstrap.min.css" rel="stylesheet" /> -->
+<!--             <link href="css/sdg.css" rel="stylesheet"/> -->
+<!--             <script src="js/jquery.min.js"></script> -->
+<!--             <script src="js/bootstrap.min.js"></script> -->
+            <script src="js/jquery.webui-popover.js"></script>
+            <script src="js/jquery.blockUI.js"></script>
+<!--             <script type="text/javascript" src="js/jquery-ui.js" /> -->
+<!--             <link rel="stylesheet" href="css/jquery-ui.css" /> -->
+<!--             <script src="js/sdg.js"></script> -->
+            
+          
+
+            <style>
+                .glyphicon-refresh-animate {
+                    -animation: spin .7s infinite linear;
+                    -webkit-animation: spin2 .7s infinite linear;
+                }
+
+                @-webkit-keyframes spin2 {
+                    from { -webkit-transform: rotate(0deg);}
+                    to { -webkit-transform: rotate(360deg);}
+                }
+
+                @keyframes spin {
+                    from { transform: scale(1) rotate(0deg);}
+                    to { transform: scale(1) rotate(360deg);}
+                }
+                .popup-panel
+                {
+                    margin: auto;
+                    margin-top: 150px;
+                    background-color: #ffffff;
+                    padding: 20px;
+                    border-radius: 5px;
+                    border: 1px solid;
+                    width: 50%;
+                }
+                .popup-panel-overlay
+                {
+                    background-color: rgba(0,0,0,0.5);
+                    position: fixed;
+                    top: 0px;
+                    left: 0px;
+                    width: 100%;
+                    height: 100%;
+                }
+            </style>
+        </h:head> 
+
+        <h:body>
+            <!--INICIO DE CUERPO DEL HTML-->
+            <f:event type="preRenderView" listener="#{indexController.init()}" />
+            <div class="container">
+                <header style="margin-bottom: 35px; margin-top: 30px">
+                    <div class="row" style="margin: 0">
+                        <div class="col-md-2" style="text-align: left; padding: 0">
+                            <img src="images/LogoSDG.png" style="width: 100%"/>
+                        </div>
+                        <div class="col-md-10" style="text-align:right; padding: 0">
+                            <img src="images/BannerSDG.png" style="width: 100%; height: 111.11px"/>
+                        </div>
+                    </div>
+                    <br/>
+                </header>
+                <div class="row">
+                    <h:form>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <nav class="navbar navbar-static-top visible-sm visible-xs" style="margin:5px 30px;">
+
+                                    <div class="navbar-custom-menu">
+                                        <ul class="nav navbar-nav" style="padding-right: 20px">
+                                            <li class="dropdown" style="background-color: #f8f8f8; padding-right: 10px" >
+                                                <a class="dropdown-toggle" data-toggle="dropdown">
+                                                    Home <span class="caret"></span>
+                                                </a>
+
+                                                <ul class="dropdown-menu" style="padding-top: 0px;" >
+
+                                                    <li><h:commandLink action="home" value="Inicio" immediate="true" style="width:100%"
+                                                                       onclick="block()"/></li>
+                                                </ul>
+                                            </li>
+
+                                            <li class="dropdown" style="background-color: #f8f8f8; padding-right: 10px" >
+                                                <a class="dropdown-toggle" data-toggle="dropdown">
+                                                    Información <span class="caret"></span>
+                                                </a>
+
+                                                <ul class="dropdown-menu" style="padding-top: 0px">
+
+                                                    <li><h:commandLink action="updateinfo" value="Actualizar Informacion" immediate="true"
+                                                                       onclick="block()"/></li>
+                                                    <li><h:commandLink action="password" value="Cambiar contraseña" immediate="true"
+                                                                       onclick="block()"/></li>
+                                                </ul>
+                                            </li>
+                                            <!--<li><a href="#">Solicitudes</a></li>-->
+                                            <li class="dropdown" style="background-color: #f8f8f8;">
+                                                <a class="dropdown-toggle" data-toggle="dropdown">
+                                                    Certificado de residencia <span class="caret"></span>
+                                                </a>
+
+                                                <ul class="dropdown-menu" style="padding-top: 0px">
+                                                    <li><h:commandLink action="crearsolicitud" value="Crear Solicitud" immediate="true"
+                                                                       onclick="block()"/></li>
+                                                    <li><h:commandLink action="consultarsolicitud" value="Consultar Solicitud" immediate="true"
+                                                                       onclick="block()"/></li>
+                                                </ul>
+                                            </li>   
+                                            <li class="dropdown" style="background-color: #f8f8f8;padding-bottom: 0px">
+                                                <a class="dropdown-toggle" data-toggle="dropdown">
+                                                    Propiedad Horizontal <span class="caret"></span>
+                                                </a>
+
+                                                <ul class="dropdown-menu" style="padding-top: 0px">
+                                                    <li><h:commandLink action="phconsultinit" value="Consultar Propiedad" immediate="true"
+                                                                       onclick="block()"/></li>
+                                                    <li style="display: none;"><h:commandLink action="phregister" value="Crear Solicitud" immediate="true"
+                                                                                              onclick="block()"/></li>
+                                                    <li style="display: none;"><h:commandLink action="updateagent" value="Actualizar Representante" immediate="true"
+                                                                                              onclick="block()"/></li>
+                                                    <li style="display: none;"><h:commandLink action="extinctionph" value="Extinción de PH" immediate="true"
+                                                                                              onclick="block()"/></li>
+                                                    <li style="display: none;"><h:commandLink action="phconsult" value="Consultar Solicitud" immediate="true"
+                                                                                              onclick="block()"/></li>
+                                                </ul>
+                                            </li>         
+                                            <li><h:commandLink action="#{loginController.show()}" value="Salir" immediate="true"/></li>
+                                        </ul>
+                                    </div>
+                                </nav>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-xs-12" style="padding: 0; padding-right: 10px">
+
+                            <nav class="navbar navbar-default sidebar hidden-sm hidden-xs" role="navigation" >
+
+                                <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1" style="padding-top: 15px;  ">
+                                    <ul class="nav navbar-nav" style="padding-right: 5px; width: 100% ">
+                                     <li class="panel panel-default" id="dropdown" style="background-color: #f8f8f8; padding-right: 10px; width: 90%  " >
+                                           <h:commandLink action="home" value="Inicio" immediate="true" 
+                                                                           onclick="block()"/>
+                                        </li>
+                                    </ul>
+                                    <label><strong>Mi cuenta</strong></label>
+                                    <ul class="nav navbar-nav" style="padding-right: 20px">
+                                       
+                                        <li class="panel panel-default" id="dropdown" style="background-color: #f8f8f8; padding-right: 10px" >
+                                            <a data-toggle="collapse" href="#Informacion">
+                                                Información <span class="caret"></span>
+                                            </a>
+
+                                            <!-- Dropdown level 1 -->
+                                            <div id="Informacion" class="panel-collapse collapse" style="padding-top: 0px">
+                                                <div class="panel-body" style="padding-top: 0px">
+                                                    <ul class="nav navbar-nav" style="padding-top: 0px">
+                                                        <li><h:commandLink action="updateinfo" value="Actualizar Informacion" immediate="true"
+                                                                           onclick="block()"/></li>
+                                                        <li><h:commandLink action="password" value="Cambiar contraseña" immediate="true"
+                                                                           onclick="block()"/></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <label><strong>Mis Tramites</strong></label>
+                                        <!--<li><a href="#">Solicitudes</a></li>-->
+                                        <li class="panel panel-default" id="dropdown" style="background-color: #f8f8f8;">
+                                            <a data-toggle="collapse" href="#Solicitudes">
+                                                Certificado de residencia <span class="caret"></span>
+                                            </a>
+
+                                            <!-- Dropdown level 1 -->
+                                            <div id="Solicitudes" class="panel-collapse collapse" style="padding-top: 0px">
+                                                <div class="panel-body" style="padding-top: 0px">
+                                                    <ul class="nav navbar-nav" style="padding-top: 0px">
+                                                        <li><h:commandLink action="crearsolicitud" value="Crear Solicitud" immediate="true"
+                                                                           onclick="block()"/></li>
+                                                        <li><h:commandLink action="consultarsolicitud" value="Consultar Solicitud" immediate="true"
+                                                                           onclick="block()"/></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </li>   
+                                        <li class="panel panel-default" id="dropdown" style="background-color: #f8f8f8;padding-bottom: 0px">
+                                            <a data-toggle="collapse" href="#phorizontal">
+                                                Propiedad Horizontal <span class="caret"></span>
+                                            </a>
+
+                                            <!-- Dropdown level 1 -->
+                                            <div id="phorizontal" class="panel-collapse collapse" style="padding-top: 0px">
+                                                <div class="panel-body" style="padding-top: 0px">
+                                                    <ul class="nav navbar-nav" style="padding-top: 0px">
+                                                        <li><h:commandLink action="phconsultinit" value="Consultar Propiedad" immediate="true"
+                                                                           onclick="block()"/></li>
+                                                        <li style="display: none;"><h:commandLink action="phregister" value="Crear Solicitud" immediate="true"
+                                                                                                  onclick="block()"/></li>
+                                                        <li style="display: none;"><h:commandLink action="updateagent" value="Actualizar Representante" immediate="true"
+                                                                                                  onclick="block()"/></li>
+                                                        <li style="display: none;"><h:commandLink action="extinctionph" value="Extinción de PH" immediate="true"
+                                                                                                  onclick="block()"/></li>
+                                                        <li style="display: none;"><h:commandLink action="phconsult" value="Consultar Solicitud" immediate="true"
+                                                                                                  onclick="block()"/></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </li>         
+                                        <li><h:commandLink action="#{loginController.show()}" value="Salir" immediate="true"/></li>
+                                    </ul>
+                                </div>
+
+                            </nav>
+                        </div>
+                    </h:form>
+                    <ui:insert name="content"/>
+                </div>
+                <footer>
+                    <p>
+                        <h6 style="text-align: center !important">
+                            &#169; Copyright 2016 - Secretaría de Gobierno<br/> Edifício Líevano, Calle 11 No. 8-17. Conmutador (57)3820660
+                            - 3387000
+                            <br/> Horarios de atención al público<br/> Lunes a Viernes de 7:00 a.m. a 4:00 p.m.<br/>
+                            Email: <a href="mailto:tramites.gobierno@gobiernobogota.gov.co">tramites.gobierno@gobiernobogota.gov.co</a><br/>
+							Email: <a href="mailto:propiedad.hotizontal@gobiernobogota.gov.co">propiedad.horizontal@gobiernobogota.gov.co</a>
+                            <br/>Versión 02.229.3
+                            <br/>
+                            <br/>
+                            <label style="font-size: 10px; font-weight:  bolder;">
+                                <strong>Para uso óptimo del aplicativo se recomienda utilizar navegadores Google Chrome 
+                                <img src="images/chrome.png" style="width: 25px"/> y Microsoft Edge <img src="images/edge.png" style="width: 25px"/></strong>
+                            </label>
+                        </h6>
+                    </p>
+                </footer>
+            </div>
+            <script>
+            		$('.numerico').on('keypress', function (e)
+	                {
+	                    return (e.charCode &gt;&#61; 48 &amp;&amp; e.charCode &lt;&#61; 57) || (e.key &#61;&#61; "Backspace");
+	                });
+            
+                //Bloquea la pantalla.
+                function block()
+                {
+                    $.blockUI({message: '<h3><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>  Cargando...</h3>', css: {
+                            border: 'none',
+                            padding: '15px',
+                            backgroundColor: '#000',
+                            '-webkit-border-radius': '10px',
+                            '-moz-border-radius': '10px',
+                            opacity: .5,
+                            color: '#fff'
+                        }});
+                }
+                ;
+                //Desbloquea la pantalla al cargar la vista.
+                $(document).ready(function ()
+                {
+                    $.unblockUI();
+                });
+            </script>
+        </h:body>
+    </ui:composition>
+</html>

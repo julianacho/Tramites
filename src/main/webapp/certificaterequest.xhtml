@@ -1,0 +1,3625 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+
+<!DOCTYPE html>
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+>
+
+
+
+<ui:composition template="/sidebartemplate.xhtml">
+	<ui:define name="content">
+		<div class="col-md-10">
+			<div class="modal fade" id="modalRegistrarPrivadoLibertad"
+				role="dialog" style="display: none"
+			>
+				<h:form id="modalPrivadoRegister">
+					<div class="modal-dialog modal-lg">
+						<!-- Modal content-->
+						<div class="modal-content">
+							<h:panelGroup id="Privadoinfo">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">&#215;</button>
+									<h4 class="modal-title">Datos Privado de Libertad</h4>
+									<h:panelGroup layout="block" id="modalalert">
+										<h:panelGroup layout="block"
+											rendered="#{certificateRequestController.modalAlertShowPrivado}"
+											id="modalSeconAlert"
+										>
+											<div
+												class="#{certificateRequestController.modalAlertStylePrivado ? 'alert alert-success alert-dismissible' : 'alert alert-warning alert-dismissible'}"
+												id="alert" align="center"
+											>
+												<a href="#" class="close" data-dismiss="alert"
+													aria-label="close"
+												>&#215;</a>
+												<h:outputLabel id="modalfinalMessage"
+													value="#{certificateRequestController.modalAlertMessagePrivado}"
+												/>
+											</div>
+										</h:panelGroup>
+									</h:panelGroup>
+								</div>
+								<div class="modal-body">
+									<div class="well well-sm">
+										<div class="panel panel-default">
+											<div class="panel-heading">
+												<label><strong>Buscar Privado de Libertad</strong></label><br />
+												<img src="images/Help.png" style="width: 20px" /> <span
+													style="color: red; font-size: 11px;"
+												>Para el registro del privado de libertad, debe primero
+													ejecutar la busqueda.</span> <span id="Home"
+													onMouseOver="mano(this)"
+													onclick="fpopover(); return false;"
+													style="width: 4%; text-transform: bold; cursor: hand"
+													data-placement="left" class="pull-right"
+													data-toggle="popover" data-html="true"
+													data-content="#{certificateRequestController.urlVideoRegistro}"
+												>Ayuda</span> <img src="images/Ayuda.png" style="width: 25px"
+													class="pull-right"
+												/>
+											</div>
+											<div class="panel-body">
+												<div class="row">
+
+													<div class="col-md-3">
+														<label>Ingrese Identificación</label>
+													</div>
+													<div class="col-md-4">
+
+														<h:inputText id="txtNitRepresentanteConsulta"
+															class="form-control" maxlength="20"
+															value="#{certificateRequestController.nitSearch}"
+															onkeypress="return check(event)" autocomplete="off"
+															onkeyup="fusernamePrivado()"
+														/>
+														<span id="messageCheckBusqueda" style="color: red;"></span>
+													</div>
+													<div class="col-md-3">
+														<h:commandButton id="btnSolicitar" value="Buscar"
+															styleClass="btn btn-default btn-block"
+															onclick="return validaVacio()"
+															action="#{certificateRequestController.FindPrivadoLibertad()}"
+														>
+															<f:ajax execute="modalPrivadoRegister"
+																render="modalPrivadoRegister" onevent="updateModal"
+															/>
+														</h:commandButton>
+													</div>
+												</div>
+
+												<div class="row">
+													<div class="col-md-12" style="margin-top: 15px;">
+														<img src="images/Help.png" style="width: 20px" /> <span
+															style="color: red; font-size: 11px;"
+														>Ingrese el documento de Identificación del Privado de
+															Libertad sin puntos, ni espacios, si va a ingresar un NIT
+															no ingrese el dígito de verificación.</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="panel panel-default">
+
+											<div class="panel panel-default">
+												<div class="panel-heading">
+													<label><strong>Información del Privado de
+															Libertad</strong></label>
+												</div>
+												<div class="panel-body">
+													<div class="row ">
+														<div class="col-md-12 ">
+															<div class="row ">
+																<div class="col-md-3 ">
+																	<label style="margin-top:21px;">Tipo de identificación <span
+																		style="color: red"
+																	>*</span></label>
+																	<h:selectOneMenu id="drpdModalTipoIdentificacion"
+																		value="#{certificateRequestController.idTypePrivado}"
+																		class="form-control requeridoPrivado"
+																	>
+																		<f:selectItem itemValue="#{null}"
+																			itemLabel="Seleccione"
+																		/>
+																		<f:selectItems
+																			value="#{certificateRequestController.valuesIdTypePrivado}"
+																		/>
+																	</h:selectOneMenu>
+																</div>
+																<div class="col-md-3 ">
+																	<label style="margin-top:21px;">No. de identificación <span
+																		style="color: red"
+																	>*</span></label>
+																	<h:inputText id="txtModalNumeroIdentificacion"
+																		class="form-control requeridoPrivado"
+																		maxlength="20"
+																		value="#{certificateRequestController.idNumberPrivado}"
+																		readonly="true" onkeypress="return check(event)"
+																		autocomplete="off"
+																		onkeyup="fusername()"
+																	/>
+																</div>
+
+																<div class="col-md-3 onlyNatural"
+																	style="display: #{certificateRequestController.showNaturalPrivado};"
+																>
+																	<label>¿Con cuál género se identifica? <span style="color: red">*</span></label>
+																	<h:selectOneMenu id="ModaldrpdGenero"
+																		value="#{certificateRequestController.genderPrivado}"
+																		class="form-control requeridoPrivado"
+																	>
+																		<f:selectItem itemValue="#{null}"
+																			itemLabel="Seleccione"
+																		/>
+																		<f:selectItems
+																			value="#{certificateRequestController.valuesGender}"
+																		/>
+																	</h:selectOneMenu>
+																	<h:message for="ModaldrpdGenero" style="color:#ff0000" />
+																</div>
+
+																<div class="col-md-3 onlyNatural"
+																	style="display: #{certificateRequestController.showNaturalPrivado};"
+																>
+																	<label style="margin-top:21px;">Estado Civil <span style="color: red">*</span></label>
+																	<h:selectOneMenu id="drpdModalEdoCivilRepresentante"
+																		value="#{certificateRequestController.idStatusPrivado}"
+																		class="form-control requeridoPrivado"
+																	>
+																		<f:selectItem itemValue="#{null}"
+																			itemLabel="Seleccione"
+																		/>
+																		<f:selectItems
+																			value="#{certificateRequestController.valuesidStatusPrivado}"
+																		/>
+																	</h:selectOneMenu>
+																</div>
+																<div class="col-md-3 ">
+																	<h:inputHidden id="Modaldireccionh"
+																		value="#{certificateRequestController.addressPrivado}"
+																	/>
+																	<h:inputHidden id="ModaldireccionComplementoh"
+																		value="#{certificateRequestController.addressComplPrivado}"
+																	/>
+																</div>
+															</div>
+															<br />
+															<div class="row ">
+																<div class="col-md-3 onlyNatural"
+																	style="display: #{certificateRequestController.showNaturalPrivado};"
+																>
+																	<label>Primer nombre <span style="color: red">*</span></label>
+																	<h:inputText id="txtModalPrimerNombre"
+																		class="form-control text-mayuscula requeridoPrivado letrasTildes"
+																		maxlength="15"
+																		value="#{certificateRequestController.firstNamePrivado}"
+																		onkeypress="return check(event)" autocomplete="off"
+																	/>
+																</div>
+																<div class="col-md-3 onlyNatural"
+																	style="display: #{certificateRequestController.showNaturalPrivado};"
+																>
+																	<label>Segundo nombre</label>
+																	<h:inputText id="ModaltxtSegundoNombre"
+																		class="form-control text-mayuscula letrasTildes" maxlength="15"
+																		value="#{certificateRequestController.secondNamePrivado}"
+																		onkeypress="return check(event)" autocomplete="off"
+																	/>
+																</div>
+																<div class="col-md-3 onlyNatural"
+																	style="display: #{certificateRequestController.showNaturalPrivado};"
+																>
+																	<label>Primer apellido <span style="color: red">*</span></label>
+																	<h:inputText id="ModaltxtPrimerApellido"
+																		class="form-control text-mayuscula requeridoPrivado letrasTildes"
+																		maxlength="15"
+																		value="#{certificateRequestController.lastNamePrivado}"
+																		onkeypress="return check(event)" autocomplete="off"
+																	/>
+																</div>
+																<div class="col-md-3 onlyNatural"
+																	style="display: #{certificateRequestController.showNaturalPrivado};"
+																>
+																	<div class="form-group">
+																		<label>Segundo apellido</label>
+																		<h:inputText id="ModaltxtSegundoApellido"
+																			class="form-control text-mayuscula  letrasTildes" maxlength="15"
+																			value="#{certificateRequestController.secondLastNamePrivado}"
+																			onkeypress="return check(event)" autocomplete="off"
+																		>
+																		</h:inputText>
+																	</div>
+																</div>
+
+															</div>
+															<br />
+															<div class="row">
+																<div class="col-md-3 ">
+																	<label>Etnia</label><label style="color: red">*</label>
+																	<h:selectOneMenu id="drpdEtnia"
+																		value="#{certificateRequestController.etniaPrivado}"
+																		class="form-control requeridoPrivado"
+																		onchange="etniaPrivado(this.value)"
+																	>
+																		<f:selectItem itemValue="#{null}"
+																			itemLabel="Seleccione"
+																		/>
+																		<f:selectItems
+																			value="#{certificateRequestController.valuesEtnias}"
+																		/>
+																	</h:selectOneMenu>
+																</div>
+																<div class="col-md-3 ">
+																	<div class="form-group">
+																		<label>Otra Etnia</label>
+																		<h:inputText id="txtCualEtnia"
+																			class="form-control text-mayuscula" maxlength="15"
+																			onkeyup="this.value = this.value.toUpperCase();valueEtniaPrivado();"
+																			readonly="true" onkeypress="return check(event)"
+																		/>
+																		<h:inputHidden
+																			value="#{certificateRequestController.cualEtniaPrivado}"
+																			id="txtCualEtniaAux"
+																		/>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="panel panel-default">
+												<div class="panel-heading">
+													<label><strong>Información de contacto</strong></label>
+													<h:selectOneRadio style="display:inline-block;float:right;"
+														id="typeDireccionPrivado"
+														onchange="typeDireccionPrivado(this.value)"
+														value="#{certificateRequestController.typeDireccionPrivado}"
+													>
+														<f:selectItem itemValue="1" itemLabel="Urbana" />
+														<f:selectItem itemValue="2" itemLabel="Rural" />
+													</h:selectOneRadio>
+													<div style="float: right;">
+														<label>Tipo de Dirección: </label>
+													</div>
+												</div>
+												<h:inputHidden id="AuxtypeDireccionPrivado"
+													value="#{certificateRequestController.typeDireccionPrivado}"
+												/>
+												<div class="panel-body">
+
+													<div class="row">
+
+														<div class="col-md-12 ">
+															<label>Dirección: La dirección deberá registrarse
+																exactamente igual a como aparece en el recibo de
+																servicio público que se adjunte en la solicitud. <span
+																style="color: red"
+															>*</span>
+															</label>
+															<h:inputText id="ModaltxtDireccion"
+																class="form-control text-mayuscula requeridoPrivado"
+																maxlength="20" disabled="true"
+																onkeyup="direccionRuralPrivado()"
+																value="#{certificateRequestController.addressPrivado} #{certificateRequestController.addressComplPrivado}"
+																autocomplete="off"
+															/>
+														</div>
+													</div>
+													<br />
+
+
+													<div class="well">
+														<div class="row" style="margin-top: 0.8%;">
+															<div class="col-xs-12">
+																<div class="row">
+																	<label class="col-xs-12">Dirección: La
+																		dirección deberá registrarse exactamente igual a como
+																		aparece en el recibo de servicio público que se
+																		adjunte en la solicitud.</label>
+																</div>
+																<div class="row">
+																	<div class="col-md-12">
+																		<div class="col-lg-12 col-xs-12" style="padding: 0;">
+																			<div style="display: inline-block; width: 23%;">
+																				<h:selectOneMenu id="txtCalleEvento"
+																					class="form-control dirPrivado requeridoPrivado"
+																					tabindex="3" onchange="direccionPrivado()"
+																				>
+																					<f:selectItem itemValue="#{null}"
+																						itemLabel="Seleccione"
+																					/>
+																					<f:selectItems
+																						value="#{certificateRequestController.valuesMainStreet}"
+																					/>
+																				</h:selectOneMenu>
+																			</div>
+																			<div style="display: inline-block; width: 5%">
+																				<h:inputText
+																					class="form-control dirPrivado requeridoPrivado numerico"
+																					id="txtCalleEvento1" tabindex="4" size="2"
+																					onkeyup="direccionPrivado()"
+																					style="padding: 4px 6px;" maxlength="3"
+																				/>
+																			</div>
+
+																			<div style="display: inline-block; width: 6%">
+																				<h:selectOneMenu id="txtCalleEvento2"
+																					class="form-control dirPrivado" tabindex="5"
+																					onchange="direccionPrivado()"
+																					style="padding: 7px 5px;"
+																				>
+																					<f:selectItem itemValue="" itemLabel="" />
+																					<f:selectItem itemValue="A" itemLabel="A" />
+																					<f:selectItem itemValue="B" itemLabel="B" />
+																					<f:selectItem itemValue="C" itemLabel="C" />
+																					<f:selectItem itemValue="D" itemLabel="D" />
+																					<f:selectItem itemValue="E" itemLabel="E" />
+																					<f:selectItem itemValue="F" itemLabel="F" />
+																					<f:selectItem itemValue="G" itemLabel="G" />
+																					<f:selectItem itemValue="H" itemLabel="H" />
+																					<f:selectItem itemValue="I" itemLabel="I" />
+																					<f:selectItem itemValue="J" itemLabel="J" />
+																					<f:selectItem itemValue="K" itemLabel="K" />
+																					<f:selectItem itemValue="L" itemLabel="L" />
+																					<f:selectItem itemValue="M" itemLabel="M" />
+																					<f:selectItem itemValue="N" itemLabel="N" />
+																					<f:selectItem itemValue="O" itemLabel="O" />
+																					<f:selectItem itemValue="P" itemLabel="P" />
+																					<f:selectItem itemValue="Q" itemLabel="Q" />
+																					<f:selectItem itemValue="R" itemLabel="R" />
+																					<f:selectItem itemValue="S" itemLabel="S" />
+																					<f:selectItem itemValue="T" itemLabel="T" />
+																					<f:selectItem itemValue="U" itemLabel="U" />
+																					<f:selectItem itemValue="V" itemLabel="V" />
+																					<f:selectItem itemValue="W" itemLabel="W" />
+																					<f:selectItem itemValue="X" itemLabel="X" />
+																					<f:selectItem itemValue="Y" itemLabel="Y" />
+																					<f:selectItem itemValue="Z" itemLabel="Z" />
+																				</h:selectOneMenu>
+																			</div>
+																			<div
+																				style="display: inline-block; width: 5%; font-size: 11px;"
+																			>
+																				<h:selectBooleanCheckbox id="txtCalleEvento3"
+																					tabindex="6" onchange="direccionPrivado()"
+																					class="dirPrivado"
+																				/>
+																				<label for="bis" class="txtLabel">BIS</label>
+																			</div>
+
+																			<h:selectOneMenu id="txtCalleEvento4"
+																				class="form-control dirPrivado" tabindex="7"
+																				onchange="direccionPrivado()"
+																				style="width: 6%;display: inline-block;padding: 7px 5px;"
+																			>
+																				<f:selectItem itemValue="" itemLabel="" />
+																				<f:selectItem itemValue="A" itemLabel="A" />
+																				<f:selectItem itemValue="B" itemLabel="B" />
+																				<f:selectItem itemValue="C" itemLabel="C" />
+																				<f:selectItem itemValue="D" itemLabel="D" />
+																				<f:selectItem itemValue="E" itemLabel="E" />
+																				<f:selectItem itemValue="F" itemLabel="F" />
+																				<f:selectItem itemValue="G" itemLabel="G" />
+																				<f:selectItem itemValue="H" itemLabel="H" />
+																				<f:selectItem itemValue="I" itemLabel="I" />
+																				<f:selectItem itemValue="J" itemLabel="J" />
+																				<f:selectItem itemValue="K" itemLabel="K" />
+																				<f:selectItem itemValue="L" itemLabel="L" />
+																				<f:selectItem itemValue="M" itemLabel="M" />
+																				<f:selectItem itemValue="N" itemLabel="N" />
+																				<f:selectItem itemValue="O" itemLabel="O" />
+																				<f:selectItem itemValue="P" itemLabel="P" />
+																				<f:selectItem itemValue="Q" itemLabel="Q" />
+																				<f:selectItem itemValue="R" itemLabel="R" />
+																				<f:selectItem itemValue="S" itemLabel="S" />
+																				<f:selectItem itemValue="T" itemLabel="T" />
+																				<f:selectItem itemValue="U" itemLabel="U" />
+																				<f:selectItem itemValue="V" itemLabel="V" />
+																				<f:selectItem itemValue="W" itemLabel="W" />
+																				<f:selectItem itemValue="X" itemLabel="X" />
+																				<f:selectItem itemValue="Y" itemLabel="Y" />
+																				<f:selectItem itemValue="Z" itemLabel="Z" />
+																			</h:selectOneMenu>
+																			<div style="display: inline-block; width: 11%">
+																				<h:selectOneMenu id="txtCalleEvento5"
+																					class="form-control dirPrivado" tabindex="8"
+																					onchange="direccionPrivado()"
+																				>
+																					<f:selectItem itemValue="#{null}" itemLabel="" />
+																					<f:selectItems
+																						value="#{certificateRequestController.valuesStreetGeneratingPath}"
+																					/>
+																				</h:selectOneMenu>
+																			</div>
+																			<div
+																				style="display: inline-block; width: 1%; text-align: center"
+																			>
+																				<label for="numeral" class="txtLabel">#</label>
+																			</div>
+																			<h:inputText
+																				class="form-control dirPrivado requeridoPrivado numerico"
+																				id="txtCalleEvento6" tabindex="9"
+																				onkeyup="direccionPrivado()"
+																				style="display: inline-block;width: 5%;padding: 4px 6px;"
+																				maxlength="3"
+																			/>
+
+																			<div style="display: inline-block; width: 6%">
+																				<h:selectOneMenu id="txtCalleEvento7"
+																					class="form-control dirPrivado" tabindex="10"
+																					onchange="direccionPrivado()"
+																					style="padding: 7px 5px;"
+																				>
+																					<f:selectItem itemValue="" itemLabel="" />
+																					<f:selectItem itemValue="A" itemLabel="A" />
+																					<f:selectItem itemValue="B" itemLabel="B" />
+																					<f:selectItem itemValue="C" itemLabel="C" />
+																					<f:selectItem itemValue="D" itemLabel="D" />
+																					<f:selectItem itemValue="E" itemLabel="E" />
+																					<f:selectItem itemValue="F" itemLabel="F" />
+																					<f:selectItem itemValue="G" itemLabel="G" />
+																					<f:selectItem itemValue="H" itemLabel="H" />
+																					<f:selectItem itemValue="I" itemLabel="I" />
+																					<f:selectItem itemValue="J" itemLabel="J" />
+																					<f:selectItem itemValue="K" itemLabel="K" />
+																					<f:selectItem itemValue="L" itemLabel="L" />
+																					<f:selectItem itemValue="M" itemLabel="M" />
+																					<f:selectItem itemValue="N" itemLabel="N" />
+																					<f:selectItem itemValue="O" itemLabel="O" />
+																					<f:selectItem itemValue="P" itemLabel="P" />
+																					<f:selectItem itemValue="Q" itemLabel="Q" />
+																					<f:selectItem itemValue="R" itemLabel="R" />
+																					<f:selectItem itemValue="S" itemLabel="S" />
+																					<f:selectItem itemValue="T" itemLabel="T" />
+																					<f:selectItem itemValue="U" itemLabel="U" />
+																					<f:selectItem itemValue="V" itemLabel="V" />
+																					<f:selectItem itemValue="W" itemLabel="W" />
+																					<f:selectItem itemValue="X" itemLabel="X" />
+																					<f:selectItem itemValue="Y" itemLabel="Y" />
+																					<f:selectItem itemValue="Z" itemLabel="Z" />
+																				</h:selectOneMenu>
+																			</div>
+																			<div
+																				style="display: inline-block; width: 5%; font-size: 11px;"
+																			>
+																				<h:selectBooleanCheckbox id="txtCalleEvento8"
+																					tabindex="11" onchange="direccionPrivado()"
+																					class="dirPrivado"
+																				/>
+																				<label for="bis" class="txtLabel">BIS</label>
+																			</div>
+																			<h:selectOneMenu id="txtCalleEvento9"
+																				class="form-control dirPrivado" tabindex="12"
+																				onchange="direccionPrivado()"
+																				style="width:6%;display: inline-block;padding: 7px 5px;"
+																			>
+																				<f:selectItem itemValue="" itemLabel="" />
+																				<f:selectItem itemValue="A" itemLabel="A" />
+																				<f:selectItem itemValue="B" itemLabel="B" />
+																				<f:selectItem itemValue="C" itemLabel="C" />
+																				<f:selectItem itemValue="D" itemLabel="D" />
+																				<f:selectItem itemValue="E" itemLabel="E" />
+																				<f:selectItem itemValue="F" itemLabel="F" />
+																				<f:selectItem itemValue="G" itemLabel="G" />
+																				<f:selectItem itemValue="H" itemLabel="H" />
+																				<f:selectItem itemValue="I" itemLabel="I" />
+																				<f:selectItem itemValue="J" itemLabel="J" />
+																				<f:selectItem itemValue="K" itemLabel="K" />
+																				<f:selectItem itemValue="L" itemLabel="L" />
+																				<f:selectItem itemValue="M" itemLabel="M" />
+																				<f:selectItem itemValue="N" itemLabel="N" />
+																				<f:selectItem itemValue="O" itemLabel="O" />
+																				<f:selectItem itemValue="P" itemLabel="P" />
+																				<f:selectItem itemValue="Q" itemLabel="Q" />
+																				<f:selectItem itemValue="R" itemLabel="R" />
+																				<f:selectItem itemValue="S" itemLabel="S" />
+																				<f:selectItem itemValue="T" itemLabel="T" />
+																				<f:selectItem itemValue="U" itemLabel="U" />
+																				<f:selectItem itemValue="V" itemLabel="V" />
+																				<f:selectItem itemValue="W" itemLabel="W" />
+																				<f:selectItem itemValue="X" itemLabel="X" />
+																				<f:selectItem itemValue="Y" itemLabel="Y" />
+																				<f:selectItem itemValue="Z" itemLabel="Z" />
+																			</h:selectOneMenu>
+
+																			<h:inputText
+																				class="form-control dirPrivado requeridoPrivado numerico"
+																				id="txtCalleEvento10" tabindex="13"
+																				onkeyup="direccionPrivado()"
+																				style="width: 5%;display: inline-block;padding: 4px 6px;"
+																				maxlength="3"
+																			/>
+																			<h:selectOneMenu id="txtCalleEvento11"
+																				class="form-control dirPrivado" tabindex="14"
+																				onchange="direccionPrivado()"
+																				style="width: 11%;display: inline-block;"
+																			>
+																				<f:selectItem itemValue="#{null}" itemLabel="" />
+																				<f:selectItems
+																					value="#{certificateRequestController.valuesStreetGeneratingPath}"
+																				/>
+																			</h:selectOneMenu>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+
+
+
+														<div class="row" style="margin-top: 0.8%">
+															<div class="col-xs-12">
+																<div class="row">
+																	<label class="col-xs-12">Complemento</label>
+																</div>
+																<div class="row">
+																	<div class="col-md-2">
+																		<h:selectOneMenu id="txtCalleEvento12"
+																			class="form-control dirPrivado" tabindex="15"
+																			onchange="direccionPrivado()"
+																		>
+																			<f:selectItem itemValue="" itemLabel="Seleccione" />
+																			<f:selectItem itemValue="AD"
+																				itemLabel="Administración"
+																			/>
+																			<f:selectItem itemValue="AG" itemLabel="Agrupación" />
+																			<f:selectItem itemValue="AL" itemLabel="Altillo" />
+																			<f:selectItem itemValue="AP" itemLabel="Apartamento" />
+																			<f:selectItem itemValue="AS"
+																				itemLabel="Apartamento Sótano"
+																			/>
+																			<f:selectItem itemValue="BG" itemLabel="Bodega" />
+																			<f:selectItem itemValue="BQ" itemLabel="Bloque" />
+																			<f:selectItem itemValue="CA" itemLabel="Casa" />
+																			<f:selectItem itemValue="CJ" itemLabel="Conjunto" />
+																			<f:selectItem itemValue="CN" itemLabel="Consultorio" />
+																			<f:selectItem itemValue="DP" itemLabel="Depósito" />
+																			<f:selectItem itemValue="DS"
+																				itemLabel="Depósito Sótano"
+																			/>
+																			<f:selectItem itemValue="ED" itemLabel="Edificio" />
+																			<f:selectItem itemValue="EN" itemLabel="Entrada" />
+																			<f:selectItem itemValue="ES" itemLabel="Estudio" />
+																			<f:selectItem itemValue="ET" itemLabel="Etapa" />
+																			<f:selectItem itemValue="EX" itemLabel="Exterior" />
+																			<f:selectItem itemValue="GD"
+																				itemLabel="Garaje deposito"
+																			/>
+																			<f:selectItem itemValue="GJ" itemLabel="Garaje" />
+																			<f:selectItem itemValue="GS"
+																				itemLabel="Garaje Sótano"
+																			/>
+																			<f:selectItem itemValue="HB" itemLabel="Habitación" />
+																			<f:selectItem itemValue="IN" itemLabel="Interior" />
+																			<f:selectItem itemValue="LB" itemLabel="Laboratorio" />
+																			<f:selectItem itemValue="LC" itemLabel="Local" />
+																			<f:selectItem itemValue="LM"
+																				itemLabel="Local Mezzanine"
+																			/>
+																			<f:selectItem itemValue="LS" itemLabel="Local Sótano" />
+																			<f:selectItem itemValue="MD" itemLabel="Modulo" />
+																			<f:selectItem itemValue="MN" itemLabel="Mezzanine" />
+																			<f:selectItem itemValue="MZ" itemLabel="Manzana" />
+																			<f:selectItem itemValue="NV" itemLabel="Nivel" />
+																			<f:selectItem itemValue="OF" itemLabel="Oficina" />
+																			<f:selectItem itemValue="OS"
+																				itemLabel="Oficina Sótano"
+																			/>
+																			<f:selectItem itemValue="PH" itemLabel="Penthouse" />
+																			<f:selectItem itemValue="PI" itemLabel="Piso" />
+																			<f:selectItem itemValue="PT" itemLabel="Portería" />
+																			<f:selectItem itemValue="SA" itemLabel="Salón" />
+																			<f:selectItem itemValue="SM"
+																				itemLabel="Super Manzana"
+																			/>
+																			<f:selectItem itemValue="SU" itemLabel="Suite" />
+																			<f:selectItem itemValue="TO" itemLabel="Torre" />
+																			<f:selectItem itemValue="TZ" itemLabel="Terraza" />
+																			<f:selectItem itemValue="UD" itemLabel="Unidad" />
+																		</h:selectOneMenu>
+																	</div>
+																	<div class="col-md-1">
+																		<h:inputText class="form-control dirPrivado"
+																			id="txtCalleEvento13" tabindex="16" size="2"
+																			onkeyup="direccionPrivado()"
+																		/>
+																	</div>
+																	<div class="col-md-2">
+																		<h:selectOneMenu id="txtCalleEvento14"
+																			class="form-control dirPrivado" tabindex="17"
+																			onchange="direccionPrivado()"
+																		>
+																			<f:selectItem itemValue="" itemLabel="Seleccione" />
+																			<f:selectItem itemValue="AD"
+																				itemLabel="Administración"
+																			/>
+																			<f:selectItem itemValue="AG" itemLabel="Agrupación" />
+																			<f:selectItem itemValue="AL" itemLabel="Altillo" />
+																			<f:selectItem itemValue="AP" itemLabel="Apartamento" />
+																			<f:selectItem itemValue="AS"
+																				itemLabel="Apartamento Sótano"
+																			/>
+																			<f:selectItem itemValue="BG" itemLabel="Bodega" />
+																			<f:selectItem itemValue="BQ" itemLabel="Bloque" />
+																			<f:selectItem itemValue="CA" itemLabel="Casa" />
+																			<f:selectItem itemValue="CJ" itemLabel="Conjunto" />
+																			<f:selectItem itemValue="CN" itemLabel="Consultorio" />
+																			<f:selectItem itemValue="DP" itemLabel="Depósito" />
+																			<f:selectItem itemValue="DS"
+																				itemLabel="Depósito Sótano"
+																			/>
+																			<f:selectItem itemValue="ED" itemLabel="Edificio" />
+																			<f:selectItem itemValue="EN" itemLabel="Entrada" />
+																			<f:selectItem itemValue="ES" itemLabel="Estudio" />
+																			<f:selectItem itemValue="ET" itemLabel="Etapa" />
+																			<f:selectItem itemValue="EX" itemLabel="Exterior" />
+																			<f:selectItem itemValue="GD"
+																				itemLabel="Garaje deposito"
+																			/>
+																			<f:selectItem itemValue="GJ" itemLabel="Garaje" />
+																			<f:selectItem itemValue="GS"
+																				itemLabel="Garaje Sótano"
+																			/>
+																			<f:selectItem itemValue="HB" itemLabel="Habitación" />
+																			<f:selectItem itemValue="IN" itemLabel="Interior" />
+																			<f:selectItem itemValue="LB" itemLabel="Laboratorio" />
+																			<f:selectItem itemValue="LC" itemLabel="Local" />
+																			<f:selectItem itemValue="LM"
+																				itemLabel="Local Mezzanine"
+																			/>
+																			<f:selectItem itemValue="LS" itemLabel="Local Sótano" />
+																			<f:selectItem itemValue="MD" itemLabel="Modulo" />
+																			<f:selectItem itemValue="MN" itemLabel="Mezzanine" />
+																			<f:selectItem itemValue="MZ" itemLabel="Manzana" />
+																			<f:selectItem itemValue="NV" itemLabel="Nivel" />
+																			<f:selectItem itemValue="OF" itemLabel="Oficina" />
+																			<f:selectItem itemValue="OS"
+																				itemLabel="Oficina Sótano"
+																			/>
+																			<f:selectItem itemValue="PH" itemLabel="Penthouse" />
+																			<f:selectItem itemValue="PI" itemLabel="Piso" />
+																			<f:selectItem itemValue="PT" itemLabel="Portería" />
+																			<f:selectItem itemValue="SA" itemLabel="Salón" />
+																			<f:selectItem itemValue="SM"
+																				itemLabel="Super Manzana"
+																			/>
+																			<f:selectItem itemValue="SU" itemLabel="Suite" />
+																			<f:selectItem itemValue="TO" itemLabel="Torre" />
+																			<f:selectItem itemValue="TZ" itemLabel="Terraza" />
+																			<f:selectItem itemValue="UD" itemLabel="Unidad" />
+																		</h:selectOneMenu>
+																	</div>
+																	<div class="col-md-1">
+																		<h:inputText class="form-control dirPrivado"
+																			id="txtCalleEvento15" tabindex="18" size="2"
+																			onkeyup="direccionPrivado()"
+																		/>
+																	</div>
+																	<div class="col-md-2">
+																		<h:selectOneMenu id="txtCalleEvento16"
+																			class="form-control dirPrivado" tabindex="19"
+																			onchange="direccionPrivado()"
+																		>
+																			<f:selectItem itemValue="" itemLabel="Seleccione" />
+																			<f:selectItem itemValue="AD"
+																				itemLabel="Administración"
+																			/>
+																			<f:selectItem itemValue="AG" itemLabel="Agrupación" />
+																			<f:selectItem itemValue="AL" itemLabel="Altillo" />
+																			<f:selectItem itemValue="AP" itemLabel="Apartamento" />
+																			<f:selectItem itemValue="AS"
+																				itemLabel="Apartamento Sótano"
+																			/>
+																			<f:selectItem itemValue="BG" itemLabel="Bodega" />
+																			<f:selectItem itemValue="BQ" itemLabel="Bloque" />
+																			<f:selectItem itemValue="CA" itemLabel="Casa" />
+																			<f:selectItem itemValue="CJ" itemLabel="Conjunto" />
+																			<f:selectItem itemValue="CN" itemLabel="Consultorio" />
+																			<f:selectItem itemValue="DP" itemLabel="Depósito" />
+																			<f:selectItem itemValue="DS"
+																				itemLabel="Depósito Sótano"
+																			/>
+																			<f:selectItem itemValue="ED" itemLabel="Edificio" />
+																			<f:selectItem itemValue="EN" itemLabel="Entrada" />
+																			<f:selectItem itemValue="ES" itemLabel="Estudio" />
+																			<f:selectItem itemValue="ET" itemLabel="Etapa" />
+																			<f:selectItem itemValue="EX" itemLabel="Exterior" />
+																			<f:selectItem itemValue="GD"
+																				itemLabel="Garaje deposito"
+																			/>
+																			<f:selectItem itemValue="GJ" itemLabel="Garaje" />
+																			<f:selectItem itemValue="GS"
+																				itemLabel="Garaje Sótano"
+																			/>
+																			<f:selectItem itemValue="HB" itemLabel="Habitación" />
+																			<f:selectItem itemValue="IN" itemLabel="Interior" />
+																			<f:selectItem itemValue="LB" itemLabel="Laboratorio" />
+																			<f:selectItem itemValue="LC" itemLabel="Local" />
+																			<f:selectItem itemValue="LM"
+																				itemLabel="Local Mezzanine"
+																			/>
+																			<f:selectItem itemValue="LS" itemLabel="Local Sótano" />
+																			<f:selectItem itemValue="MD" itemLabel="Modulo" />
+																			<f:selectItem itemValue="MN" itemLabel="Mezzanine" />
+																			<f:selectItem itemValue="MZ" itemLabel="Manzana" />
+																			<f:selectItem itemValue="NV" itemLabel="Nivel" />
+																			<f:selectItem itemValue="OF" itemLabel="Oficina" />
+																			<f:selectItem itemValue="OS"
+																				itemLabel="Oficina Sótano"
+																			/>
+																			<f:selectItem itemValue="PH" itemLabel="Penthouse" />
+																			<f:selectItem itemValue="PI" itemLabel="Piso" />
+																			<f:selectItem itemValue="PT" itemLabel="Portería" />
+																			<f:selectItem itemValue="SA" itemLabel="Salón" />
+																			<f:selectItem itemValue="SM"
+																				itemLabel="Super Manzana"
+																			/>
+																			<f:selectItem itemValue="SU" itemLabel="Suite" />
+																			<f:selectItem itemValue="TO" itemLabel="Torre" />
+																			<f:selectItem itemValue="TZ" itemLabel="Terraza" />
+																			<f:selectItem itemValue="UD" itemLabel="Unidad" />
+																		</h:selectOneMenu>
+																	</div>
+																	<div class="col-md-1">
+																		<h:inputText class="form-control dirPrivado"
+																			id="txtCalleEvento17" tabindex="20" size="2"
+																			onkeyup="direccionPrivado()"
+																		/>
+																	</div>
+																	<div class="col-md-2 col-md-offset-1"
+																		style="text-align: right"
+																	>
+																		<h:commandButton type="reset" id="cleanbutton"
+																			value="Limpiar"
+																			styleClass="btn btn-default btn-block"
+																			onclick="cleanPrivado()" immediate="true"
+																		>
+																			<f:ajax execute="@form" render="@none" />
+																		</h:commandButton>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="row ">
+														<div class="col-md-3 ">
+															<label>No. Teléfono <span style="color: red">*</span></label>
+															<h:inputText id="ModaltxtTelefono"
+																class="form-control  requeridoPrivado numerico"
+																maxlength="10"
+																value="#{certificateRequestController.phonePrivado}"
+																autocomplete="off"
+															>
+															</h:inputText>
+														</div>
+														<div class="col-md-3 ">
+															<label>Correo electrónico <span
+																style="color: red"
+															>*</span></label>
+															<h:inputText id="Modalemail"
+																class="form-control requeridoPrivado"
+																value="#{certificateRequestController.emailPrivado}"
+																requiredMessage="Este campo es requerido."
+																maxlength="100" onkeyup="return validateMail(this.id)"
+																autocomplete="off"
+															/>
+															<span id="messageModalemail" style="color: red;"></span>
+														</div>
+
+													</div>
+
+												</div>
+											</div>
+										</div>
+									</div>
+
+								</div>
+								<div class="modal-footer btn-toolbar">
+									<span id="checkvalidationmessagerepresentante"></span>
+									<h:commandButton id="btnModalAsociarPrivadoLibertad"
+										value="Asociar Privado de Libertad"
+										styleClass="btn btn-default"
+										action="#{certificateRequestController.RegisterPrivado()}"
+										onclick="return validaDireccionPrivado()"
+									>
+										<f:ajax execute=":modalPrivadoRegister:Privadoinfo"
+											render=":modalPrivadoRegister:Privadoinfo :certificateRequestForm:tablePrivado"
+											onevent="closeModalPrivado"
+										/>
+									</h:commandButton>
+									<button type="button" id="btnModalCerrar"
+										class="btn btn-default" data-dismiss="modal"
+									>Cerrar</button>
+								</div>
+							</h:panelGroup>
+						</div>
+					</div>
+				</h:form>
+			</div>
+			<div class="modal fade" id="modalRegistrarMenorEdad" role="dialog"
+				style="display: none"
+			>
+				<h:form id="modalCertificate">
+					<div class="modal-dialog modal-lg">
+						<!-- Modal content-->
+						<div class="modal-content">
+							<h:panelGroup id="youngerinfo">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal"
+										onclick="modalclose()"
+									>&#215;</button>
+									<h4 class="modal-title">Datos menor de edad</h4>
+									<h:panelGroup layout="block" id="modalalert">
+										<h:panelGroup layout="block"
+											rendered="#{certificateRequestController.modalAlertShow}"
+										>
+											<div
+												class="#{certificateRequestController.modalAlertStyle ? 'alert alert-success alert-dismissible' : 'alert alert-warning alert-dismissible'}"
+												id="alert" align="center"
+											>
+												<a href="#" class="close" data-dismiss="alert"
+													aria-label="close"
+												>&#215;</a>
+												<h:outputLabel id="modalfinalMessage"
+													value="#{certificateRequestController.modalAlertMessage}"
+												/>
+											</div>
+										</h:panelGroup>
+									</h:panelGroup>
+								</div>
+								<div class="modal-body">
+									<div class="well well-sm">
+										<div class="panel panel-default" style="margin-bottom: -8px">
+											<div class="panel-heading">
+												<img src="images/Help.png" style="width: 25px" /> <label><strong>Los
+														campos marcados con <label style="color: red"></label><label
+														style="color: red"
+													>*</label> son obligatorios.
+												</strong></label> <span id="spanAyuda1" onMouseOver="mano(this)"
+													onclick="fpopover(this.id); return false;"
+													style="width: 4%; text-transform: bold; cursor: hand"
+													data-placement="left" class="pull-right"
+													data-toggle="popover" data-html="true"
+													data-content="#{certificateRequestController.urlVideoRegistro}"
+												>Ayuda</span> <img src="images/Ayuda.png" style="width: 25px"
+													class="pull-right"
+												/>
+											</div>
+										</div>
+										<div class="panel panel-default">
+											<div class="panel-heading">
+												<label><strong>Información Personal</strong></label>
+											</div>
+											<div class="panel-body">
+												<div class="row ">
+													<div class="col-md-12 ">
+														<div class="row ">
+
+															<div class="col-md-4 ">
+																<label>Nacionalidad</label><label style="color: red">*</label>
+																<h:selectOneMenu id="ModaldrpdNacionalidad"
+																	value="#{certificateRequestController.nationalityYounger}"
+																	class="form-control  requeridoModal"
+																	requiredMessage="Este campo es requerido."
+																>
+																	<f:selectItem itemValue="#{null}"
+																		itemLabel="Seleccione"
+																	/>
+																	<f:selectItems
+																		value="#{certificateRequestController.valuesNationality}"
+																	/>
+																</h:selectOneMenu>
+																<h:message for="ModaldrpdNacionalidad"
+																	style="color:#ff0000"
+																/>
+															</div>
+															<div class="col-md-4 ">
+																<label>Tipo de identificación</label><label
+																	style="color: red"
+																>*</label>
+																<h:selectOneMenu id="drpdModalTipoIdentificacion"
+																	value="#{certificateRequestController.idTypeYounger}"
+																	class="form-control requeridoModal" disabled="false" onchange="changeTypeDocValue()"
+																>
+																                                                                                    
+																	<f:selectItem itemValue="" itemLabel="Seleccione" />
+																	<f:selectItems
+																		value="#{certificateRequestController.valuesIdTypeYounger}"
+																	/>
+																</h:selectOneMenu>
+																<h:message for="ModalTipoIdH" style="color:#ff0000" />
+															</div>
+															<div class="col-md-4 " data-toggle="tooltip"
+																data-placement="right"
+																title="Digite su número de identificación completo y verifique la información consignada ya que la misma no podrá ser editada por el usuario una vez se cree el registró."
+															>
+																<label>No. de identificación</label><label
+																	style="color: red"
+																>*</label>
+																<h:inputText id="txtModalNumeroIdentificacion"
+																	class="form-control requeridoModal"
+																	maxlength="20"
+																	value="#{certificateRequestController.idNumberYounger}"
+																	readonly="true" onkeypress="return check(event)"
+																	autocomplete="off"
+																	onkeyup="fusername(this.value)"
+																>
+																</h:inputText>
+																<h:message for="txtModalNumeroIdentificacion"
+																	style="color:#ff0000"
+																/>
+															</div>
+															
+														</div>
+														<br />
+														<div class="row ">
+															<div class="col-md-3 ">
+																<label>Primer nombre</label><label style="color: red">*</label>
+																<h:inputText id="txtModalPrimerNombre"
+																	class="form-control text-mayuscula requeridoModal letrasTildes"
+																	maxlength="15"
+																	value="#{certificateRequestController.firstNameYounger}"
+																	onkeyup="this.value=this.value.toUpperCase();"
+																	onkeypress="return check(event)" autocomplete="off"
+																/>
+															</div>
+															<div class="col-md-3 ">
+																<label>Segundo nombre</label>
+																<h:inputText id="ModaltxtSegundoNombre"
+																	class="form-control text-mayuscula letrasTildes" maxlength="15"
+																	value="#{certificateRequestController.secondNameYounger}"
+																	onkeyup="this.value=this.value.toUpperCase();"
+																	onkeypress="return check(event)" autocomplete="off"
+																/>
+															</div>
+															<div class="col-md-3 ">
+																<label>Primer apellido</label><label style="color: red">*</label>
+																<h:inputText id="ModaltxtPrimerApellido"
+																	class="form-control text-mayuscula requeridoModal letrasTildes"
+																	maxlength="15"
+																	value="#{certificateRequestController.lastNameYounger}"
+																	onkeyup="this.value=this.value.toUpperCase();"
+																	onkeypress="return check(event)" autocomplete="off"
+																/>
+															</div>
+															<div class="col-md-3 ">
+																<div class="form-group">
+																	<label>Segundo apellido</label>
+																	<h:inputText id="ModaltxtSegundoApellido letrasTildes"
+																		class="form-control text-mayuscula letrasTildes" maxlength="15"
+																		value="#{certificateRequestController.secondLastNameYounger}"
+																		onkeyup="this.value=this.value.toUpperCase();"
+																		onkeypress="return check(event)" autocomplete="off"
+																	>
+																	</h:inputText>
+																</div>
+															</div>
+														</div>
+														<br />
+														<div class="row ">
+															<div class="col-md-3" data-toggle="tooltip"
+																data-placement="right"
+																title="Verifique la información consignada en este campo, la misma no podrá ser editada por el usuario una vez se cree el registro."
+															>
+																<label style="margin-top:21px;">Fecha de nacimiento</label><label
+																	style="color: red"
+																>*</label>
+																<h:inputText id="ModaltxtFechaNacimiento"
+																	styleClass="form-control datepicker  requeridoModal"
+																	readonly="true"
+																	style="width: 100%; display: inline-block"
+																	requiredMessage="Este campo es requerido."
+																	value="#{certificateRequestController.birthDateYounger}"
+																/>
+																<h:message for="fechanacimientoh" style="color:#ff0000" />
+															</div>
+															<div class="col-md-3 ">
+																<label style="margin-top:21px;">Sexo asignado al nacer</label><label style="color: red">*</label>
+																<h:selectOneMenu id="ModaldrpdSexo"
+																	value="#{certificateRequestController.sexoYounger}"
+																	class="form-control requeridoModal"
+																	requiredMessage="Este campo es requerido."
+																>
+																	<f:selectItem itemValue="#{null}"
+																		itemLabel="Seleccione"
+																	/>
+																	<f:selectItems
+																		value="#{certificateRequestController.valuesSex}"
+																	/>
+																</h:selectOneMenu>
+															</div>
+															<div class="col-md-3">
+																<label>¿Con cuál género se identifica?<label style="color: red">*</label></label>
+																<h:selectOneMenu id="ModaldrpdGenero"
+																	value="#{certificateRequestController.genderYounger}"
+																	class="form-control  requeridoModal"
+																	requiredMessage="Este campo es requerido."
+																>
+																	<f:selectItem itemValue="#{null}"
+																		itemLabel="Seleccione"
+																	/>
+																	<f:selectItems
+																		value="#{certificateRequestController.valuesGender}"
+																	/>
+																</h:selectOneMenu>
+																<h:message for="ModaldrpdGenero" style="color:#ff0000" />
+															</div>
+
+															<div class="col-md-3 ">
+																<label style="margin-top:21px;">Orientación Sexual</label>
+																<h:selectOneMenu id="ModaldrpdSexualOrient"
+																	value="#{certificateRequestController.sexualOrientYounger}"
+																	class="form-control"
+																>
+																	<f:selectItem itemValue="#{null}"
+																		itemLabel="Seleccione"
+																	/>
+																	<f:selectItems
+																		value="#{certificateRequestController.valuesSexualOrient}"
+																	/>
+																</h:selectOneMenu>
+															</div>
+														</div>
+														<br />
+														<div class="row">
+															<div class="col-md-3 ">
+																<label>Etnia</label><label style="color: red">*</label>
+																<h:selectOneMenu id="drpdEtnia"
+																	value="#{certificateRequestController.etnia}"
+																	class="form-control requeridoModal"
+																	onchange="etniaMenor(this.value)"
+																>
+																	<f:selectItem itemValue="#{null}"
+																		itemLabel="Seleccione"
+																	/>
+																	<f:selectItems
+																		value="#{certificateRequestController.valuesEtnias}"
+																	/>
+																</h:selectOneMenu>
+															</div>
+															<div class="col-md-3 ">
+																<div class="form-group">
+																	<label>Otra Etnia</label>
+																	<h:inputText id="txtCualEtnia"
+																		class="form-control text-mayuscula" maxlength="15"
+																		onkeyup="this.value = this.value.toUpperCase();valueEtniaMenor();"
+																		readonly="true" onkeypress="return check(event)"
+																	/>
+																	<h:inputHidden
+																		value="#{certificateRequestController.cualEtnia}"
+																		id="txtCualEtniaAux"
+																	/>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="panel panel-default">
+											<div class="panel-heading">
+												<label><strong>Información de contacto</strong></label>
+												<h:selectOneRadio style="display:inline-block;float:right;"
+													id="typeDireccion" onchange="typeDireccion(this.value)"
+													value="#{certificateRequestController.typeDireccion}"
+												>
+													<f:selectItem itemValue="1" itemLabel="Urbana" />
+													<f:selectItem itemValue="2" itemLabel="Rural" />
+												</h:selectOneRadio>
+												<h:inputHidden id="txtDireccionSelect"
+													value="#{certificateRequestController.typeDireccion}"
+												/>
+												<div style="float: right;">
+													<label>Tipo de Dirección: </label>
+												</div>
+											</div>
+											<div class="panel-body">
+												<div class="row ">
+													<div class="col-md-3 ">
+														<label>No. Celular</label>
+														<h:inputText id="ModaltxtCelular"
+															class="form-control  requeridoModal numerico" maxlength="10"
+															value="#{certificateRequestController.cellphoneYounger}"
+														>
+														</h:inputText>
+														<h:message for="ModaltxtCelular" style="color:#ff0000" />
+													</div>
+													<div class="col-md-3 ">
+														<label>No. Teléfono</label>
+														<h:inputText id="ModaltxtTelefono"
+															class="form-control   requeridoModal numerico"
+															maxlength="10"
+															value="#{certificateRequestController.phoneYounger}"
+														>
+														</h:inputText>
+														<h:message for="ModaltxtTelefono" style="color:#ff0000" />
+													</div>
+													<div class="col-md-6">
+														<label>Dirección rural</label> <label
+															style="color: red; display: none;"
+															id="requeridoDireccionRural"
+														>*</label>
+														<h:inputText id="ModaltxtDireccionRural"
+															class="form-control text-mayuscula" maxlength="30"
+															onkeyup="direccionRural()" readonly="true"
+															autocomplete="off"
+														/>
+														<h:inputHidden id="txtDireccionRuralh"
+															value="#{certificateRequestController.ruralAddressYounger}"
+														/>
+													</div>
+												</div>
+												<br />
+												<div class="row">
+													<div class="col-md-12">
+														<label>Dirección</label><label style="color: red"
+															id="requeridoDireccion"
+														>*</label>
+														<h:inputText id="ModaltxtDireccion"
+															class="form-control text-mayuscula  requeridoModal "
+															maxlength="20" readonly="true"
+															value="#{certificateRequestController.addressYounger} #{certificateRequestController.addressComplYounger}"
+														/>
+														<h:inputHidden id="Modaldireccionh"
+															value="#{certificateRequestController.addressYounger}"
+														/>
+														<h:inputHidden id="ModaldireccionComplementoh"
+															value="#{certificateRequestController.addressComplYounger}"
+														/>
+													</div>
+												</div>
+												<br />
+												<div class="well" id="dir">
+													<div class="row" style="margin-top: 0.8%;">
+														<div class="col-xs-12">
+															<div class="row">
+																<label class="col-xs-12">Dirección</label>
+															</div>
+															<div class="row">
+																<div class="col-md-12">
+																	<div class="col-lg-12 col-xs-12" style="padding: 0;">
+																		<div style="display: inline-block; width: 23%;">
+																			<h:selectOneMenu id="txtCalleEvento"
+																				class="form-control  requeridoModal dir"
+																				tabindex="3" onchange="direccion()"
+																			>
+																				<f:selectItem itemValue="#{null}" itemLabel="" />
+																				<f:selectItems
+																					value="#{certificateRequestController.valuesMainStreet}"
+																				/>
+																			</h:selectOneMenu>
+																			<h:message for="txtCalleEvento"
+																				style="color:#ff0000; font-size:13px;"
+																			/>
+																		</div>
+																		<div style="display: inline-block; width: 5%">
+																			<h:inputText
+																				class="form-control  requeridoModal  dir numerico"
+																				id="txtCalleEvento1" tabindex="4" size="2"
+																				onkeyup="direccion()" style="padding: 4px 6px;"
+																				maxlength="3"
+																			/>
+																		</div>
+																		<div style="display: inline-block; width: 6%">
+																			<h:selectOneMenu id="txtCalleEvento2"
+																				class="form-control dir" tabindex="5"
+																				onchange="direccion()" style="padding: 7px 5px;"
+																			>
+																				<f:selectItem itemValue="" itemLabel="" />
+																				<f:selectItem itemValue="A" itemLabel="A" />
+																				<f:selectItem itemValue="B" itemLabel="B" />
+																				<f:selectItem itemValue="C" itemLabel="C" />
+																				<f:selectItem itemValue="D" itemLabel="D" />
+																				<f:selectItem itemValue="E" itemLabel="E" />
+																				<f:selectItem itemValue="F" itemLabel="F" />
+																				<f:selectItem itemValue="G" itemLabel="G" />
+																				<f:selectItem itemValue="H" itemLabel="H" />
+																				<f:selectItem itemValue="I" itemLabel="I" />
+																				<f:selectItem itemValue="J" itemLabel="J" />
+																				<f:selectItem itemValue="K" itemLabel="K" />
+																				<f:selectItem itemValue="L" itemLabel="L" />
+																				<f:selectItem itemValue="M" itemLabel="M" />
+																				<f:selectItem itemValue="N" itemLabel="N" />
+																				<f:selectItem itemValue="O" itemLabel="O" />
+																				<f:selectItem itemValue="P" itemLabel="P" />
+																				<f:selectItem itemValue="Q" itemLabel="Q" />
+																				<f:selectItem itemValue="R" itemLabel="R" />
+																				<f:selectItem itemValue="S" itemLabel="S" />
+																				<f:selectItem itemValue="T" itemLabel="T" />
+																				<f:selectItem itemValue="U" itemLabel="U" />
+																				<f:selectItem itemValue="V" itemLabel="V" />
+																				<f:selectItem itemValue="W" itemLabel="W" />
+																				<f:selectItem itemValue="X" itemLabel="X" />
+																				<f:selectItem itemValue="Y" itemLabel="Y" />
+																				<f:selectItem itemValue="Z" itemLabel="Z" />
+																			</h:selectOneMenu>
+																		</div>
+																		<div
+																			style="display: inline-block; width: 5%; font-size: 11px;"
+																		>
+																			<h:selectBooleanCheckbox id="txtCalleEvento3"
+																				tabindex="6" onchange="direccion()" class="dir"
+																			/>
+																			<label for="bis" class="txtLabel">BIS</label>
+																		</div>
+
+																		<h:selectOneMenu id="txtCalleEvento4"
+																			class="form-control dir" tabindex="7"
+																			onchange="direccion()"
+																			style="width: 6%;display: inline-block;padding: 7px 5px;"
+																		>
+																			<f:selectItem itemValue="" itemLabel="" />
+																			<f:selectItem itemValue="A" itemLabel="A" />
+																			<f:selectItem itemValue="B" itemLabel="B" />
+																			<f:selectItem itemValue="C" itemLabel="C" />
+																			<f:selectItem itemValue="D" itemLabel="D" />
+																			<f:selectItem itemValue="E" itemLabel="E" />
+																			<f:selectItem itemValue="F" itemLabel="F" />
+																			<f:selectItem itemValue="G" itemLabel="G" />
+																			<f:selectItem itemValue="H" itemLabel="H" />
+																			<f:selectItem itemValue="I" itemLabel="I" />
+																			<f:selectItem itemValue="J" itemLabel="J" />
+																			<f:selectItem itemValue="K" itemLabel="K" />
+																			<f:selectItem itemValue="L" itemLabel="L" />
+																			<f:selectItem itemValue="M" itemLabel="M" />
+																			<f:selectItem itemValue="N" itemLabel="N" />
+																			<f:selectItem itemValue="O" itemLabel="O" />
+																			<f:selectItem itemValue="P" itemLabel="P" />
+																			<f:selectItem itemValue="Q" itemLabel="Q" />
+																			<f:selectItem itemValue="R" itemLabel="R" />
+																			<f:selectItem itemValue="S" itemLabel="S" />
+																			<f:selectItem itemValue="T" itemLabel="T" />
+																			<f:selectItem itemValue="U" itemLabel="U" />
+																			<f:selectItem itemValue="V" itemLabel="V" />
+																			<f:selectItem itemValue="W" itemLabel="W" />
+																			<f:selectItem itemValue="X" itemLabel="X" />
+																			<f:selectItem itemValue="Y" itemLabel="Y" />
+																			<f:selectItem itemValue="Z" itemLabel="Z" />
+																		</h:selectOneMenu>
+																		<div style="display: inline-block; width: 11%">
+																			<h:selectOneMenu id="txtCalleEvento5"
+																				class="form-control dir" tabindex="8"
+																				onchange="direccion()"
+																			>
+																				<f:selectItem itemValue="#{null}" itemLabel="" />
+																				<f:selectItems
+																					value="#{certificateRequestController.valuesStreetGeneratingPath}"
+																				/>
+																			</h:selectOneMenu>
+																		</div>
+																		<div
+																			style="display: inline-block; width: 1%; text-align: center"
+																		>
+																			<label for="numeral" class="txtLabel">#</label>
+																		</div>
+																		<h:inputText
+																			class="form-control  requeridoModal  dir numerico"
+																			id="txtCalleEvento6" tabindex="9" maxlength="3"
+																			onkeyup="direccion()"
+																			style="display: inline-block;width: 5%;padding: 4px 6px;"
+																		/>
+
+																		<div style="display: inline-block; width: 6%">
+																			<h:selectOneMenu id="txtCalleEvento7"
+																				class="form-control dir" tabindex="10"
+																				onchange="direccion()" style="padding: 7px 5px;"
+																			>
+																				<f:selectItem itemValue="" itemLabel="" />
+																				<f:selectItem itemValue="A" itemLabel="A" />
+																				<f:selectItem itemValue="B" itemLabel="B" />
+																				<f:selectItem itemValue="C" itemLabel="C" />
+																				<f:selectItem itemValue="D" itemLabel="D" />
+																				<f:selectItem itemValue="E" itemLabel="E" />
+																				<f:selectItem itemValue="F" itemLabel="F" />
+																				<f:selectItem itemValue="G" itemLabel="G" />
+																				<f:selectItem itemValue="H" itemLabel="H" />
+																				<f:selectItem itemValue="I" itemLabel="I" />
+																				<f:selectItem itemValue="J" itemLabel="J" />
+																				<f:selectItem itemValue="K" itemLabel="K" />
+																				<f:selectItem itemValue="L" itemLabel="L" />
+																				<f:selectItem itemValue="M" itemLabel="M" />
+																				<f:selectItem itemValue="N" itemLabel="N" />
+																				<f:selectItem itemValue="O" itemLabel="O" />
+																				<f:selectItem itemValue="P" itemLabel="P" />
+																				<f:selectItem itemValue="Q" itemLabel="Q" />
+																				<f:selectItem itemValue="R" itemLabel="R" />
+																				<f:selectItem itemValue="S" itemLabel="S" />
+																				<f:selectItem itemValue="T" itemLabel="T" />
+																				<f:selectItem itemValue="U" itemLabel="U" />
+																				<f:selectItem itemValue="V" itemLabel="V" />
+																				<f:selectItem itemValue="W" itemLabel="W" />
+																				<f:selectItem itemValue="X" itemLabel="X" />
+																				<f:selectItem itemValue="Y" itemLabel="Y" />
+																				<f:selectItem itemValue="Z" itemLabel="Z" />
+																			</h:selectOneMenu>
+																		</div>
+																		<div
+																			style="display: inline-block; width: 5%; font-size: 11px;"
+																		>
+																			<h:selectBooleanCheckbox id="txtCalleEvento8"
+																				tabindex="11" onchange="direccion()" class="dir"
+																			/>
+																			<label for="bis" class="txtLabel">BIS</label>
+																		</div>
+																		<h:selectOneMenu id="txtCalleEvento9"
+																			class="form-control dir" tabindex="12"
+																			onchange="direccion()"
+																			style="width:6%;display: inline-block;padding: 7px 5px;"
+																		>
+																			<f:selectItem itemValue="" itemLabel="" />
+																			<f:selectItem itemValue="A" itemLabel="A" />
+																			<f:selectItem itemValue="B" itemLabel="B" />
+																			<f:selectItem itemValue="C" itemLabel="C" />
+																			<f:selectItem itemValue="D" itemLabel="D" />
+																			<f:selectItem itemValue="E" itemLabel="E" />
+																			<f:selectItem itemValue="F" itemLabel="F" />
+																			<f:selectItem itemValue="G" itemLabel="G" />
+																			<f:selectItem itemValue="H" itemLabel="H" />
+																			<f:selectItem itemValue="I" itemLabel="I" />
+																			<f:selectItem itemValue="J" itemLabel="J" />
+																			<f:selectItem itemValue="K" itemLabel="K" />
+																			<f:selectItem itemValue="L" itemLabel="L" />
+																			<f:selectItem itemValue="M" itemLabel="M" />
+																			<f:selectItem itemValue="N" itemLabel="N" />
+																			<f:selectItem itemValue="O" itemLabel="O" />
+																			<f:selectItem itemValue="P" itemLabel="P" />
+																			<f:selectItem itemValue="Q" itemLabel="Q" />
+																			<f:selectItem itemValue="R" itemLabel="R" />
+																			<f:selectItem itemValue="S" itemLabel="S" />
+																			<f:selectItem itemValue="T" itemLabel="T" />
+																			<f:selectItem itemValue="U" itemLabel="U" />
+																			<f:selectItem itemValue="V" itemLabel="V" />
+																			<f:selectItem itemValue="W" itemLabel="W" />
+																			<f:selectItem itemValue="X" itemLabel="X" />
+																			<f:selectItem itemValue="Y" itemLabel="Y" />
+																			<f:selectItem itemValue="Z" itemLabel="Z" />
+																		</h:selectOneMenu>
+																		<h:inputText
+																			class="form-control  requeridoModal  dir numerico"
+																			id="txtCalleEvento10" tabindex="13" maxlength="3"
+																			onkeyup="direccion()"
+																			style="width: 5%;display: inline-block;padding: 4px 6px;"
+																		/>
+																		<h:selectOneMenu id="txtCalleEvento11"
+																			class="form-control dir" tabindex="14"
+																			onchange="direccion()"
+																			style="width: 11%;display: inline-block;"
+																		>
+																			<f:selectItem itemValue="#{null}" itemLabel="" />
+																			<f:selectItems
+																				value="#{certificateRequestController.valuesStreetGeneratingPath}"
+																			/>
+																		</h:selectOneMenu>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="row" style="margin-top: 0.8%">
+														<div class="col-xs-12">
+															<div class="row">
+																<label class="col-xs-12">Complemento</label>
+															</div>
+															<div class="row">
+																<div class="col-md-2">
+																	<h:selectOneMenu id="txtCalleEvento12"
+																		class="form-control dir" tabindex="15"
+																		onchange="direccion()"
+																	>
+																		<f:selectItem itemValue="" itemLabel="Seleccione" />
+																		<f:selectItem itemValue="AD"
+																			itemLabel="Administración"
+																		/>
+																		<f:selectItem itemValue="AG" itemLabel="Agrupación" />
+																		<f:selectItem itemValue="AL" itemLabel="Altillo" />
+																		<f:selectItem itemValue="AP" itemLabel="Apartamento" />
+																		<f:selectItem itemValue="AS"
+																			itemLabel="Apartamento Sótano"
+																		/>
+																		<f:selectItem itemValue="BG" itemLabel="Bodega" />
+																		<f:selectItem itemValue="BQ" itemLabel="Bloque" />
+																		<f:selectItem itemValue="CA" itemLabel="Casa" />
+																		<f:selectItem itemValue="CJ" itemLabel="Conjunto" />
+																		<f:selectItem itemValue="CN" itemLabel="Consultorio" />
+																		<f:selectItem itemValue="DP" itemLabel="Depósito" />
+																		<f:selectItem itemValue="DS"
+																			itemLabel="Depósito Sótano"
+																		/>
+																		<f:selectItem itemValue="ED" itemLabel="Edificio" />
+																		<f:selectItem itemValue="EN" itemLabel="Entrada" />
+																		<f:selectItem itemValue="ES" itemLabel="Estudio" />
+																		<f:selectItem itemValue="ET" itemLabel="Etapa" />
+																		<f:selectItem itemValue="EX" itemLabel="Exterior" />
+																		<f:selectItem itemValue="GD"
+																			itemLabel="Garaje deposito"
+																		/>
+																		<f:selectItem itemValue="GJ" itemLabel="Garaje" />
+																		<f:selectItem itemValue="GS" itemLabel="Garaje Sótano" />
+																		<f:selectItem itemValue="HB" itemLabel="Habitación" />
+																		<f:selectItem itemValue="IN" itemLabel="Interior" />
+																		<f:selectItem itemValue="LB" itemLabel="Laboratorio" />
+																		<f:selectItem itemValue="LC" itemLabel="Local" />
+																		<f:selectItem itemValue="LM"
+																			itemLabel="Local Mezzanine"
+																		/>
+																		<f:selectItem itemValue="LS" itemLabel="Local Sótano" />
+																		<f:selectItem itemValue="MD" itemLabel="Modulo" />
+																		<f:selectItem itemValue="MN" itemLabel="Mezzanine" />
+																		<f:selectItem itemValue="MZ" itemLabel="Manzana" />
+																		<f:selectItem itemValue="NV" itemLabel="Nivel" />
+																		<f:selectItem itemValue="OF" itemLabel="Oficina" />
+																		<f:selectItem itemValue="OS"
+																			itemLabel="Oficina Sótano"
+																		/>
+																		<f:selectItem itemValue="PH" itemLabel="Penthouse" />
+																		<f:selectItem itemValue="PI" itemLabel="Piso" />
+																		<f:selectItem itemValue="PT" itemLabel="Portería" />
+																		<f:selectItem itemValue="SA" itemLabel="Salón" />
+																		<f:selectItem itemValue="SM" itemLabel="Super Manzana" />
+																		<f:selectItem itemValue="SU" itemLabel="Suite" />
+																		<f:selectItem itemValue="TO" itemLabel="Torre" />
+																		<f:selectItem itemValue="TZ" itemLabel="Terraza" />
+																		<f:selectItem itemValue="UD" itemLabel="Unidad" />
+																	</h:selectOneMenu>
+																</div>
+																<div class="col-md-1">
+																	<h:inputText class="form-control dir"
+																		id="txtCalleEvento13" tabindex="16" size="2"
+																		onkeyup="direccion()"
+																	/>
+																</div>
+																<div class="col-md-2">
+																	<h:selectOneMenu id="txtCalleEvento14"
+																		class="form-control dir" tabindex="17"
+																		onchange="direccion()"
+																	>
+																		<f:selectItem itemValue="" itemLabel="Seleccione" />
+																		<f:selectItem itemValue="AD"
+																			itemLabel="Administración"
+																		/>
+																		<f:selectItem itemValue="AG" itemLabel="Agrupación" />
+																		<f:selectItem itemValue="AL" itemLabel="Altillo" />
+																		<f:selectItem itemValue="AP" itemLabel="Apartamento" />
+																		<f:selectItem itemValue="AS"
+																			itemLabel="Apartamento Sótano"
+																		/>
+																		<f:selectItem itemValue="BG" itemLabel="Bodega" />
+																		<f:selectItem itemValue="BQ" itemLabel="Bloque" />
+																		<f:selectItem itemValue="CA" itemLabel="Casa" />
+																		<f:selectItem itemValue="CJ" itemLabel="Conjunto" />
+																		<f:selectItem itemValue="CN" itemLabel="Consultorio" />
+																		<f:selectItem itemValue="DP" itemLabel="Depósito" />
+																		<f:selectItem itemValue="DS"
+																			itemLabel="Depósito Sótano"
+																		/>
+																		<f:selectItem itemValue="ED" itemLabel="Edificio" />
+																		<f:selectItem itemValue="EN" itemLabel="Entrada" />
+																		<f:selectItem itemValue="ES" itemLabel="Estudio" />
+																		<f:selectItem itemValue="ET" itemLabel="Etapa" />
+																		<f:selectItem itemValue="EX" itemLabel="Exterior" />
+																		<f:selectItem itemValue="GD"
+																			itemLabel="Garaje deposito"
+																		/>
+																		<f:selectItem itemValue="GJ" itemLabel="Garaje" />
+																		<f:selectItem itemValue="GS" itemLabel="Garaje Sótano" />
+																		<f:selectItem itemValue="HB" itemLabel="Habitación" />
+																		<f:selectItem itemValue="IN" itemLabel="Interior" />
+																		<f:selectItem itemValue="LB" itemLabel="Laboratorio" />
+																		<f:selectItem itemValue="LC" itemLabel="Local" />
+																		<f:selectItem itemValue="LM"
+																			itemLabel="Local Mezzanine"
+																		/>
+																		<f:selectItem itemValue="LS" itemLabel="Local Sótano" />
+																		<f:selectItem itemValue="MD" itemLabel="Modulo" />
+																		<f:selectItem itemValue="MN" itemLabel="Mezzanine" />
+																		<f:selectItem itemValue="MZ" itemLabel="Manzana" />
+																		<f:selectItem itemValue="NV" itemLabel="Nivel" />
+																		<f:selectItem itemValue="OF" itemLabel="Oficina" />
+																		<f:selectItem itemValue="OS"
+																			itemLabel="Oficina Sótano"
+																		/>
+																		<f:selectItem itemValue="PH" itemLabel="Penthouse" />
+																		<f:selectItem itemValue="PI" itemLabel="Piso" />
+																		<f:selectItem itemValue="PT" itemLabel="Portería" />
+																		<f:selectItem itemValue="SA" itemLabel="Salón" />
+																		<f:selectItem itemValue="SM" itemLabel="Super Manzana" />
+																		<f:selectItem itemValue="SU" itemLabel="Suite" />
+																		<f:selectItem itemValue="TO" itemLabel="Torre" />
+																		<f:selectItem itemValue="TZ" itemLabel="Terraza" />
+																		<f:selectItem itemValue="UD" itemLabel="Unidad" />
+																	</h:selectOneMenu>
+																</div>
+																<div class="col-md-1">
+																	<h:inputText class="form-control dir"
+																		id="txtCalleEvento15" tabindex="18" size="2"
+																		onkeyup="direccion()"
+																	/>
+																</div>
+																<div class="col-md-2">
+																	<h:selectOneMenu id="txtCalleEvento16"
+																		class="form-control dir" tabindex="19"
+																		onchange="direccion()"
+																	>
+																		<f:selectItem itemValue="" itemLabel="Seleccione" />
+																		<f:selectItem itemValue="AD"
+																			itemLabel="Administración"
+																		/>
+																		<f:selectItem itemValue="AG" itemLabel="Agrupación" />
+																		<f:selectItem itemValue="AL" itemLabel="Altillo" />
+																		<f:selectItem itemValue="AP" itemLabel="Apartamento" />
+																		<f:selectItem itemValue="AS"
+																			itemLabel="Apartamento Sótano"
+																		/>
+																		<f:selectItem itemValue="BG" itemLabel="Bodega" />
+																		<f:selectItem itemValue="BQ" itemLabel="Bloque" />
+																		<f:selectItem itemValue="CA" itemLabel="Casa" />
+																		<f:selectItem itemValue="CJ" itemLabel="Conjunto" />
+																		<f:selectItem itemValue="CN" itemLabel="Consultorio" />
+																		<f:selectItem itemValue="DP" itemLabel="Depósito" />
+																		<f:selectItem itemValue="DS"
+																			itemLabel="Depósito Sótano"
+																		/>
+																		<f:selectItem itemValue="ED" itemLabel="Edificio" />
+																		<f:selectItem itemValue="EN" itemLabel="Entrada" />
+																		<f:selectItem itemValue="ES" itemLabel="Estudio" />
+																		<f:selectItem itemValue="ET" itemLabel="Etapa" />
+																		<f:selectItem itemValue="EX" itemLabel="Exterior" />
+																		<f:selectItem itemValue="GD"
+																			itemLabel="Garaje deposito"
+																		/>
+																		<f:selectItem itemValue="GJ" itemLabel="Garaje" />
+																		<f:selectItem itemValue="GS" itemLabel="Garaje Sótano" />
+																		<f:selectItem itemValue="HB" itemLabel="Habitación" />
+																		<f:selectItem itemValue="IN" itemLabel="Interior" />
+																		<f:selectItem itemValue="LB" itemLabel="Laboratorio" />
+																		<f:selectItem itemValue="LC" itemLabel="Local" />
+																		<f:selectItem itemValue="LM"
+																			itemLabel="Local Mezzanine"
+																		/>
+																		<f:selectItem itemValue="LS" itemLabel="Local Sótano" />
+																		<f:selectItem itemValue="MD" itemLabel="Modulo" />
+																		<f:selectItem itemValue="MN" itemLabel="Mezzanine" />
+																		<f:selectItem itemValue="MZ" itemLabel="Manzana" />
+																		<f:selectItem itemValue="NV" itemLabel="Nivel" />
+																		<f:selectItem itemValue="OF" itemLabel="Oficina" />
+																		<f:selectItem itemValue="OS"
+																			itemLabel="Oficina Sótano"
+																		/>
+																		<f:selectItem itemValue="PH" itemLabel="Penthouse" />
+																		<f:selectItem itemValue="PI" itemLabel="Piso" />
+																		<f:selectItem itemValue="PT" itemLabel="Portería" />
+																		<f:selectItem itemValue="SA" itemLabel="Salón" />
+																		<f:selectItem itemValue="SM" itemLabel="Super Manzana" />
+																		<f:selectItem itemValue="SU" itemLabel="Suite" />
+																		<f:selectItem itemValue="TO" itemLabel="Torre" />
+																		<f:selectItem itemValue="TZ" itemLabel="Terraza" />
+																		<f:selectItem itemValue="UD" itemLabel="Unidad" />
+																	</h:selectOneMenu>
+																</div>
+																<div class="col-md-1">
+																	<h:inputText class="form-control dir"
+																		id="txtCalleEvento17" tabindex="20" size="2"
+																		onkeyup="direccion()"
+																	/>
+																</div>
+																<div class="col-md-2 col-md-offset-1"
+																	style="text-align: right"
+																>
+																	<h:commandButton type="reset" id="cleanbutton"
+																		value="Limpiar" styleClass="btn btn-default btn-block"
+																		onclick="clean()" immediate="true"
+																	>
+																		<f:ajax execute="@form" render="@none" />
+																	</h:commandButton>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row ">
+
+													<div class="col-md-3 ">
+														<label>Ciudad de residencia</label><label
+															style="color: red"
+														>*</label>
+														<h:selectOneMenu id="ModaldrpdCiudadResidencia"
+															onchange="locationList(this.value)"
+															class="form-control requeridoModal"
+														>
+															<f:selectItem itemValue="#{null}" itemLabel="Seleccione" />
+															<f:selectItems
+																value="#{certificateRequestController.valuesResidenceCity}"
+																var="residence" itemLabel="#{residence.nameLocation}"
+																itemValue="#{residence.idLocation}|#{residence.valueLocation}"
+															/>
+														</h:selectOneMenu>
+														<h:inputHidden id="valCiudadResidencia"
+															value="#{certificateRequestController.residenceCityYounger}"
+														/>
+													</div>
+													<div class="col-md-3 ">
+														<label>Localidad</label><label style="color: red">*</label>
+														<h:selectOneMenu id="ModaldrpdLocalidad"
+															class="form-control requeridoModal"
+															onchange="barriosList(this.value)"
+														>
+															<f:selectItem itemValue="#{null}" itemLabel="Seleccione" />
+															<f:selectItems
+																value="#{certificateRequestController.valuesLocation}"
+																var="location" itemLabel="#{location.nameLocation}"
+																itemValue="#{location.idLocation}|#{location.valueLocation}|#{location.padreId}"
+															/>
+														</h:selectOneMenu>
+														<h:inputHidden id="valLocalidad"
+															value="#{certificateRequestController.locationYounger}"
+														/>
+													</div>
+													<div class="col-md-3 ">
+														<label>Barrio</label><label style="color: red">*</label> <select
+															class="form-control requeridoModal" id="ModaldrpdBarrio"
+															onchange="barrioVal(this.value)"
+														>
+
+														</select>
+
+														<h:selectOneMenu id="ModaldrpdBarrioAux"
+															class="form-control" style="visibility: hidden;"
+														>
+															<f:selectItems
+																value="#{certificateRequestController.valuesNeightborhood}"
+																var="neight" itemLabel="#{neight.nameLocation}"
+																itemValue="#{neight.valueLocation}|#{neight.padreId}"
+															/>
+														</h:selectOneMenu>
+														<h:inputHidden id="valBarrio"
+															value="#{certificateRequestController.neightborhoodYounger}"
+														/>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="panel panel-default">
+											<div class="panel-heading">
+												<label><strong>Información adicional</strong></label>
+											</div>
+											<div class="panel-body">
+												<div class="row ">
+													<div class="col-md-3 ">
+														<label>Ocupación</label><label style="color: red">*</label>
+														<h:selectOneMenu id="ModaldrpdOcupacion"
+															value="#{certificateRequestController.occupationYounger}"
+															class="form-control requeridoModal"
+															requiredMessage="Este campo es requerido."
+														>
+															<f:selectItem itemValue="#{null}" itemLabel="Seleccione" />
+															<f:selectItems
+																value="#{certificateRequestController.valuesOccupation}"
+															/>
+														</h:selectOneMenu>
+														<h:message for="ModaldrpdOcupacion" style="color:#ff0000" />
+													</div>
+													<div class="col-md-3 ">
+														<label>Condición especial</label>
+														<h:selectOneMenu id="ModaldrpdCondicionEspecial"
+															value="#{certificateRequestController.specialConditionYounger}"
+															class="form-control"
+														>
+															<f:selectItem itemValue="#{null}" itemLabel="Seleccione" />
+															<f:selectItems
+																value="#{certificateRequestController.valuesSpecialCondition}"
+															/>
+														</h:selectOneMenu>
+													</div>
+													<div class="col-md-3 ">
+														<label>Estrato</label><label style="color: red">*</label>
+														<h:selectOneMenu id="ModaldrpdEstrato"
+															value="#{certificateRequestController.stratumYounger}"
+															class="form-control requeridoModal"
+															requiredMessage="Este campo es requerido."
+														>
+															<f:selectItem itemValue="#{null}" itemLabel="Seleccione" />
+															<f:selectItems
+																value="#{certificateRequestController.valuesStratum}"
+															/>
+														</h:selectOneMenu>
+														<h:message for="ModaldrpdEstrato" style="color:#ff0000" />
+													</div>
+													<div class="col-md-3 ">
+														<label>Correo electrónico</label><label style="color: red">*</label>
+														<h:inputText id="Modalemail"
+															class="form-control requeridoModal"
+															value="#{certificateRequestController.emailYounger}"
+															autocomplete="off"
+														>
+														</h:inputText>
+														<span id='emailmessage'></span>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+								</div>
+								<div class="modal-footer btn-toolbar">
+									<h:inputHidden id="fechanacimientoh"
+										value="#{certificateRequestController.birthDateYounger}"
+									/>
+									<h:commandButton id="btnModalAsociarMenor"
+										value="Asociar menor" styleClass="btn btn-default"
+										action="#{certificateRequestController.RegisterYounger()}"
+										onclick="return validaDireccionModal()"
+									>
+										<f:ajax execute="modalCertificate:youngerinfo"
+											render="modalCertificate:youngerinfo :certificateRequestForm:tableyounger"
+											onevent="closeModal"
+										/>
+									</h:commandButton>
+									<button type="button" id="btnModalCerrar"
+										class="btn btn-default" data-dismiss="modal"
+										onclick="modalclose()"
+									>Cerrar</button>
+								</div>
+							</h:panelGroup>
+						</div>
+					</div>
+				</h:form>
+			</div>
+			<h:form id="certificateRequestForm" enctype="multipart/form-data">
+				<h:panelGroup id="registeralert" layout="block"
+					rendered="#{certificateRequestController.alertMessage}"
+				>
+					<div
+						class="#{certificateRequestController.alertStyle ? 'alert alert-success alert-dismissible' : 'alert alert-warning alert-dismissible'}"
+						id="alert" align="center"
+					>
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">&#215;</a>
+						<h:outputLabel id="finalMessage"
+							value="#{certificateRequestController.alertText}"
+						/>
+					</div>
+				</h:panelGroup>
+				<section>
+					<div class="well">
+						<div class="row">
+							<div class="col-md-12" style="text-align: center">
+								<h3>
+									<strong>#{certificateRequestController.correct?'Corrección
+										Certificado de Residencia':'Formulario de Solicitud de Certificado de							
+										Residencia'}</strong>
+								</h3>
+							</div>
+						</div>
+					</div>
+					<div class="well well-sm">
+						<div class="panel panel-default" style="margin-bottom: -8px">
+							<div class="panel-heading">
+								<img src="images/Help.png" style="width: 25px" /> <label><strong>Los
+										campos marcados con <label style="color: red"></label><label
+										style="color: red"
+									>*</label> son obligatorios.
+								</strong></label> <span id="spanAyuda" onMouseOver="mano(this)"
+									onclick="fpopover(this.id); return false;"
+									style="width: 4%; text-transform: bold" data-placement="left"
+									class="pull-right" data-toggle="popover" data-html="true"
+									data-content="#{certificateRequestController.urlVideoRegistro2}"
+								>Ayuda</span> <img src="images/Ayuda.png" style="width: 25px"
+									class="pull-right"
+								/>
+							</div>
+						</div>
+						<div class="panel panel-default" id="test">
+							<div class="panel-heading">
+								<label data-toggle="tooltip" data-placement="right"
+									title="Si desea hacer la edición de los datos diríjase a la opción “Información” y “Actualizar Información”."
+								> <strong>Datos solicitante o acudiente</strong>
+								</label>
+							</div>
+							<div class="panel-body">
+								<div class="row ">
+									<div class="col-md-12 ">
+										<div class="row ">
+											<div class="col-md-3 ">
+												<label>Tipo de identificación</label>
+												<h:inputText id="drpdTipoIdentificacion" disabled="true"
+													class="form-control"
+													value="#{certificateRequestController.idType}"
+												/>
+											</div>
+											<div class="col-md-3 ">
+												<label>No. de identificación</label>
+												<h:inputText id="txtNumeroIdentificacion" disabled="true"
+													class="form-control numerico"
+													value="#{certificateRequestController.idNumber}"
+													maxlength="15"
+												/>
+											</div>
+											<div class="col-md-6">
+												<label>Correo electrónico</label>
+												<h:inputText id="email" disabled="true" class="form-control"
+													value="#{certificateRequestController.email}"
+												/>
+											</div>
+										</div>
+										<br />
+										<div class="row ">
+											<div class="col-md-3 ">
+												<label>Primer nombre</label>
+												<h:inputText id="txtPrimerNombre" disabled="true"
+													class="form-control letrasTildes"
+													value="#{certificateRequestController.firstName}"
+													onkeyup="this.value=this.value.toUpperCase();"
+												/>
+											</div>
+											<div class="col-md-3 ">
+												<label>Segundo nombre</label>
+												<h:inputText id="txtSegundoNombre" disabled="true"
+													class="form-control letrasTildes"
+													value="#{certificateRequestController.secondName}"
+													onkeyup="this.value=this.value.toUpperCase();"
+												/>
+											</div>
+											<div class="col-md-3 ">
+												<label>Primer apellido</label>
+												<h:inputText id="txtPrimerApellido" disabled="true"
+													class="form-control letrasTildes"
+													value="#{certificateRequestController.lastName}"
+													onkeyup="this.value=this.value.toUpperCase();"
+												/>
+											</div>
+											<div class="col-md-3 ">
+												<label>Segundo apellido</label>
+												<h:inputText id="txtSegundoApellido" disabled="true"
+													class="form-control letrasTildes"
+													value="#{certificateRequestController.secondLastName}"
+													onkeyup="this.value=this.value.toUpperCase();"
+												/>
+											</div>
+										</div>
+										<br />
+										<div class="row ">
+											<div class="col-md-12">
+												<label>Dirección:</label>
+												<h:inputText id="txtDireccion" disabled="true"
+													class="form-control text-mayuscula" maxlength="20"
+													value="#{certificateRequestController.address}"
+												/>
+											</div>
+										</div>
+										<br />
+										<div class="row ">
+											<div class="col-md-2">
+												<label>Tipo de trámite </label><label style="color: red">*</label>
+											</div>
+											<div class="col-md-4">
+												<h:selectOneMenu id="drpdTipoTramite"
+													value="#{certificateRequestController.procedureType}"
+													class="form-control requerido"
+													onchange="tipoTramite(this.value)"
+													disabled="#{certificateRequestController.disableProcedureType}"
+												>
+													<f:selectItem itemValue="#{null}" itemLabel="Seleccione" />
+													<f:selectItems
+														value="#{certificateRequestController.valuesProcedureType}"
+													/>
+												</h:selectOneMenu>
+											</div>
+										</div>
+										<br />
+										<div class="row ">
+											<div class="col-md-4">
+												<label style="display: inline">¿El certificado es
+													para un menor de edad a cargo?</label><label style="color: red">*</label>
+											</div>
+											<div class="col-md-3">
+												<h:selectOneMenu id="drpdCertificadoMenorEdad"
+													value="#{certificateRequestController.younger}"
+													class="form-control requerido"
+													onchange="tipoTramiteME(this.value)"
+													disabled="#{certificateRequestController.disableYounger}"
+												>
+													<f:selectItem itemValue="" itemLabel="Seleccionar" />
+													<f:selectItem itemValue="1" itemLabel="SI" />
+													<f:selectItem itemValue="0" itemLabel="NO" />
+												</h:selectOneMenu>
+												<h:message for="youngerh" style="color:#ff0000" />
+											</div>
+											<div class="col-md-2">
+												<label>Parentesco</label><label style="color: red">*</label>
+											</div>
+											<div class="col-md-3">
+												<h:selectOneMenu id="drpdParentesco"
+													value="#{certificateRequestController.related}"
+													class="form-control" required="false" disabled="false"
+													requiredMessage="Seleccione una opcion"
+												>
+													<f:selectItem itemValue="#{null}" itemLabel="Seleccione" />
+													<f:selectItems
+														value="#{certificateRequestController.valuesRelated}"
+													/>
+												</h:selectOneMenu>
+												<span id='relatedmessage'></span>
+											</div>
+										</div>
+										<br /> <br />
+										<div class="row " style="display: none">
+											>
+											<div class="col-md-9">
+												<label>¿Señor usuario su certificado requiere ser
+													apostillado ante el ministerio de relaciones exteriores?</label><label
+													style="color: red"
+												>*</label>
+											</div>
+											<div class="col-md-3" data-toggle="tooltip"
+												data-placement="top"
+												title="Recuerde que si marca la opción “SI” el certificado deberá ser retirado dentro de los 5 días hábiles siguientes a su aprobación en la alcaldía de la localidad correspondiente con firma manuscrita original para entregar ante el ministerio."
+											>
+												<h:selectOneMenu id="drpdApostillado"
+													value="#{certificateRequestController.externalRelation}"
+													class="form-control requerido"
+													requiredMessage="Seleccione una opcion"
+													disabled="#{certificateRequestController.disableExternalRelation}"
+												>
+													<f:selectItem itemValue="#{null}" itemLabel="Seleccione" />
+													<f:selectItem itemValue="True" itemLabel="SI" />
+													<f:selectItem itemValue="False" itemLabel="NO" />
+												</h:selectOneMenu>
+												<h:message for="drpdApostillado" style="color:#ff0000" />
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-4 btn-toolbar">
+												<button type="button" id="btnRegistrarPrivado"
+													class="btn btn-default" onclick="openModalPrivado()"
+													style="display: none;"
+												>Registrar Privado de Libertad</button>
+											</div>
+										</div>
+										<br />
+										<div class="panel panel-default" id="tablePrivadoLibertad"
+											style="display: none;"
+										>
+											<div class="panel-heading">
+												<label><strong>Datos de la persona privada
+														de la libertad</strong></label>
+											</div>
+											<div class="panel-body">
+												<h:panelGroup id="tablePrivado">
+													<div class="row">
+														<div class="col-md-12">
+															<span id="MessageRepresentante"></span>
+															<div class="panel panel-default">
+																<h:dataTable
+																	value="#{certificateRequestController.listPrivadoLibertadDTOs}"
+																	var="y" class="table table-bordered text-uppercase"
+																	id="datatableprivado"
+																>
+																	<h:column>
+																		<f:facet name="header">Sel</f:facet>
+																		<h:selectBooleanCheckbox id="chkbSeleccionarPrivado"
+																			value="#{y.select}" class="checkPrivado"
+																		/>
+																	</h:column>
+																	<h:column>
+																		<f:facet name="header">Nombres</f:facet>
+                                                                                #{y.name}
+                                                                        </h:column>
+																	<h:column>
+																		<f:facet name="header">Tipo Identificación</f:facet>
+                                                                                #{y.idType}
+                                                                        </h:column>
+																	<h:column>
+																		<f:facet name="header">Identificación</f:facet>
+                                                                                #{y.idNumber}
+                                                                        </h:column>
+																	<h:column>
+																		<f:facet name="header">Dirección</f:facet>
+                                                                                #{y.address} #{y.addressCompl}
+                                                                        </h:column>
+																	<h:column>
+																		<f:facet name="header">Opción</f:facet>
+																		<h:commandButton id="updateButtonPrivado"
+																			value="Limpiar" styleClass="btn btn-default"
+																			action="#{certificateRequestController.updatePrivado()}"
+																			immediate="true"
+																		>
+																			<f:ajax
+																				execute=":certificateRequestForm:tablePrivado"
+																				render=":certificateRequestForm:tablePrivado"
+																			/>
+																		</h:commandButton>
+																	</h:column>
+																</h:dataTable>
+															</div>
+														</div>
+													</div>
+												</h:panelGroup>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<label><strong>Documentos soporte</strong></label> <img
+									src="images/Help.png" style="width: 25px"
+								/> <label style="font-size: 10px;"><strong>Tenga
+										en cuenta que para subir o cargar documentos, el formato debe
+										ser PDF, JPG o PNG y los nombres no deben tener caracteres
+										especiales, espacios ni tildes y se recomienda el uso de
+										minúsculas. <label style="color: red"></label><label
+										style="color: red"
+									>pdf,png,jpg</label>
+								</strong></label>
+							</div>
+							<div class="panel-body">
+								<div class="row">
+									<h:form enctype="multipart/form-data">
+										<div class="col-md-6">
+											<label for="inputDocumentoIdentidadSolicitanteAcudiente">Documentos
+												de identidad Solicitante o Acudiente</label><label
+												style="color: red"
+											>*</label>
+										</div>
+										<div class="col-md-4" data-toggle="tooltip"
+											data-placement="left"
+											title="Documento de identidad según corresponda, únicamente cedula de ciudadanía o de extranjería."
+										>
+											<p:fileUpload mode="simple"
+												id="inputDocumentoIdentidadSolicitanteAcudiente"
+												value="#{certificateRequestController.uploadedFileAttendant}"
+												disabled="false"
+												requiredMessage="Debe seleccionar un archivo"
+												styleClass="requerido"
+											/>
+											<h:message for="inputDocumentoIdentidadSolicitanteAcudiente"
+												style="color:#ff0000"
+											/>
+											<span id='messageinputDocumentoIdentidadSolicitanteAcudiente'
+												style="font-size: 9px;"
+											>un documento de 4 Megas máximo de tipo pdf,png,jpg</span>
+										</div>
+									</h:form>
+								</div>
+								<br />
+								<div class="row">
+									<div class="col-md-6">
+										<label for="inputReciboServicioPublico" style=" padding-bottom: 0 !important;">Recibo de servicios públicos: </label>
+										<label style="color: red">*</label>
+										<label style="font-size: 10px; padding-top: -5px !important; "><strong>Solo
+											se permiten recibos de servicio público de agua, luz o gas,
+											no mayor a 60 días y en el recibo se debe visualizar
+											claramente la dirección y la fecha</strong></label>
+											
+											
+									</div>
+									<div class="col-md-4" data-toggle="tooltip"
+										data-placement="left"
+										title="Únicamente se debe adjuntar recibos de Gas, Luz y EEAAB, el recibo debe tener una vigencia no mayor a 2 meses."
+										style="margint-top: 15px;"
+									>
+										<p:fileUpload mode="simple" id="inputReciboServicioPublico"
+											value="#{certificateRequestController.uploadedFilePublicService}"
+											disabled="false"
+											requiredMessage="Debe seleccionar un archivo"
+											styleClass="requerido"
+										/>
+										<h:message for="inputReciboServicioPublico"
+											style="color:#ff0000"
+										/>
+										<span id='messageinputReciboServicioPublico'
+											style="font-size: 9px;"
+										>un documento de 4 Megas máximo de tipo pdf,png,jpg</span>
+									</div>
+
+								</div>
+								<br />
+								<div class="row">
+									<div class="col-md-6">
+										<label for="inputDocumentoMenorEdad" style=" padding-bottom: 0 !important;" >Documento de identidad del menor de edad o privado de libertad.<label style="color: red">*</label></label>
+										<label style="font-size: 10px; padding-top: -5px !important;"><strong>
+											 El documento del menor de edad debe ser escaneado por ambas caras.</strong></label>
+									</div>
+									<div class="col-md-4" data-toggle="tooltip"
+										data-placement="left"
+										title="Documento de Identidad del menor de edad según corresponda, Registro Civil, Tarjeta de identidad, cedula de extranjería, Visa para extranjeros de 0 a 7 años."
+									>
+										<p:fileUpload mode="simple" id="inputDocumentoMenorEdad"
+											value="#{certificateRequestController.uploadedFileYounger}"
+											disabled="false"
+											requiredMessage="Debe seleccionar un archivo"
+										/>
+										<h:message for="inputDocumentoMenorEdad" style="color:#ff0000" />
+										<span id='messageinputDocumentoMenorEdad'
+											style="font-size: 9px;"
+										>un documento de 4 Megas máximo de tipo pdf,png,jpg</span>
+									</div>
+								</div>
+								<br />
+								<div class="row">
+									<div class="col-md-6">
+										<label for="inputDocumentoPatriaPotestad">Documento
+											patria potestad</label><label style="color: red">*</label>
+									</div>
+									<div class="col-md-4" data-toggle="tooltip"
+										data-placement="left"
+										title="En caso de no ser el padre o madre del menor, debe aportar el documento que legalmente lo reconoce como acudiente de este."
+									>
+										<p:fileUpload mode="simple" id="inputDocumentoPatriaPotestad"
+											value="#{certificateRequestController.uploadedFileCustody}"
+											disabled="false"
+											requiredMessage="Debe seleccionar un archivo"
+										/>
+										<h:message for="inputDocumentoPatriaPotestad"
+											style="color:#ff0000"
+										/>
+
+										<span id='messageinputDocumentoPatriaPotestad'
+											style="font-size: 9px;"
+										>un documento de 4 Megas máximo de tipo pdf,png,jpg</span>
+									</div>
+									<div class="col-md-1">
+										<h:inputHidden value="#{certificateRequestController.correct}"
+											id="correcth"
+										/>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="panel panel-default" id="tableMenorEdad"
+							style="display: none;"
+						>
+							<div class="panel-heading">
+								<label><strong>Datos del menor de edad</strong></label>
+							</div>
+							<div class="panel-body">
+								<div class="row ">
+									<div class="col-md-12 btn-toolbar">
+										<button type="button" id="btnRegistrarMenorEdad"
+											class="btn btn-default" onclick="openModalNormal()"
+											disabled="true"
+										>Registrar menor de edad</button>
+
+									</div>
+								</div>
+								<br />
+								<h:panelGroup id="tableyounger">
+									<div class="row">
+										<div class="col-md-12">
+											<span id="MessageMenor"></span>
+											<div class="panel panel-default">
+												<h:dataTable
+													value="#{certificateRequestController.listYoungerDto}"
+													var="y" class="table table-bordered text-uppercase " id="datatableyounger"
+												>
+													<h:column>
+														<f:facet name="header">Seleccionar</f:facet>
+														<h:selectBooleanCheckbox id="chkbSeleccionaryounger"
+															value="#{y.select}" class="checkMenor"
+														/>
+													</h:column>
+													<h:column>
+														<f:facet name="header">Tipo de documento</f:facet>
+                                                                #{y.idType}
+                                                        </h:column>
+													<h:column>
+														<f:facet name="header">No. de documento</f:facet>
+                                                                #{y.idNumber}
+                                                        </h:column>
+													<h:column>
+														<f:facet name="header">Nombres</f:facet>
+                                                                #{y.name}
+                                                        </h:column>
+													<h:column>
+														<f:facet name="header">Dirección</f:facet>
+                                                                #{y.address}#{y.addressCompl}#{y.ruralAddress}
+                                                        </h:column>
+													<h:column>
+														<f:facet name="header">Opción</f:facet>
+														<h:commandButton id="updateButton" value="Actualizar"
+															styleClass="btn btn-default"
+															action="#{certificateRequestController.UpdateYounger()}"
+															immediate="true"
+														>
+															<f:param name="idnumber" value="#{y.idNumber}" />
+															<f:ajax execute=":certificateRequestForm:tableyounger"
+																render=":modalCertificate:youngerinfo"
+																onevent="openModal"
+															/>
+														</h:commandButton>
+													</h:column>
+												</h:dataTable>
+											</div>
+										</div>
+									</div>
+								</h:panelGroup>
+
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<label style="text-align: justify"><strong><h:selectBooleanCheckbox id="chkbSeleccionar" value="#{certificateRequestController.oathCheckBox}" required="false"/>
+								 Acepto, bajo la gravedad de juramento, que soy la persona facultada para realizar este
+								trámite. De la misma manera, acepto que todos los datos suministrados están correctamente
+								diligenciados y la información aportada es cierta y veraz. Entiendo que cualquier error en
+								el diligenciamiento del presente formulario podrá dar lugar a rechazo o cancelación del trámite,
+								bajo la completa responsabilidad de la persona solicitante de este.</strong> </label>
+						<br/>
+								<span id='checkmessage'></span>
+							</div>
+						</div>
+					</div>
+					<div class="well">
+						<div class="row ">
+							<div class="col-md-1">
+								<h:inputHidden id="aux3"
+									value="#{certificateRequestController.atentionDate}"
+								/>
+							</div>
+							<div class="col-md-1">
+								<h:inputHidden id="parentescoh"
+									value="#{certificateRequestController.related}"
+									required="false" requiredMessage="Seleccione una opción."
+								/>
+							</div>
+							<div class="col-md-3 col-md-offset-1" style="text-align: center">
+								<span id='checkvalidationmessage'></span>
+								<h:commandButton id="btnSolicitar" value="Solicitar"
+									styleClass="btn btn-default btn-block"
+									action="#{certificateRequestController.Request()}"
+									onclick="return validaDireccion()"
+								>
+								</h:commandButton>
+							</div>
+							<div class="col-md-3">
+								<h:commandButton value="Regresar"
+									styleClass="btn btn-default btn-block"
+									rendered="#{certificateRequestController.correct}"
+									action="#{certificateRequestController.Back()}"
+									immediate="true" onclick="block()"
+								/>
+							</div>
+							<div class="col-md-1">
+								<h:inputHidden id="listamenores"
+									value="#{certificateRequestController.youngerSize}"
+								/>
+								<h:inputHidden id="youngerh"
+									value="#{certificateRequestController.younger}"
+									requiredMessage="Seleccione una opcion"
+								/>
+								<h:inputHidden id="proceduretypeh"
+									value="#{certificateRequestController.procedureType}"
+									requiredMessage="Seleccione una opcion"
+								/>
+							</div>
+							<div class="col-md-1">
+								<h:inputHidden id="aux"
+									value="#{certificateRequestController.certificateKey}"
+								/>
+							</div>
+							<div class="col-md-1">
+								<h:inputHidden id="aux2"
+									value="#{certificateRequestController.oldRadNumber}"
+								/>
+							</div>
+						</div>
+					</div>
+				</section>
+			</h:form>
+			<h:panelGroup id="infoPanel" layout="block"
+				rendered="#{certificateRequestController.infoPanelShow}"
+			>
+				<div class="modal" tabindex="-1" role="dialog" id="infoModal"
+					style="display: block"
+				>
+					<div class="modal-dialog modal-dialog-centered" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h3 class="modal-title">Formulario de Solicitud Certificado
+									De Residencia</h3>
+								<button type="button" class="close" data-dismiss="modal"
+									aria-label="Close"
+								>
+									<span aria-hidden="true">&#215;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<h:outputLabel
+									value="#{certificateRequestController.infoPanelMessage}"
+								/>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-primary"
+									data-dismiss="modal" onclick="modalCloseInfo()"
+								>Cerrar</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</h:panelGroup>
+			<div class="modal" tabindex="-1" role="dialog" id="infoModal"
+				style="display: none"
+			>
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h3 class="modal-title">Información Importante</h3>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close"
+							>
+								<span aria-hidden="true">&#215;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<h:outputLabel value="" id="mensaje" />
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-primary"
+								data-dismiss="modal" onclick="closeModalInfo()"
+							>Cerrar</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<h:outputScript>
+
+				$('.letrasTildes').on('keypress', function (e){
+					return ((e.charCode &gt;&#61; 65 &amp;&amp; e.charCode &lt;&#61; 90)                                
+							|| (e.charCode &gt;&#61; 97 &amp;&amp; e.charCode &lt;&#61; 122)                                
+							|| (e.charCode &#61;&#61; 32)                                 
+							|| (e.key &#61;&#61; "Backspace")                                
+							|| (e.charCode &#61;&#61; 193)                                 
+							|| (e.charCode &#61;&#61; 201)                                 
+							|| (e.charCode &#61;&#61; 205)                                 
+							|| (e.charCode &#61;&#61; 211)                                 
+							|| (e.charCode &#61;&#61; 218)                                
+							|| (e.charCode &#61;&#61; 225)                                 
+							|| (e.charCode &#61;&#61; 233)                                 
+							|| (e.charCode &#61;&#61; 237)                                 
+							|| (e.charCode &#61;&#61; 243)                                 
+							|| (e.charCode &#61;&#61; 250)                                
+							|| (e.charCode &#61;&#61; 209)                                
+							|| (e.charCode &#61;&#61; 241));                        
+					//return;                    
+				});
+
+
+                    function validaVacio()
+                    {
+                        if($("#modalPrivadoRegister\\:txtNitRepresentanteConsulta").val() &#61;&#61; '')
+                        {
+                            $("#messageCheckBusqueda").html('Debe Insertar una identificación de usuario');
+                            return false;
+                        } else {
+                            $("#messageCheckBusqueda").html('');
+                            return true;
+                        }
+                    };
+                    function validaDireccion()
+                    {
+                        var req = document.getElementsByClassName('requerido');
+                        var tableReq = document.getElementsByClassName('checkMenor');
+                        var valTable = 0;
+                        var dev1 = -1;
+                        var dev = 0;
+                        var dev2 = 0;
+
+                        for (var i &#61; 0; i &lt; req.length; i++) 
+                        {
+                            dev++;
+                            if (req[i].value &#61;&#61; "") 
+                            {
+                                req[i].style.backgroundColor = "#ffcece";
+
+                            } else {
+                                req[i].style.backgroundColor = "";("disabled", false);
+                                dev = dev - 1;
+                            }
+                        }
+                        var menor = $("#certificateRequestForm\\:drpdCertificadoMenorEdad").val();
+                        if(menor &#61;&#61; 1)
+                        {
+                            if(tableReq.length &#61;&#61; 0)
+                            {
+                                $('#MessageMenor').html('Debe crear al menos un menor de edad.').css('color', 'red');
+                                dev1 = 0;                            
+                            } else {
+                                for (var i &#61; 0; i &lt; tableReq.length; i++) 
+                                {
+                                    dev2++;
+                                    if (tableReq[i].checked) 
+                                    {
+                                        $('#MessageMenor').html('');
+                                        dev1 = dev2;
+                                    } else { 
+                                        dev2--;
+                                        dev1 = dev2;
+                                    }
+                                }  
+                            }
+                            
+                            if(dev1 &gt; 1)
+                            {
+                                $('#MessageMenor').html('Se debe Seleccionar solo 1 menor.').css('color', 'red');
+                            }
+                            
+                            if(dev1 &lt; 1)
+                            {
+                                $('#MessageMenor').html('Se debe Seleccionar al menos 1 menor.').css('color', 'red');
+                            }
+                            
+
+                        } else {
+                            $('#MessageMenor').html('');
+                        }
+                        
+                        
+                        if ($("#certificateRequestForm\\:chkbSeleccionar").is(':checked') === false)
+                        {
+                            $('#checkmessage').html('La solicitud no puede enviarse porque aún no ha aceptado la declaración bajo gravedad de juramento').css('color', 'red');
+                        } else {
+                            $('#checkmessage').html('');
+                        }
+                        
+                        if((dev1 &#61;&#61; 0 || dev1 &gt; 1) &amp;&amp;  menor &#61;&#61; 1)
+                        {
+                            valTable = 1;
+                        }
+                        
+                        if (dev &gt; 0 || valTable &#61;&#61; 1) 
+                        {
+                            $('#checkvalidationmessage').html('Faltan Campos por Completar').css('color', 'red');
+                            return false;
+                        } else {
+                                                  
+                            $('#checkmessage').html('');
+                            $('#checkvalidationmessage').html('');
+                            return checkoath();
+                        }
+                    };
+                    
+                    function validaDireccionModal()
+                    {
+                    
+                    $('.numerico').on('keypress', function (e)
+                    {
+                        return e.charCode &gt;&#61; 48 &amp;&amp; e.charCode &lt;&#61; 57 || (e.key &#61;&#61; "Backspace");
+                    });
+                       
+                       
+                        var req = document.getElementsByClassName('requeridoModal');
+                        var dev = 0;
+
+                        for (var i &#61; 0; i &lt; req.length; i++) 
+                        {
+                            dev++;
+                            if (req[i].value &#61;&#61; "") 
+                            {
+                                req[i].style.backgroundColor = "#ffcece";
+                            } else {
+                                req[i].style.backgroundColor = "";
+                                dev = dev - 1;
+                            }
+                                   var auxId = req[i].id.split(':')[1];
+                              
+                            if (auxId &#61;&#61; 'ModaltxtTelefono' || auxId &#61;&#61; 'ModaltxtCelular')
+                            {
+                                
+                                var auxValue = $("#modalCertificate\\:"+auxId).val();
+                            }
+                             var auxId = req[i].id.split(':')[1];
+                            if (auxId &#61;&#61; 'ModaltxtTelefono')
+                            {
+                                
+                                var auxValue = $("#modalCertificate\\:ModaltxtTelefono").val();
+                                if(auxValue &#33;&#61; "")
+                                {
+                                        dev = dev -1;
+                                        $("#modalCertificate\\:ModaltxtCelular").css('background-color','');
+                                } else {
+                                
+                                        if($("#modalCertificate\\:ModaltxtCelular").val() &#33;&#61; "")
+                                        { 
+                                            $("#modalCertificate\\:ModaltxtTelefono").css('background-color','');
+                                            dev = dev -1;
+                                        }
+                                }
+                            }
+                        }
+
+                        if (dev &gt; 0) 
+                        {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    };
+                    function typeDireccion(select)
+                    {
+                        $("#modalCertificate\\:txtDireccionSelect").val(select);
+                        var req = document.getElementsByClassName('dir');
+                        if(select === '1')
+                        {
+                            $("#modalCertificate\\:ModaltxtDireccionRural").attr('readonly','true');
+                            $("#modalCertificate\\:txtDireccionRuralh").val('');
+                            $("#modalCertificate\\:ModaltxtDireccionRural").val('');
+                            $("#requeridoDireccionRural").css('display','none');
+                            $("#requeridoDireccion").css('display','');
+                            $("#modalCertificate\\:ModaltxtDireccionRural").removeClass('requeridoModal');
+                            $("#modalCertificate\\:ModaltxtDireccionRural").css('background-color',''); 
+                            $("#modalCertificate\\:ModaltxtDireccion").css('background-color','');
+                            $("#modalCertificate\\:ModaltxtDireccion").addClass('requeridoModal');
+                            $("#modalCertificate\\:txtCalleEvento").addClass('requeridoModal');
+                            $("#modalCertificate\\:txtCalleEvento1").addClass('requeridoModal');
+                            $("#modalCertificate\\:txtCalleEvento6").addClass('requeridoModal');
+                            $("#modalCertificate\\:txtCalleEvento10").addClass('requeridoModal');
+                            for (var i &#61; 0; i &lt; req.length; i++) 
+                            {
+                                req[i].style.backgroundColor = "";
+                                req[i].disabled = "";
+                            }
+                        }
+                        if(select === '2')
+                        {
+                            $("#modalCertificate\\:ModaltxtDireccionRural").removeAttr('readonly');
+                            $("#requeridoDireccionRural").css('display','');
+                            $("#requeridoDireccion").css('display','none');
+                            $("#modalCertificate\\:ModaltxtDireccionRural").addClass('requeridoModal');
+                            $("#modalCertificate\\:Modaldireccionh").val('');
+                            $("#modalCertificate\\:ModaltxtDireccionRural").css('background-color',''); 
+                            $("#modalCertificate\\:ModaltxtDireccion").css('background-color',''); 
+                            $("#modalCertificate\\:ModaltxtDireccion").removeClass('requeridoModal');
+                            $("#modalCertificate\\:ModaltxtDireccion").val('');
+                            $("#modalCertificate\\:txtCalleEvento").removeClass('requeridoModal');
+                            $("#modalCertificate\\:txtCalleEvento1").removeClass('requeridoModal');
+                            $("#modalCertificate\\:txtCalleEvento6").removeClass('requeridoModal');
+                            $("#modalCertificate\\:txtCalleEvento10").removeClass('requeridoModal');
+                            for (var i &#61; 0; i &lt; req.length; i++) 
+                            {
+                                req[i].style.backgroundColor = "";
+                                req[i].disabled = "disabled";
+                            }
+                        }
+                    };
+                    
+                    function typeDireccionPrivado(select)
+                    {
+                        $("#modalPrivadoRegister\\:AuxtypeDireccionPrivado").val(select);
+                        var req = document.getElementsByClassName('dirPrivado');
+                        if(select === '1')
+                        { 
+                            $("#modalPrivadoRegister\\:ModaltxtDireccion").val("");
+                            $("#modalPrivadoRegister\\:Modaldireccionh").val("");
+                            $("#modalPrivadoRegister\\:ModaldireccionComplementoh").val("");
+                            $("#modalPrivadoRegister\\:ModaltxtDireccion").attr('disabled','disabled');
+                            $("#modalPrivadoRegister\\:ModaltxtDireccion").css('background-color','');
+                            $("#modalPrivadoRegister\\:txtCalleEvento").addClass('requeridoPrivado');
+                            $("#modalPrivadoRegister\\:txtCalleEvento1").addClass('requeridoPrivado');
+                            $("#modalPrivadoRegister\\:txtCalleEvento6").addClass('requeridoPrivado');
+                            $("#modalPrivadoRegister\\:txtCalleEvento10").addClass('requeridoPrivado');
+                            for (var i &#61; 0; i &lt; req.length; i++) 
+                            {
+                                req[i].style.backgroundColor = "";
+                                req[i].disabled = "";
+                                req[i].value = "";
+                            }
+                        }
+                        if(select === '2')
+                        {
+                            $("#modalPrivadoRegister\\:ModaltxtDireccion").val("");
+                            $("#modalPrivadoRegister\\:Modaldireccionh").val("");
+                            $("#modalPrivadoRegister\\:ModaldireccionComplementoh").val("");
+                            $("#modalPrivadoRegister\\:ModaltxtDireccion").removeAttr('disabled');
+                            $("#modalPrivadoRegister\\:ModaltxtDireccion").css('background-color',''); 
+                            $("#modalPrivadoRegister\\:txtCalleEvento").removeClass('requeridoPrivado');
+                            $("#modalPrivadoRegister\\:txtCalleEvento1").removeClass('requeridoPrivado');
+                            $("#modalPrivadoRegister\\:txtCalleEvento6").removeClass('requeridoPrivado');
+                            $("#modalPrivadoRegister\\:txtCalleEvento10").removeClass('requeridoPrivado');
+                            for (var i &#61; 0; i &lt; req.length; i++) 
+                            {
+                                req[i].style.backgroundColor = "";
+                                req[i].disabled = "disabled";
+                                req[i].value = "";
+                            }
+                        }
+                    };
+                    
+                    
+                    function validarSelect()
+                    {
+                        var req = document.getElementsByClassName('dir');
+                        var select = $("#modalCertificate\\:txtDireccionSelect").val();
+                        
+                        if(select === '1')
+                        {
+                            $("#modalCertificate\\:ModaltxtDireccionRural").attr('readonly','true');
+                            $("#modalCertificate\\:txtDireccionRuralh").val('');
+                            $("#requeridoDireccionRural").css('display','none');
+                            $("#requeridoDireccion").css('display','');
+                            $("#modalCertificate\\:ModaltxtDireccionRural").removeClass('requeridoModal');
+                            $("#modalCertificate\\:ModaltxtDireccionRural").css('background-color',''); 
+                            $("#modalCertificate\\:ModaltxtDireccion").css('background-color','');
+                            $("#modalCertificate\\:ModaltxtDireccion").addClass('requeridoModal');
+                            $("#modalCertificate\\:ModaltxtDireccion").val($("#modalCertificate\\:Modaldireccionh").val()+ ' ' + $("#modalCertificate\\:ModaldireccionComplementoh").val());
+                            $("#modalCertificate\\:ModaltxtCalleEvento").addClass('requeridoModal');
+                            $("#modalCertificate\\:ModaltxtCalleEvento1").addClass('requeridoModal');
+                            $("#modalCertificate\\:ModaltxtCalleEvento6").addClass('requeridoModal');
+                            $("#modalCertificate\\:ModaltxtCalleEvento10").addClass('requeridoModal');
+
+                            for (var i &#61; 0; i &lt; req.length; i++) 
+                            {
+                                req[i].style.backgroundColor = "";
+                                req[i].disabled = "";
+                                req[i].value = "";
+                            }
+                        }
+                        if(select === '2')
+                        {
+                            $("#modalCertificate\\:ModaltxtDireccionRural").removeAttr('readonly');
+                            $("#modalCertificate\\:ModaltxtDireccionRural").val($("#modalCertificate\\:txtDireccionRuralh").val());
+                            $("#requeridoDireccionRural").css('display','');
+                            $("#requeridoDireccion").css('display','none');
+                            $("#modalCertificate\\:ModaltxtDireccionRural").addClass('requeridoModal');
+                            $("#modalCertificate\\:Modaldireccionh").val('');
+                            $("#modalCertificate\\:ModaldireccionComplemnetoh").val('');
+                            $("#modalCertificate\\:ModaltxtDireccionRural").css('background-color',''); 
+                            $("#modalCertificate\\:ModaltxtDireccion").css('background-color',''); 
+                            $("#modalCertificate\\:ModaltxtDireccion").removeClass('requeridoModal');
+                            $("#modalCertificate\\:ModaltxtCalleEvento").removeClass('requeridoModal');
+                            $("#modalCertificate\\:ModaltxtCalleEvento1").removeClass('requeridoModal');
+                            $("#modalCertificate\\:ModaltxtCalleEvento6").removeClass('requeridoModal');
+                            $("#modalCertificate\\:ModaltxtCalleEvento10").removeClass('requeridoModal');
+                            for (var i &#61; 0; i &lt; req.length; i++) 
+                            {
+                                req[i].style.backgroundColor = "";
+                                req[i].disabled = "disabled";
+                                req[i].value = "";
+                            }
+                        }
+                    };
+                    
+                    $('.numerico').on('keypress', function (e)
+                    {
+                        return e.charCode &gt;&#61; 48 &amp;&amp; e.charCode &lt;&#61; 57 || (e.key &#61;&#61; "Backspace");
+                    });
+                    function validateTypeDireccionPrivado()
+                    {
+                        var req = document.getElementsByClassName('dirPrivado');
+                        var select = $("#modalPrivadoRegister\\:AuxtypeDireccionPrivado").val();
+                        if(select === '1')
+                        { 
+                            $("#modalPrivadoRegister\\:ModaltxtDireccion").attr('disabled','disabled');
+                            $("#modalPrivadoRegister\\:ModaltxtDireccion").css('background-color','');
+                            $("#modalPrivadoRegister\\:txtCalleEvento").removeClass('requeridoPrivado');
+                            $("#modalPrivadoRegister\\:txtCalleEvento1").removeClass('requeridoPrivado');
+                            $("#modalPrivadoRegister\\:txtCalleEvento6").removeClass('requeridoPrivado');
+                            $("#modalPrivadoRegister\\:txtCalleEvento10").removeClass('requeridoPrivado');
+                            for (var i &#61; 0; i &lt; req.length; i++) 
+                            {
+                                req[i].style.backgroundColor = "";
+                                req[i].disabled = "";
+                                req[i].value = "";
+                            }
+                        }
+                        if(select === '2')
+                        {
+                            $("#modalPrivadoRegister\\:ModaltxtDireccion").removeAttr('disabled');
+                            $("#modalPrivadoRegister\\:ModaltxtDireccion").css('background-color',''); 
+                            $("#modalPrivadoRegister\\:txtCalleEvento").removeClass('requeridoPrivado');
+                            $("#modalPrivadoRegister\\:txtCalleEvento1").removeClass('requeridoPrivado');
+                            $("#modalPrivadoRegister\\:txtCalleEvento6").removeClass('requeridoPrivado');
+                            $("#modalPrivadoRegister\\:txtCalleEvento10").removeClass('requeridoPrivado');
+                            for (var i &#61; 0; i &lt; req.length; i++) 
+                            {
+                                req[i].style.backgroundColor = "";
+                                req[i].disabled = "disabled";
+                                req[i].value = "";
+                            }
+                        }
+                    };
+                    function validaDireccionPrivado()
+                    {
+                        var req = document.getElementsByClassName('requeridoPrivado');
+                        var dev = 0;
+
+                        for (var i &#61; 0; i &lt; req.length; i++) 
+                        {
+                            dev++;
+                            if (req[i].value &#61;&#61; "") 
+                            {
+                                req[i].style.backgroundColor = "#ffcece";
+                            } else {
+                                req[i].style.backgroundColor = "";
+                                dev = dev - 1;
+                            }
+                        }
+
+                        if (dev &gt; 0) 
+                        {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    };
+                </h:outputScript>
+		</div>
+		<script type="text/javascript">
+                //Función al cambiar si es menor de edad o no.
+                
+				function changeTypeDocValue()
+                {
+                    var selectedValue = document.getElementById("modalCertificate:drpdModalTipoIdentificacion").value;
+                    console.log('Cambio Valor Seleccionado');
+                    console.log(selectedValue);
+                    $("#modalCertificate\\:txtModalNumeroIdentificacion").val('');
+                    
+                }
+                
+				 function fusername(NumIdent)
+                {
+                    //modalCertificate
+                    var selectedValue = document.getElementById("modalCertificate:drpdModalTipoIdentificacion").value;
+                    console.log('Valor Seleccionado');
+                    console.log(selectedValue);     
+                    if((selectedValue === 'CE')){
+                        var documen = document.getElementById("modalCertificate:txtModalNumeroIdentificacion").value.toUpperCase();
+                        $("#modalCertificate\\:txtModalNumeroIdentificacion").val(documen);
+                    }else{
+                        
+                        if((selectedValue === 'VI')){
+                            var documen = document.getElementById("modalCertificate:txtModalNumeroIdentificacion").value.toUpperCase();
+                            $("#modalCertificate\\:txtModalNumeroIdentificacion").val(documen);
+                        }else{
+                            $("#modalCertificate\\:txtModalNumeroIdentificacion").val(NumIdent.replace(/[^0-9]/g, ''));
+                        }
+                    }
+                   
+                    
+                };
+                
+                function fusernamePrivado(NumIdent)
+                {
+                    
+                    
+                        var documen = document.getElementById("modalPrivadoRegister:txtNitRepresentanteConsulta").value.toUpperCase();
+                        $("#modalPrivadoRegister\\:txtNitRepresentanteConsulta").val(documen);
+                    
+                    
+                };
+                
+              		$('.numerico').on('keypress', function (e)
+	                {
+	                    return (e.charCode &gt;&#61; 48 &amp;&amp; e.charCode &lt;&#61; 57) || (e.key &#61;&#61; "Backspace");
+	                });
+                
+                
+                
+                 $("input[type=file]").on("change", function(inputFile, id) {
+   			     	
+        			var max = 2048 * 2048; // 4MB
+                    var file = inputFile.delegateTarget.files[0];
+                    var name = inputFile.delegateTarget.name.split(":")
+                    var messageName = "";
+                    if (name.length > 2){
+                    	messageName = "#message" + name[2];	
+                    }else{
+                    	messageName = "#message" + name[1];
+                    }
+                    if (file.size > max)
+                    {
+                        $(messageName).html('El archivo supera el peso permitido de 4MB').css('color', 'red');
+                        $(document.getElementById(inputFile.delegateTarget.name)).prop("value", null);
+ 
+                    }else
+                    {
+                        var ext = file.name.split(".");
+                        if ((ext[1].toLowerCase() !== "pdf") &amp;&amp; (ext[1].toLowerCase() !== "png") &amp;&amp; (ext[1].toLowerCase() !== "jpg") &amp;&amp; (ext[1].toLowerCase() !== "tif") )
+                        {
+                            $(messageName).html('El formato del archivo no es válido').css('color', 'red');
+                            $(document.getElementById(inputFile.delegateTarget.name)).prop("value", null);
+                        } else {
+                            $(messageName).html('');
+                        }
+                    }
+				}); 
+                
+                 $(document.getElementById("certificateRequestForm:drpdCertificadoMenorEdad")).change(function () 
+                         {
+                             
+                             if ($(this).val() === "0")
+                             {
+                                 $("#certificateRequestForm\\:inputDocumentoMenorEdad").removeClass("requerido");
+                                 $("#certificateRequestForm\\:inputDocumentoPatriaPotestad").removeClass("requerido");
+                                 $("#certificateRequestForm\\:drpdParentesco").removeClass("requerido");
+                                 $("#certificateRequestForm\\:inputDocumentoMenorEdad").css('background-color',"");
+                                 $("#certificateRequestForm\\:inputDocumentoPatriaPotestad").css('background-color',"");
+                                 $("#certificateRequestForm\\:drpdParentesco").css('background-color',"");
+                                 $(document.getElementById("certificateRequestForm:drpdParentesco")).prop("value", "");
+                                 $(document.getElementById("certificateRequestForm:drpdParentesco")).prop("required", false);
+                                 $(document.getElementById("certificateRequestForm:drpdParentesco")).prop("disabled", true);
+                                 $(document.getElementById("certificateRequestForm:parentescoh")).prop("value", "");
+                                 $(document.getElementById("certificateRequestForm:inputDocumentoIdentidadSolicitanteAcudiente")).prop("disabled", false);
+                                 $(document.getElementById("certificateRequestForm:inputDocumentoMenorEdad")).prop("disabled", true);
+                                 $(document.getElementById("btnRegistrarMenorEdad")).prop("disabled", true);
+                                 $(document.getElementById("chkbSeleccionar")).prop("disabled", true);
+                                 $(document.getElementById("certificateRequestForm:inputReciboServicioPublico")).prop("disabled", false);
+                                 $(document.getElementById("certificateRequestForm:inputDocumentoPatriaPotestad")).prop("disabled", true);
+                                 $("#certificateRequestForm\\:inputDocumentoPatriaPotestad").val("");
+                                 $("#certificateRequestForm\\:inputDocumentoMenorEdad").val("");
+                             } else if ($(this).val() === "1")
+                             {
+                                 $("#certificateRequestForm\\:inputDocumentoMenorEdad").addClass("requerido");
+                                 $("#certificateRequestForm\\:drpdParentesco").addClass("requerido");
+                                 $(document.getElementById("certificateRequestForm:drpdParentesco")).prop("disabled", false);
+                                 $(document.getElementById("certificateRequestForm:inputDocumentoIdentidadSolicitanteAcudiente")).prop("disabled", false);
+                                 $(document.getElementById("certificateRequestForm:inputDocumentoMenorEdad")).prop("disabled", false);
+                                 $(document.getElementById("btnRegistrarMenorEdad")).prop("disabled", false);
+                                 $(document.getElementById("chkbSeleccionar")).prop("disabled", false);
+                                 $(document.getElementById("certificateRequestForm:inputReciboServicioPublico")).prop("disabled", false);
+                                 $(document.getElementById("certificateRequestForm:inputDocumentoPatriaPotestad")).prop("disabled", true);
+                                 //$("#certificateRequestForm\\:drpdTipoTramite").val("");
+                                 tipoTramite("");
+                             } else
+                             {
+                                 $("#certificateRequestForm\\:inputDocumentoMenorEdad").removeClass("requerido");
+                                 $("#certificateRequestForm\\:drpdParentesco").removeClass("requerido");
+                                 $("#certificateRequestForm\\:inputDocumentoMenorEdad").css('background-color',"");
+                                 $("#certificateRequestForm\\:drpdParentesco").css('background-color',"");
+                                 $(document.getElementById("certificateRequestForm:drpdParentesco")).prop("value", "");
+                                 $(document.getElementById("certificateRequestForm:drpdParentesco")).prop("required", false);
+                                 $(document.getElementById("certificateRequestForm:drpdParentesco")).prop("disabled", true);
+                                 $(document.getElementById("certificateRequestForm:parentescoh")).prop("value", "");
+                                 $(document.getElementById("certificateRequestForm:inputDocumentoIdentidadSolicitanteAcudiente")).prop("disabled", false);
+                                 $(document.getElementById("certificateRequestForm:inputDocumentoMenorEdad")).prop("disabled", true);
+                                 $(document.getElementById("btnRegistrarMenorEdad")).prop("disabled", true);
+                                 $(document.getElementById("chkbSeleccionar")).prop("disabled", true);
+                                 $(document.getElementById("certificateRequestForm:inputReciboServicioPublico")).prop("disabled", false);
+                                 $(document.getElementById("certificateRequestForm:inputDocumentoPatriaPotestad")).prop("disabled", true);
+                                 $("#certificateRequestForm\\:inputDocumentoPatriaPotestad").val("");
+                                 $("#certificateRequestForm\\:inputDocumentoMenorEdad").val("");
+                             }
+                
+                    $("#certificateRequestForm\\:youngerh").prop("value", $("#certificateRequestForm\\:drpdCertificadoMenorEdad").val());
+                });
+                //Función al cambiar el tipo de parentesco.
+                $(document.getElementById("certificateRequestForm:drpdParentesco")).change(function () 
+                {
+                    $(document.getElementById("certificateRequestForm:parentescoh")).prop("value", $(this).val());
+                    if ($(this).val() === "3")
+                    {
+                        $("#certificateRequestForm\\:inputDocumentoPatriaPotestad").addClass("requerido");
+                        $(document.getElementById("certificateRequestForm:inputDocumentoPatriaPotestad")).prop("disabled", false);
+                        $("#certificateRequestForm\\:inputDocumentoPatriaPotestad").val("");
+                    } else
+                    {
+                        $("#certificateRequestForm\\:inputDocumentoPatriaPotestad").removeClass("requerido");
+                        $("#certificateRequestForm\\:inputDocumentoPatriaPotestad").css('background-color',"");
+                        $(document.getElementById("certificateRequestForm:inputDocumentoPatriaPotestad")).prop("disabled", true);
+                    }
+                });
+                //Función al cambiar el tipo de trámite.
+                $("#certificateRequestForm\\:drpdTipoTramite").change(function()
+                {
+                   $("#certificateRequestForm\\:proceduretypeh").prop("value", $(this).val()); 
+                });
+                //Cierra el modal de registrar menor de edad.
+                /*function closeModal()
+                {
+                    //$(document.getElementById("modalCertificate")).prop("hidden", true);
+                    
+                }
+                ;*/
+                function direccionRural()
+                {
+                    $("#modalCertificate\\:txtDireccionRuralh").prop("value",$("#modalCertificate\\:ModaltxtDireccionRural").val());
+                }
+                
+                function direccionRuralPrivado()
+                {
+                    $("#modalPrivadoRegister\\:Modaldireccionh").prop("value",$("#modalPrivadoRegister\\:ModaltxtDireccion").val());
+                }
+                //Coge todos los valores de los elementos de la dirección para 
+                //unirlos y mostrar el resultado en el campo de dirección.
+                function direccion()
+                {
+                    var ce = $("#modalCertificate\\:txtCalleEvento").val();
+                    var ce1 = $("#modalCertificate\\:txtCalleEvento1").val();
+                    var ce2 = $("#modalCertificate\\:txtCalleEvento2").val();
+                    var ce3 = $("#modalCertificate\\:txtCalleEvento3").is(':checked') === true ? " Bis" : "";
+                    var ce4 = $("#modalCertificate\\:txtCalleEvento4").val();
+                    var ce5 = " " + $("#modalCertificate\\:txtCalleEvento5").val() + " # ";
+                    var ce6 = $("#modalCertificate\\:txtCalleEvento6").val();
+                    var ce7 = $("#modalCertificate\\:txtCalleEvento7").val();
+                    var ce8 = $("#modalCertificate\\:txtCalleEvento8").is(':checked') === true ? " Bis" : "";
+                    var ce9 = " " + $("#modalCertificate\\:txtCalleEvento9").val() + " - ";
+                    var ce10 = $("#modalCertificate\\:txtCalleEvento10").val();
+                    var ce11 = $("#modalCertificate\\:txtCalleEvento11").val();
+                    var co1 = " " + $("#modalCertificate\\:txtCalleEvento12").val();
+                    var co2 = " " + $("#modalCertificate\\:txtCalleEvento13").val();
+                    var co3 = " " + $("#modalCertificate\\:txtCalleEvento14").val();
+                    var co4 = " " + $("#modalCertificate\\:txtCalleEvento15").val();
+                    var co5 = " " + $("#modalCertificate\\:txtCalleEvento16").val();
+                    var co6 = " " + $("#modalCertificate\\:txtCalleEvento17").val();
+                    var dir = ce + " " + ce1 + ce2 + ce3 + " " + ce4 + ce5 + ce6 + ce7 + ce8 + ce9 + ce10 + " " + ce11;
+                    var complemento =  co1 + co2 + co3 + co4 + co5 + co6;;
+                    var direccion = dir + complemento;
+                    $("#modalCertificate\\:ModaltxtDireccion").prop("value", direccion);
+                    $("#modalCertificate\\:Modaldireccionh").prop("value", dir);
+                    $("#modalCertificate\\:ModaldireccionComplementoh").prop("value", complemento);
+                }
+                ;
+                //Limpia todos los campos de dirección.
+                function clean()
+                {
+                    $("#modalCertificate\\:txtCalleEvento").prop("value", "");
+                    $("#modalCertificate\\:txtCalleEvento1").prop("value", "");
+                    $("#modalCertificate\\:txtCalleEvento2").prop("value", "");
+                    $("#modalCertificate\\:txtCalleEvento3").prop("value", "");
+                    $("#modalCertificate\\:txtCalleEvento4").prop("value", "");
+                    $("#modalCertificate\\:txtCalleEvento5").prop("value", "");
+                    $("#modalCertificate\\:txtCalleEvento6").prop("value", "");
+                    $("#modalCertificate\\:txtCalleEvento7").prop("value", "");
+                    $("#modalCertificate\\:txtCalleEvento8").prop("value", "");
+                    $("#modalCertificate\\:txtCalleEvento9").prop("value", "");
+                    $("#modalCertificate\\:txtCalleEvento10").prop("value", "");
+                    $("#modalCertificate\\:txtCalleEvento11").prop("value", "");
+                    $("#modalCertificate\\:txtCalleEvento12").prop("value", "");
+                    $("#modalCertificate\\:txtCalleEvento13").prop("value", "");
+                    $("#modalCertificate\\:txtCalleEvento14").prop("value", "");
+                    $("#modalCertificate\\:txtCalleEvento15").prop("value", "");
+                    $("#modalCertificate\\:txtCalleEvento16").prop("value", "");
+                    $("#modalCertificate\\:txtCalleEvento17").prop("value", "");
+                    $("#modalCertificate\\:ModaltxtDireccion").prop("value", "");
+                    $("#modalCertificate\\:Modaldireccionh").prop("value", "");
+                    $("#modalCertificate\\:ModaldireccionComplementoh").prop("value", "");
+                }
+                ;
+                function direccionPrivado()
+                {
+                    var ce = $("#modalPrivadoRegister\\:txtCalleEvento").val();
+                    var ce1 = $("#modalPrivadoRegister\\:txtCalleEvento1").val();
+                    var ce2 = $("#modalPrivadoRegister\\:txtCalleEvento2").val();
+                    var ce3 = $("#modalPrivadoRegister\\:txtCalleEvento3").is(':checked') === true ? " Bis" : "";
+                    var ce4 = $("#modalPrivadoRegister\\:txtCalleEvento4").val();
+                    var ce5 = " " + $("#modalPrivadoRegister\\:txtCalleEvento5").val() + " # ";
+                    var ce6 = $("#modalPrivadoRegister\\:txtCalleEvento6").val();
+                    var ce7 = $("#modalPrivadoRegister\\:txtCalleEvento7").val();
+                    var ce8 = $("#modalPrivadoRegister\\:txtCalleEvento8").is(':checked') === true ? " Bis" : "";
+                    var ce9 = " " + $("#modalPrivadoRegister\\:txtCalleEvento9").val() + " - ";
+                    var ce10 = $("#modalPrivadoRegister\\:txtCalleEvento10").val();
+                    var ce11 = $("#modalPrivadoRegister\\:txtCalleEvento11").val();
+                    var co1 = " " + $("#modalPrivadoRegister\\:txtCalleEvento12").val();
+                    var co2 = " " + $("#modalPrivadoRegister\\:txtCalleEvento13").val();
+                    var co3 = " " + $("#modalPrivadoRegister\\:txtCalleEvento14").val();
+                    var co4 = " " + $("#modalPrivadoRegister\\:txtCalleEvento15").val();
+                    var co5 = " " + $("#modalPrivadoRegister\\:txtCalleEvento16").val();
+                    var co6 = " " + $("#modalPrivadoRegister\\:txtCalleEvento17").val();
+                    
+                    
+                    var dir = ce + " " + ce1 + ce2 + ce3 + " " + ce4 + ce5 + ce6 + ce7 + ce8 + ce9 + ce10 + " " + ce11;
+                    var complemento =  co1 + co2 + co3 + co4 + co5 + co6;
+                    var direccion = dir + complemento;
+                    $("#modalPrivadoRegister\\:ModaltxtDireccion").prop("value", direccion);
+                    $("#modalPrivadoRegister\\:Modaldireccionh").prop("value", dir);
+                    $("#modalPrivadoRegister\\:ModaldireccionComplementoh").prop("value", complemento);
+                }
+                ;
+                function direccionRuralLegalAgent()
+                {
+                    $("#modalPrivadoRegister\\:Modaldireccionh").prop("value", $("#modalPrivadoRegister\\:ModaltxtDireccion").val());
+                }
+                ;
+                //Limpia todos los campos de dirección.
+                function cleanPrivado()
+                {
+                    $("#modalPrivadoRegister\\:txtCalleEvento").prop("value", "");
+                    $("#modalPrivadoRegister\\:txtCalleEvento1").prop("value", "");
+                    $("#modalPrivadoRegister\\:txtCalleEvento2").prop("value", "");
+                    $("#modalPrivadoRegister\\:txtCalleEvento3").prop("value", "");
+                    $("#modalPrivadoRegister\\:txtCalleEvento4").prop("value", "");
+                    $("#modalPrivadoRegister\\:txtCalleEvento5").prop("value", "");
+                    $("#modalPrivadoRegister\\:txtCalleEvento6").prop("value", "");
+                    $("#modalPrivadoRegister\\:txtCalleEvento7").prop("value", "");
+                    $("#modalPrivadoRegister\\:txtCalleEvento8").prop("value", "");
+                    $("#modalPrivadoRegister\\:txtCalleEvento9").prop("value", "");
+                    $("#modalPrivadoRegister\\:txtCalleEvento10").prop("value", "");
+                    $("#modalPrivadoRegister\\:txtCalleEvento11").prop("value", "");
+                    $("#modalPrivadoRegister\\:txtCalleEvento12").prop("value", "");
+                    $("#modalPrivadoRegister\\:txtCalleEvento13").prop("value", "");
+                    $("#modalPrivadoRegister\\:txtCalleEvento14").prop("value", "");
+                    $("#modalPrivadoRegister\\:txtCalleEvento15").prop("value", "");
+                    $("#modalPrivadoRegister\\:txtCalleEvento16").prop("value", "");
+                    $("#modalPrivadoRegister\\:txtCalleEvento17").prop("value", "");
+                    $("#modalPrivadoRegister\\:ModaltxtDireccion").prop("value", "");
+                }
+                ;
+                //Abre el modal para actualizar el menor. Precarga cierta información. El data es el evento AJAX.
+                function openModal(data)
+                {
+                    $("#modalCertificate\\:txtCalleEvento").removeClass("requeridoModal");
+                    $("#modalCertificate\\:txtCalleEvento1").removeClass("requeridoModal");
+                    $("#modalCertificate\\:txtCalleEvento6").removeClass("requeridoModal");
+                    $("#modalCertificate\\:txtCalleEvento10").removeClass("requeridoModal");
+                    
+                    $("#modalCertificate\\:txtCualEtnia").val($("#modalCertificate\\:txtCualEtniaAux").val());
+                    etniaMenor($("#modalCertificate\\:drpdEtnia").val());
+                    //Componente de calendario para los campos de fecha.
+                    $(".datepicker").datepicker
+                    ({
+                         showOn: "button",
+                         buttonImage: "images/calendario.png",
+                         buttonText: "",
+                         buttonImageOnly: true,
+                         dateFormat: 'yy-mm-dd',
+                         changeMonth: true,
+                         changeYear: true,
+                         monthNamesShort: [ "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic" ],
+                         yearRange: "1900:2030",
+                         maxDate: new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+new Date().getDate(),
+                         minDate: (new Date().getFullYear()-18)+'-'+(new Date().getMonth()+1)+'-'+new Date().getDate(),
+                         onSelect: function() 
+                         { 
+                             var dateObject = $(this).datepicker({ dateFormat: 'yy-mm-dd' }).val();
+                             $("#modalCertificate\\:ModaltxtFechaNacimiento").prop("value", dateObject);
+                             $("#modalCertificate\\:fechanacimientoh").prop("value", dateObject);
+                         }
+                    });
+                    $(".ui-datepicker-trigger").css({'display': 'inline-block' , 'margin-left': '-35px' , 'height': '32px' , 'vertical-align': '-11px'});
+                    var status = data.status;
+                    //Bloquea la pantalla.
+                    block();
+                    if (status === "complete")
+                    {
+                        //$(document.getElementById("modalRegistrarMenorEdad")).css("display", "block");
+                        $("#modalCertificate\\:drpdModalTipoIdentificacion").prop("disabled", true);
+                        $("#modalCertificate\\:txtModalNumeroIdentificacion").prop("readonly", true);
+                        $('#modalRegistrarMenorEdad').modal('show');
+                        //Desbloquea la pantalla
+                        $.unblockUI();
+                    }
+                    if (status === "success")
+                    {
+                        //$(document.getElementById("modalRegistrarMenorEdad")).css("display", "block");
+                        $("#modalCertificate\\:drpdModalTipoIdentificacion").prop("disabled", true);
+                        $("#modalCertificate\\:txtModalNumeroIdentificacion").prop("readonly", true);
+                        $('#modalRegistrarMenorEdad').modal('show');
+                        //Desbloquea la pantalla
+                        $.unblockUI();
+                    }
+                    var ciudad = $("#modalCertificate\\:valCiudadResidencia").val();
+                    var localidad = $("#modalCertificate\\:valLocalidad").val();
+                    var barrio = $("#modalCertificate\\:valBarrio").val();
+                    $('#modalCertificate\\:ModaldrpdCiudadResidencia option').each(function() 
+                    {
+                        if ( $(this).val().split("|")[1] === ciudad ) {
+                            $(this).attr("selected",true);
+                        } 
+                    });
+                    $('#modalCertificate\\:ModaldrpdLocalidad option').each(function() 
+                    {
+                        if ( $(this).val().split("|")[2] === $('#modalCertificate\\:ModaldrpdCiudadResidencia').val().split("|")[0] ) 
+                        {
+                            $(this).css({"display":""});
+                        } else {
+                            $(this).css({"display":"none"});
+                        }
+                        if ($(this).val().split("|")[1] === localidad) 
+                        {
+                            $(this).attr("selected",true);
+                        }
+                    });
+                    $('#modalCertificate\\:ModaldrpdBarrioAux option').each(function() 
+                    {
+                        if ( $(this).val().split("|")[1] === $('#modalCertificate\\:ModaldrpdLocalidad').val().split("|")[0] ) 
+                        {
+                            $(this).css({"display":""});
+                            $("#ModaldrpdBarrio").append(new Option($(this).text(), $(this).val()));
+                        } else {
+                            $("#ModaldrpdBarrio option[value='"+$(this).val()+"']").remove();
+                            $(this).css({"display":"none"});
+                        }
+                        if ($(this).val().split("|")[0] === barrio) 
+                        {
+                            $("#ModaldrpdBarrio option[value='"+$(this).val()+"']").attr("selected",true);
+                        }
+                    });
+                    validarSelect();
+                }
+                ;
+                //Abre el modal para registrar el menor de edad.
+                function openModalNormal()
+                {
+                    $("#modalCertificate\\:drpdModalTipoIdentificacion").prop("disabled", false);
+                    $("#modalCertificate\\:txtModalNumeroIdentificacion").prop("readonly", false);
+                    $("#modalCertificate\\:drpdModalTipoIdentificacion").val("");
+                    $("#modalCertificate\\:txtModalNumeroIdentificacion").val("");
+                    $("#modalCertificate\\:txtModalPrimerNombre").val("");
+                    $("#modalCertificate\\:ModaltxtSegundoNombre").val("");
+                    $("#modalCertificate\\:ModaltxtPrimerApellido").val("");
+                    $("#modalCertificate\\:ModaltxtSegundoApellido").val("");
+                    $("#modalCertificate\\:ModaltxtFechaNacimiento").val("");
+                    $("#modalCertificate\\:ModaldrpdGenero").val("");
+                    $("#modalCertificate\\:ModaldrpdSexo").val("");
+                    $("#modalCertificate\\:ModaldrpdSexualOrient").val("");
+                    $("#modalCertificate\\:ModaldrpdNacionalidad").val("");
+                    $("#modalCertificate\\:ModaltxtCelular").val("");
+                    $("#modalCertificate\\:ModaltxtTelefono").val("");
+                    $("#modalCertificate\\:ModaltxtDireccion").val("");
+                    $("#modalCertificate\\:ModaltxtDireccionRural").val("");
+                    $("#modalCertificate\\:ModaldrpdLocalidad").val("");
+                    $("#modalCertificate\\:ModaldrpdBarrio").val("");
+                    $("#modalCertificate\\:ModaldrpdCiudadResidencia").val("");
+                    $("#modalCertificate\\:ModaldrpdOcupacion").val("");
+                    $("#modalCertificate\\:ModaldrpdCondicionEspecial").val("");
+                    $("#modalCertificate\\:ModaldrpdEstrato").val("");
+                    $("#modalCertificate\\:Modalemail").val("");
+                    $("#modalCertificate\\:drpdEtnia").val("");
+                    $("#modalCertificate\\:txtCualEtnia").val("");
+                    $("#modalCertificate\\:txtCualEtniaAux").val("");
+                    $("#modalCertificate\\:ModaldrpdLocalidad").prop("disabled","true");
+                    $("#ModaldrpdBarrio").prop("disabled","true");
+                    $("#modalRegistrarMenorEdad\\:typeDireccion").val("1");
+                    $("#modalRegistrarMenorEdad").modal('show');
+                };
+                
+                
+                function closeModalInfo() 
+                {
+                    $("#infoModal").css("display", "none");            
+                    $("#infoModal").modal("hide");
+                }
+                function openModalPrivado()
+                {
+                    var tableReq = document.getElementsByClassName('checkPrivado');
+                    if(tableReq.length &#61;&#61; 1)
+                    {
+                        $("#mensaje").html("Ya Cuenta con un Privado de Libertad Registrado. Si quiere Crear uno Nuevo, debe seleccionar la opcion 'Limpiar' que tiene la tabla, y luego proceder a crear uno Nuevo.");
+                        $("#infoModal").css("display", "block");            
+                        $("#infoModal").modal("show");
+                        
+                    } else {
+                        cleanPrivado();
+                        $("#modalPrivadoRegister\\:modalSeconAlert").css({"display":"none"});
+                        $("#modalPrivadoRegister\\:drpdModalTipoIdentificacion").prop("disabled", false);
+                        $("#modalPrivadoRegister\\:txtModalNumeroIdentificacion").prop("readonly", true);
+                        $("#modalPrivadoRegister\\:txtNitRepresentanteConsulta").val("");
+                        $("#modalPrivadoRegister\\:drpdModalTipoIdentificacion").val("");
+                        $("#modalPrivadoRegister\\:txtModalNumeroIdentificacion").val("");
+                        $("#modalPrivadoRegister\\:txtModalPrimerNombre").val("");
+                        $("#modalPrivadoRegister\\:ModaltxtSegundoNombre").val("");
+                        $("#modalPrivadoRegister\\:ModaltxtPrimerApellido").val("");
+                        $("#modalPrivadoRegister\\:ModaltxtSegundoApellido").val("");
+                        $("#modalPrivadoRegister\\:ModaldrpdGenero").val("");
+                        $("#modalPrivadoRegister\\:ModaldrpdNacionalidad").val("");
+                        $("#modalPrivadoRegister\\:ModaltxtCelular").val("");
+                        $("#modalPrivadoRegister\\:ModaltxtTelefono").val("");
+                        $("#modalPrivadoRegister\\:ModaltxtDireccion").val("");
+                        $("#modalPrivadoRegister\\:ModaltxtDireccion").prop("disabled", true);
+                        $("#modalPrivadoRegister\\:ModaltxtDireccionRural").val("");
+                        $("#modalPrivadoRegister\\:Modalemail").val("");
+                        $("#modalPrivadoRegister\\:drpdEtnia").val("");
+                        $("#modalPrivadoRegister\\:txtCualEtnia").val("");
+                        $("#modalPrivadoRegister\\:txtCualEtniaAux").val("");
+                        $("#modalPrivadoRegister\\:drpdModalEdoCivilRepresentante").val("");
+                        $("#modalRegistrarPrivadoLibertad").modal('show');
+                        
+                    }
+                }
+                
+                function updateModal() 
+                {
+                    validateTypeDireccionPrivado();
+                    etniaPrivado($("#modalPrivadoRegister\\:drpdEtnia").val());
+                    $("#modalPrivadoRegister\\:txtCualEtnia").val($("#modalPrivadoRegister\\:txtCualEtniaAux").val());
+                }
+                
+                function tipoTramite(valor)
+                {
+                	
+					if(valor == "385"){
+                		
+                		$("#certificateRequestForm\\:drpdApostillado").val("True");
+                		
+                	}else{
+                		
+                		$("#certificateRequestForm\\:drpdApostillado").val("False");
+                		
+                	}
+                	
+                    if (valor == "391" ) 
+                    {
+                        $("#btnRegistrarPrivado").css('display','');
+                        $("#tablePrivadoLibertad").css('display','');
+                        //$("#certificateRequestForm\\:inputDocumentoMenorEdad").addClass("requerido");            
+                        //$("#certificateRequestForm\\:inputDocumentoMenorEdad").prop("disabled", false);
+                        //$("#certificateRequestForm\\:drpdCertificadoMenorEdad").val(0);                      
+                    } else {
+                        $("#tablePrivadoLibertad").css('display','none');
+                        $("#btnRegistrarPrivado").css('display','none');
+                        //if ($("#certificateRequestForm\\:drpdCertificadoMenorEdad").val() == 0)   
+                        //{
+                            //$("#certificateRequestForm\\:inputDocumentoMenorEdad").removeClass("requerido");
+                            //$("#certificateRequestForm\\:inputDocumentoMenorEdad").prop("disabled", true);
+                            //$("#certificateRequestForm\\:inputDocumentoMenorEdad").val("");
+                        //}
+                    }
+                    
+                   
+                }
+                
+                function tipoTramiteME(valor)
+                {
+                    if (valor == "1" ) 
+                    {
+                        //$("#btnRegistrarPrivado").css('display','');
+                        $("#tableMenorEdad").css('display','');
+                        //$("#certificateRequestForm\\:inputDocumentoMenorEdad").addClass("requerido");            
+                        //$(document.getElementById("certificateRequestForm:inputDocumentoMenorEdad")).prop("disabled", false);
+                        //"#certificateRequestForm\\:drpdCertificadoMenorEdad").val(0);                      
+                    } else {
+                        $("#tableMenorEdad").css('display','none');
+                        //$("#btnRegistrarPrivado").css('display','none');
+                        //if ($("#certificateRequestForm\\:drpdCertificadoMenorEdad").val() == 0)   
+                        //{
+                        //    $("#certificateRequestForm\\:inputDocumentoMenorEdad").removeClass("requerido");
+                        //    $(document.getElementById("certificateRequestForm:inputDocumentoMenorEdad")).prop("disabled", true);
+                        //    $("#certificateRequestForm\\:inputDocumentoMenorEdad").val("");
+                        //}
+                    }
+                    
+                   
+                }                
+                //Cierra el modal de registrar menor de edad.
+                function modalclose()
+                {
+                    $(document.getElementById("modalRegistrarMenorEdad")).prop("hidden", true);
+                }
+                ;
+                
+                //Esta función verifica el tipo y el tamaño de los archivos que se cargan.
+                function checkFile(inputFile, id) 
+                {
+                    var max = 2048 * 2048; // 4MB
+                    var file = inputFile.files[0];
+                    var name = id.split(":");
+                    var messageName = "#message" + name[1];
+                    if (file.size > max)
+                    {
+                        $(messageName).html('El archivo supera el peso permitido de 4MB').css('color', 'red');
+                        inputFile.value = null;
+                    } else
+                    {
+                        var ext = file.name.split(".");
+                        if ((ext[1].toLowerCase() !== "pdf") &amp;&amp; (ext[1].toLowerCase() !== "png") &amp;&amp; (ext[1].toLowerCase() !== "jpg") &amp;&amp; (ext[1].toLowerCase() !== "tif") )
+                        {
+                            $(messageName).html('El formato del archivo no es válido').css('color', 'red');
+                            inputFile.value = null;
+                        } else {
+                            $(messageName).html('');
+                        }
+                    }
+                };
+                //Esta función verifica si el checkbox de declaración bajo gravedad de juramento está seleccionado. 
+                //Si esta seleccionado bloquea la pantalla y hace su procedimiento normal; si no, coloca un mensaje de error en el campo.
+                function checkoath()
+                {
+                    $("#messageinputDocumentoIdentidadSolicitanteAcudiente").html('');
+                    $("#messageinputReciboServicioPublico").html('');
+                    $("#messageinputDocumentoMenorEdad").html('');
+                    $("#messageinputDocumentoPatriaPotestad").html('');
+                    if ($("#certificateRequestForm\\:chkbSeleccionar").is(':checked') === true)
+                    {
+                        if($("#certificateRequestForm\\:drpdCertificadoMenorEdad").val() === "1")
+                        {
+                            if($("#certificateRequestForm\\:parentescoh").val() === "")
+                            {
+                                $("#certificateRequestForm\\:drpdParentesco").focus();
+                                $('#relatedmessage').html('Seleccione una opción').css('color', 'red');
+                                return false;
+                            }
+                            else
+                            {
+                                $('#checkmessage').html('');
+                                $('#relatedmessage').html('');
+                                $.blockUI({message: '<h3><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>  Cargando...</h3>', css: {
+                                border: 'none',
+                                        padding: '15px',
+                                        backgroundColor: '#000',
+                                        '-webkit-border-radius': '10px',
+                                        '-moz-border-radius': '10px',
+                                        opacity: .5,
+                                        color: '#fff'
+                                }});
+                                return true;
+                            }
+                        }
+                        else
+                        {
+                            $('#checkmessage').html('');
+                            $('#relatedmessage').html('');
+                            $.blockUI({message: '<h3><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>  Cargando...</h3>', css: {
+                            border: 'none',
+                                    padding: '15px',
+                                    backgroundColor: '#000',
+                                    '-webkit-border-radius': '10px',
+                                    '-moz-border-radius': '10px',
+                                    opacity: .5,
+                                    color: '#fff'
+                            }});
+                            return true;
+                        }
+                    } else
+                    {
+                        $('#checkmessage').html('La solicitud no puede enviarse porque aún no ha aceptado la declaración bajo gravedad de juramento').css('color', 'red');
+                        return false;
+                    }
+                };
+                //Ciera el modal con la información del radicado.
+                function modalCloseInfo()
+                {
+                    $(document.getElementById("infoModal")).css("display", "none");
+                    setTimeout('fRedireccion()', 1000);
+                };
+                ////Cada vez que se escribe una letra en el campo de email se verifica que tenga el formato de correo, en 
+                //caso que no tenga el formato adecuado, coloca un mensaje 
+                $("#modalCertificate\\:Modalemail").keyup(function()
+                {
+                    console.log("a");
+                    $("#modalCertificate\\:Modalemail").filter(function(){
+                        var email=$(this).val();
+                        var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+                        if( !emailReg.test( email ) ) {
+                           $('#emailmessage').html('Formato inválido').css('color', 'red');
+						   
+                        } else {
+                           $('#emailmessage').html('');
+						   
+                        }
+                    });
+                });
+                
+                $(document).ready(function()
+                {
+                    //ayuda
+                    $('#spanAyuda').popover({
+                        title: '<span class="text-info"><strong> Ayuda</strong></span>' +
+                                '<button type="button" id="close" class="close" onclick="$(&quot;#spanAyuda&quot;).popover(&quot;hide&quot;);">X</button>'
+                    });
+                    $('#spanAyuda1').popover({
+                        title: '<span class="text-info"><strong> Ayuda</strong></span>' +
+                                '<button type="button" id="close" class="close" onclick="$(&quot;#spanAyuda1&quot;).popover(&quot;hide&quot;);">X</button>'
+                    });
+                    //tooltip
+                    $('[data-toggle="tooltip"]').tooltip();
+                    $(".datepicker").datepicker
+                    ({
+                         showOn: "button",
+                         buttonImage: "images/calendario.png",
+                         buttonText: "",
+                         buttonImageOnly: true,
+                         dateFormat: 'yy-mm-dd',
+                         changeMonth: true,
+                         changeYear: true,
+                         monthNamesShort: [ "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic" ],
+                         yearRange: "1900:2030",
+                         maxDate: new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+new Date().getDate(),
+                         minDate: (new Date().getFullYear()-18)+'-'+(new Date().getMonth()+1)+'-'+new Date().getDate(),
+                         onSelect: function() 
+                         { 
+                             var dateObject = $(this).datepicker({ dateFormat: 'yy-mm-dd' }).val();
+                             $("#modalCertificate\\:ModaltxtFechaNacimiento").prop("value", dateObject);
+                             $("#modalCertificate\\:fechanacimientoh").prop("value", dateObject);
+                         }
+                    });
+                    $(".ui-datepicker-trigger").css({'display': 'inline-block' , 'margin-left': '-35px' , 'height': '32px' , 'vertical-align': '-11px'});
+                    $(document.getElementById("certificateRequestForm:drpdParentesco")).prop("disabled", true);
+                    $(document.getElementById("certificateRequestForm:drpdParentesco")).prop("value", "");
+                    $(document.getElementById("certificateRequestForm:inputDocumentoMenorEdad")).prop("disabled", true);
+                    $(document.getElementById("certificateRequestForm:inputDocumentoPatriaPotestad")).prop("disabled", true);
+                    $('#modalCertificate\\:ModaltxtTelefono').attr('placeholder', 'Indicativo + Telefono');
+                    $("#modalCertificate\\:typeDireccion\\:0").css({'margin-left':'5px','margin-right':'5px'});
+                    $("#modalCertificate\\:typeDireccion\\:1").css({'margin-left':'5px','margin-right':'5px'});
+                    
+                    tipoTramite($("#certificateRequestForm\\:proceduretypeh").val());
+                    
+                    
+                                    
+                    
+                });
+                   function fRedireccion() 
+                        {
+                            console.log("Vamos a redireccionar");
+                            window.location.href = "certificateconsult.xhtml";
+                        }
+                function closeModal()
+                {
+                    $(".datepicker").datepicker
+                    ({
+                         showOn: "button",
+                         buttonImage: "images/calendario.png",
+                         buttonText: "",
+                         buttonImageOnly: true,
+                         dateFormat: 'yy-mm-dd',
+                         changeMonth: true,
+                         changeYear: true,
+                         monthNamesShort: [ "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic" ],
+                         yearRange: "1900:2030",
+                         maxDate: new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+new Date().getDate(),
+                         minDate: (new Date().getFullYear()-18)+'-'+(new Date().getMonth()+1)+'-'+new Date().getDate(),
+                         onSelect: function() 
+                         { 
+                             var dateObject = $(this).datepicker({ dateFormat: 'yy-mm-dd' }).val();
+                             $("#modalCertificate\\:ModaltxtFechaNacimiento").prop("value", dateObject);
+                             $("#modalCertificate\\:fechanacimientoh").prop("value", dateObject);
+                         }
+                    });
+                    $(".ui-datepicker-trigger").css({'display': 'inline-block' , 'margin-left': '-35px' , 'height': '32px' , 'vertical-align': '-11px'});
+                    $('#modalCertificate\\:ModaltxtTelefono').attr('placeholder', 'Indicativo + Telefono');
+                    $('#modalRegistrarMenorEdad').modal('hide');
+                }
+                
+                function closeModalPrivado()
+                {
+                    $("#modalRegistrarPrivadoLibertad").modal('hide');
+                }
+                
+                
+                function locationList(ciudad)
+                {
+                    ciudad = ciudad.split("|");
+                    console.log(ciudad);
+                    
+                    $("#modalCertificate\\:valCiudadResidencia").val(ciudad[1]);
+                    
+                    $("#modalCertificate\\:ModaldrpdLocalidad").val("");
+                    $("#ModaldrpdBarrio").val("");
+                    $('#modalCertificate\\:ModaldrpdLocalidad option').each(function() {
+                        if ( $(this).val().split("|")[2] === ciudad[0] ) {
+                            $(this).css({"display":""});
+                        } else {
+                            $(this).css({"display":"none"});
+                        }
+                    });
+                    $("#modalCertificate\\:ModaldrpdLocalidad").removeAttr("disabled");
+                    $("#ModaldrpdBarrio").prop("disabled","true");
+                }
+                
+                function barriosList(localidad) 
+                {
+                    localidad = localidad.split("|");
+                    console.log(localidad);
+                    $("#modalCertificate\\:valLocalidad").val(localidad[1]);
+                    $("#ModaldrpdBarrio").val("");
+                    $("#ModaldrpdBarrio").append(new Option("Seleccione", ""));
+                    $('#modalCertificate\\:ModaldrpdBarrioAux option').each(function() {
+                        if ( $(this).val().split("|")[1] === localidad[0] ) {
+                            $(this).css({"display":""});
+                            $("#ModaldrpdBarrio").append(new Option($(this).text(), $(this).val()));
+                        } else {
+                            $("#ModaldrpdBarrio option[value='"+$(this).val()+"']").remove();
+                            $(this).css({"display":"none"});
+                        }
+                    });
+                    $("#ModaldrpdBarrio").removeAttr("disabled");
+                }
+                
+                function barrioVal(barrio) 
+                {
+                    barrio = barrio.split("|");
+                    $("#modalCertificate\\:valBarrio") .val(barrio[0]);
+                }
+                
+                     function fpopover(vSpanAyuda)
+                {
+                    var p =0;
+                    
+                    p = $("#"+vSpanAyuda).popover();
+                    console.log(p);
+                    p.on("show.bs.popover", function (e) {
+                        p.data("bs.popover").tip().css({"max-width": "100%"});
+                    });
+                }
+                             
+                
+                function mano(a) {
+                    if (navigator.appName === "Netscape") {
+                        a.style.cursor = 'pointer';
+                    } else {
+                        a.style.cursor = 'hand';
+                    }
+                }
+                
+                function etniaMenor(etniaVal) 
+                {
+                    if (etniaVal == 8) 
+                    {
+                        $("#modalCertificate\\:txtCualEtnia").removeAttr('readonly');
+                        $("#modalCertificate\\:txtCualEtnia").addClass('requeridoModal');
+                    } else {
+                        $("#modalCertificate\\:txtCualEtnia").val("");
+                        $("#modalCertificate\\:txtCualEtniaAux").val("");
+                        $("#modalCertificate\\:txtCualEtnia").attr('readonly',true);
+                        $("#modalCertificate\\:txtCualEtnia").removeClass('requeridoModal');
+                        $("#modalCertificate\\:txtCualEtnia").css('background-color','');
+                    }
+                }
+                
+                function valueEtniaMenor() 
+                {
+                    $("#modalCertificate\\:txtCualEtniaAux").val($("#modalCertificate\\:txtCualEtnia").val());
+                }
+                
+                function etniaPrivado(etniaVal) 
+                {
+                    if (etniaVal == 8) 
+                    {
+                        $("#modalPrivadoRegister\\:txtCualEtnia").removeAttr('readonly');
+                        $("#modalPrivadoRegister\\:txtCualEtnia").addClass('requeridoPrivado');
+                    } else {
+                        $("#modalPrivadoRegister\\:txtCualEtnia").val("");
+                        $("#modalPrivadoRegister\\:txtCualEtniaAux").val("");
+                        $("#modalPrivadoRegister\\:txtCualEtnia").attr('readonly',true);
+                        $("#modalPrivadoRegister\\:txtCualEtnia").removeClass('requeridoPrivado');
+                        $("#modalPrivadoRegister\\:txtCualEtnia").css('background-color','');
+                    }
+                }
+                
+                function valueEtniaPrivado() 
+                {
+                    $("#modalPrivadoRegister\\:txtCualEtniaAux").val($("#modalPrivadoRegister\\:txtCualEtnia").val());
+                }
+                
+
+
+				$("#modalPrivadoRegister\\:chkbSeleccionar").change(function()
+				{
+					if ($("#modalPrivadoRegister\\:chkbSeleccionar").is(':checked') === false)
+					{
+						$('#checkmessage').html('La solicitud no puede enviarse porque aún no ha aceptado la declaración bajo gravedad de juramento').css('color', 'red');
+					} else {
+						$('#checkmessage').html('');
+					}
+
+				});
+
+				$('.letrasTildes').on('keypress', function (e){
+					return ((e.charCode &gt;&#61; 65 &amp;&amp; e.charCode &lt;&#61; 90)                                
+							|| (e.charCode &gt;&#61; 97 &amp;&amp; e.charCode &lt;&#61; 122)                                
+							|| (e.charCode &#61;&#61; 32)                                 
+							|| (e.key &#61;&#61; "Backspace")                                
+							|| (e.charCode &#61;&#61; 193)                                 
+							|| (e.charCode &#61;&#61; 201)                                 
+							|| (e.charCode &#61;&#61; 205)                                 
+							|| (e.charCode &#61;&#61; 211)                                 
+							|| (e.charCode &#61;&#61; 218)                                
+							|| (e.charCode &#61;&#61; 225)                                 
+							|| (e.charCode &#61;&#61; 233)                                 
+							|| (e.charCode &#61;&#61; 237)                                 
+							|| (e.charCode &#61;&#61; 243)                                 
+							|| (e.charCode &#61;&#61; 250)                                
+							|| (e.charCode &#61;&#61; 209)                                
+							|| (e.charCode &#61;&#61; 241));                        
+					//return;                    
+				});
+				
+
+				$('.numerico').on('keypress', function (e){
+					return (e.charCode &gt;&#61; 48 &amp;&amp; e.charCode &lt;&#61; 57) || (e.key &#61;&#61; "Backspace");});
+				
+          
+            </script>
+	</ui:define>
+</ui:composition>
+
+</html>
